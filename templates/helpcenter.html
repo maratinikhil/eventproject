@@ -1,0 +1,260 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+  Help Center
+{% endblock  %}
+{% block content %}
+<div class="font-poppins bg-white dark:bg-gray-900 transition-colors duration-300 min-h-screen">
+    <!-- Help Center Content -->
+    <div class="max-w-7xl mx-auto px-4 py-12">
+        <!-- Header Section -->
+        <div class="text-center mb-16">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-800 dark:text-white mb-4">Help Center</h1>
+            <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-8">Find answers to common questions
+                and get support for your EventHub experience.</p>
+
+            <!-- Search Bar -->
+            <div class="max-w-2xl mx-auto">
+                <div class="relative">
+                    <input type="text" placeholder="Search for help..."
+                        class="w-full px-6 py-4 rounded-2xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                    <button
+                        class="absolute right-3 top-1/2 transform -translate-y-1/2 bg-purple-600 hover:bg-purple-700 text-white p-2 rounded-lg transition">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Help Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+            <a href="#tickets"
+                class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 text-center hover:shadow-md transition-shadow duration-300 group">
+                <div
+                    class="bg-purple-100 dark:bg-purple-900 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                    <i class="fas fa-ticket-alt text-purple-600 dark:text-purple-400 text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2">Tickets & Booking</h3>
+                <p class="text-gray-600 dark:text-gray-300">Booking, cancellation, and ticket issues</p>
+            </a>
+
+            <a href="#events"
+                class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 text-center hover:shadow-md transition-shadow duration-300 group">
+                <div
+                    class="bg-blue-100 dark:bg-blue-900 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                    <i class="fas fa-calendar-check text-purple-600 dark:text-purple-400 text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2">Events</h3>
+                <p class="text-gray-600 dark:text-gray-300">Event information and details</p>
+            </a>
+
+            <a href="#account"
+                class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 text-center hover:shadow-md transition-shadow duration-300 group">
+                <div
+                    class="bg-amber-100 dark:bg-amber-900 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                    <i class="fas fa-user-circle text-purple-600 dark:text-purple-400 text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2">Account</h3>
+                <p class="text-gray-600 dark:text-gray-300">Profile and account settings</p>
+            </a>
+
+            <a href="#payments"
+                class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 text-center hover:shadow-md transition-shadow duration-300 group">
+                <div
+                    class="bg-green-100 dark:bg-green-900 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                    <i class="fas fa-credit-card text-purple-600 dark:text-purple-400 text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2">Payments</h3>
+                <p class="text-gray-600 dark:text-gray-300">Billing and payment methods</p>
+            </a>
+        </div>
+
+        <!-- FAQ Section -->
+        <div class="mb-16">
+            <h2 class="text-3xl font-bold text-center text-gray-800 dark:text-white mb-12">Frequently Asked Questions
+            </h2>
+
+            <div class="max-w-4xl mx-auto space-y-6">
+                <!-- FAQ Item 1 -->
+                <div
+                    class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+                    <button
+                        class="faq-question w-full px-6 py-4 text-left flex justify-between items-center hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors duration-200">
+                        <h3 class="text-lg font-semibold text-gray-800 dark:text-white">How do I book tickets for an
+                            event?</h3>
+                        <i class="fas fa-chevron-down text-purple-600 transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-answer px-6 py-4 border-t border-gray-100 dark:border-gray-700 hidden">
+                        <p class="text-gray-600 dark:text-gray-300 mb-3">Booking tickets on EventHub is simple:</p>
+                        <ol class="list-decimal list-inside space-y-2 text-gray-600 dark:text-gray-300">
+                            <li>Find the event you want to attend</li>
+                            <li>Select the number of tickets and preferred seating</li>
+                            <li>Click "Book Now" and proceed to checkout</li>
+                            <li>Enter your payment information and confirm booking</li>
+                            <li>You'll receive an email confirmation with your e-tickets</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 2 -->
+                <div
+                    class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+                    <button
+                        class="faq-question w-full px-6 py-4 text-left flex justify-between items-center hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors duration-200">
+                        <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Can I cancel or refund my
+                            tickets?</h3>
+                        <i class="fas fa-chevron-down text-purple-600 transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-answer px-6 py-4 border-t border-gray-100 dark:border-gray-700 hidden">
+                        <p class="text-gray-600 dark:text-gray-300 mb-3">Our cancellation policy depends on the event
+                            organizer:</p>
+                        <ul class="list-disc list-inside space-y-2 text-gray-600 dark:text-gray-300">
+                            <li>Most comedy shows allow cancellations up to 24 hours before the event</li>
+                            <li>Movie tickets are generally non-refundable</li>
+                            <li>Concert tickets may have specific refund windows</li>
+                            <li>Check the event details page for specific cancellation policies</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 3 -->
+                <div
+                    class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+                    <button
+                        class="faq-question w-full px-6 py-4 text-left flex justify-between items-center hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors duration-200">
+                        <h3 class="text-lg font-semibold text-gray-800 dark:text-white">How do I contact event
+                            organizers?</h3>
+                        <i class="fas fa-chevron-down text-purple-600 transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-answer px-6 py-4 border-t border-gray-100 dark:border-gray-700 hidden">
+                        <p class="text-gray-600 dark:text-gray-300">You can contact event organizers through several
+                            methods:</p>
+                        <ul class="list-disc list-inside space-y-2 text-gray-600 dark:text-gray-300 mt-2">
+                            <li>Visit the event page and click "Contact Organizer"</li>
+                            <li>Use the messaging system in your EventHub account</li>
+                            <li>Find contact information in your booking confirmation email</li>
+                            <li>For urgent issues, contact our support team who can assist</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 4 -->
+                <div
+                    class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+                    <button
+                        class="faq-question w-full px-6 py-4 text-left flex justify-between items-center hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors duration-200">
+                        <h3 class="text-lg font-semibold text-gray-800 dark:text-white">What payment methods do you
+                            accept?</h3>
+                        <i class="fas fa-chevron-down text-purple-600 transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-answer px-6 py-4 border-t border-gray-100 dark:border-gray-700 hidden">
+                        <p class="text-gray-600 dark:text-gray-300 mb-3">We accept various payment methods for your
+                            convenience:</p>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
+                            <div class="text-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                <i class="fab fa-cc-visa text-2xl text-blue-600 mb-2"></i>
+                                <p class="text-sm text-gray-600 dark:text-gray-300">Visa</p>
+                            </div>
+                            <div class="text-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                <i class="fab fa-cc-mastercard text-2xl text-red-600 mb-2"></i>
+                                <p class="text-sm text-gray-600 dark:text-gray-300">Mastercard</p>
+                            </div>
+                            <div class="text-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                <i class="fab fa-cc-paypal text-2xl text-blue-500 mb-2"></i>
+                                <p class="text-sm text-gray-600 dark:text-gray-300">PayPal</p>
+                            </div>
+                            <div class="text-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                <i class="fab fa-cc-apple-pay text-2xl text-gray-800 dark:text-white mb-2"></i>
+                                <p class="text-sm text-gray-600 dark:text-gray-300">Apple Pay</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Support Section -->
+        <div class="bg-gradient-to-r from-purple-500 to-amber-500 rounded-2xl p-8 text-white mb-16">
+            <div class="max-w-4xl mx-auto text-center">
+                <h2 class="text-3xl font-bold mb-4">Still Need Help?</h2>
+                <p class="text-xl mb-8">Our support team is here to assist you with any questions or issues.</p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-white bg-opacity-20 p-6 rounded-xl">
+                        <i class="fas fa-envelope text-3xl mb-4"></i>
+                        <h3 class="text-xl font-bold mb-2">Email Support</h3>
+                        <p class="mb-4">Get help via email within 24 hours</p>
+                        <a href="mailto:support@eventhub.com"
+                            class="bg-white text-purple-600 px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition">Send
+                            Email</a>
+                    </div>
+                    <div class="bg-white bg-opacity-20 p-6 rounded-xl">
+                        <i class="fas fa-phone-alt text-3xl mb-4"></i>
+                        <h3 class="text-xl font-bold mb-2">Phone Support</h3>
+                        <p class="mb-4">Call us for immediate assistance</p>
+                        <a href="tel:+1-555-EVENTHUB"
+                            class="bg-white text-purple-600 px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition">Call
+                            Now</a>
+                    </div>
+                    <div class="bg-white bg-opacity-20 p-6 rounded-xl">
+                        <i class="fas fa-comments text-3xl mb-4"></i>
+                        <h3 class="text-xl font-bold mb-2">Live Chat</h3>
+                        <p class="mb-4">Chat with our support team in real-time</p>
+                        <button
+                            class="bg-white text-purple-600 px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition">Start
+                            Chat</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resources Section -->
+        <div class="mb-16">
+            <h2 class="text-3xl font-bold text-center text-gray-800 dark:text-white mb-12">Helpful Resources</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div
+                    class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+                    <div
+                        class="bg-purple-100 dark:bg-purple-900 w-12 h-12 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-book text-purple-600 dark:text-purple-400"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-3">User Guide</h3>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4">Complete guide to using EventHub features and
+                        services.</p>
+                    <a href="#"
+                        class="text-purple-600 dark:text-purple-400 font-medium hover:text-purple-700 dark:hover:text-purple-300 transition">Read
+                        Guide →</a>
+                </div>
+                <div
+                    class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+                    <div
+                        class="bg-blue-100 dark:bg-blue-900 w-12 h-12 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-video text-purple-600 dark:text-purple-400"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-3">Video Tutorials</h3>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4">Watch step-by-step videos for common tasks and
+                        features.</p>
+                    <a href="#"
+                        class="text-purple-600 dark:text-purple-400 font-medium hover:text-purple-700 dark:hover:text-purple-300 transition">Watch
+                        Videos →</a>
+                </div>
+                <div
+                    class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+                    <div
+                        class="bg-amber-100 dark:bg-amber-900 w-12 h-12 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-newspaper text-purple-600 dark:text-purple-400"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-3">Blog & Updates</h3>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4">Stay updated with the latest features and
+                        announcements.</p>
+                    <a href="#"
+                        class="text-purple-600 dark:text-purple-400 font-medium hover:text-purple-700 dark:hover:text-purple-300 transition">Visit
+                        Blog →</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'js/helpcenter.js' %}"></script>
+<link rel="stylesheet" href="{% static 'css/helpcenter.css' %}">
+{% endblock %}

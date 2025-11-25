@@ -1,0 +1,385 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}{{ comedyshow.title }} | Comedy Night{% endblock %}
+
+{% block content %}
+<div class="bg-gradient-to-br from-purple-50 to-orange-50 dark:from-gray-900 dark:to-purple-900 min-h-screen">
+
+    <!-- 🎤 Comedy Hero Section -->
+    <section class="relative h-96 w-full overflow-hidden shadow-2xl">
+        {% if comedyshow.image %}
+        <img src="{{ comedyshow.image.url }}" alt="{{ comedyshow.title }}"
+            class="w-full h-full object-cover transform hover:scale-105 transition duration-700">
+        {% else %}
+        <div
+            class="w-full h-full bg-gradient-to-r from-orange-400 to-purple-600 flex items-center justify-center relative">
+            <!-- Animated floating emojis -->
+            <div class="absolute inset-0 overflow-hidden">
+                <span class="absolute text-4xl animate-bounce" style="top:20%; left:10%">😂</span>
+                <span class="absolute text-3xl animate-pulse" style="top:60%; left:80%">🤣</span>
+                <span class="absolute text-5xl animate-bounce delay-300" style="top:40%; left:70%">🎭</span>
+                <span class="absolute text-4xl animate-ping" style="top:80%; left:20%">🎤</span>
+            </div>
+            <span class="text-6xl z-10">🎭</span>
+        </div>
+        {% endif %}
+
+        <!-- Gradient Overlay -->
+        <div class="absolute inset-0 bg-gradient-to-br from-orange-900/40 via-purple-900/50 to-transparent"></div>
+
+        <!-- Floating Content Container -->
+        <div class="absolute bottom-0 left-0 right-0 p-8">
+            <div class="max-w-6xl mx-auto">
+                <div class="flex flex-col md:flex-row md:items-end md:justify-between">
+                    <div class="text-white mb-6 md:mb-0">
+                        <!-- Comedy Type & Age Badges -->
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span
+                                class="bg-orange-500 text-white text-sm font-bold px-3 py-1 rounded-full shadow-lg transform hover:scale-105 transition">
+                                🎭 {{ comedyshow.comedy_type }}
+                            </span>
+                            <span class="bg-red-500 text-white text-sm font-bold px-3 py-1 rounded-full shadow-lg">
+                                🔞 {{ comedyshow.age_limit }}+
+                            </span>
+                            <span
+                                class="bg-green-500 text-white text-sm font-bold px-3 py-1 rounded-full shadow-lg flex items-center transform hover:scale-105 transition">
+                                <span class="w-2 h-2 bg-white rounded-full mr-2 animate-pulse"></span>
+                                💺 {{ comedyshow.available_seats }} Seats Left
+                            </span>
+                            <span
+                                class="bg-yellow-400 text-gray-900 text-sm font-bold px-3 py-1 rounded-full shadow-lg">
+                                ⭐ {{ comedyshow.popularity }}
+                            </span>
+                        </div>
+
+                        <h1
+                            class="text-4xl md:text-5xl font-bold mb-3 bg-gradient-to-r from-orange-200 to-yellow-200 bg-clip-text text-transparent">
+                            {{ comedyshow.title }}
+                        </h1>
+                        <div class="flex flex-wrap items-center gap-4 text-orange-100">
+                            <div class="flex items-center bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full">
+                                <span class="text-yellow-300 mr-2">📍</span>
+                                {{ comedyshow.location }}
+                            </div>
+                            <div class="flex items-center bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full">
+                                <span class="text-blue-300 mr-2">📅</span>
+                                {{ comedyshow.date|date:"F d, Y" }}
+                            </div>
+                            <div class="flex items-center bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full">
+                                <span class="text-purple-300 mr-2">⏰</span>
+                                {{ comedyshow.time|time:"g:i A" }} • {{ comedyshow.duration }} min
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Floating CTA Button -->
+                    <div
+                        class="bg-white/20 backdrop-blur-lg rounded-2xl p-4 border border-white/30 shadow-2xl transform hover:scale-105 transition duration-300">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-white font-medium text-lg">🎟️ Ticket Price</span>
+                            <span
+                                class="text-2xl font-bold text-white bg-gradient-to-r from-orange-400 to-yellow-400 bg-clip-text text-transparent">
+                                ₹ {{ comedyshow.ticket_price }}
+                            </span>
+                        </div>
+                        <button
+                            class="w-full bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700 text-white font-bold py-3 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center justify-center group">
+                            <span class="group-hover:animate-bounce mr-2">😂</span>
+                            Laugh My Way In!
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🎟 Main Content -->
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-10 grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+        <!-- Left Column -->
+        <div class="lg:col-span-2 space-y-8">
+
+            <!-- About Section -->
+            <section
+                class="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-6 sm:p-8 border border-orange-100 dark:border-orange-800/30">
+                <div class="flex items-center mb-6">
+                    <div class="w-2 h-10 bg-gradient-to-b from-orange-400 to-purple-500 rounded-full mr-4"></div>
+                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white">About This Comedy Night</h2>
+                </div>
+                <p class="text-gray-700 dark:text-gray-300 leading-relaxed text-lg">
+                    {{ comedyshow.description }}
+                </p>
+                <div
+                    class="mt-6 p-4 bg-orange-50 dark:bg-orange-900/20 rounded-2xl border border-orange-200 dark:border-orange-700">
+                    <div class="flex items-center">
+                        <span class="text-2xl mr-3">💡</span>
+                        <p class="text-orange-800 dark:text-orange-200 font-medium">Expect non-stop laughter, hilarious
+                            stories, and comedy that hits close to home!</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Comedian Profile -->
+            <section
+                class="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-6 sm:p-8 border border-purple-100 dark:border-purple-800/30">
+                <div class="flex items-center mb-6">
+                    <div class="w-2 h-10 bg-gradient-to-b from-purple-400 to-pink-500 rounded-full mr-4"></div>
+                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Star Comedian</h2>
+                </div>
+
+                <div
+                    class="flex items-center p-6 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-2xl border border-purple-200 dark:border-purple-700">
+                    <div
+                        class="w-24 h-24 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full flex items-center justify-center text-white font-bold text-3xl shadow-lg ring-4 ring-white dark:ring-gray-800">
+                        {{ comedyshow.comedian_name|slice:":1" }}
+                    </div>
+                    <div class="ml-6 flex-1">
+                        <h3 class="text-2xl font-bold text-gray-900 dark:text-white">{{ comedyshow.comedian_name }}</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mb-2 text-lg">🎤 {{ comedyshow.comedy_type }}
+                            Specialist • {{ comedyshow.experience }}</p>
+                        <div class="flex items-center">
+                            <div class="flex text-yellow-400">
+                                {% with comedyshow.rating as rating %}
+                                {% for i in "12345" %}
+                                {% if forloop.counter <= rating|add:0 %} <svg
+                                    class="w-6 h-6 fill-current transform hover:scale-110 transition"
+                                    viewBox="0 0 20 20">
+                                    <path
+                                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                    </svg>
+                                    {% else %}
+                                    <svg class="w-6 h-6 text-gray-300" fill="currentColor" viewBox="0 0 20 20">
+                                        <path
+                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                    </svg>
+                                    {% endif %}
+                                    {% endfor %}
+                                    {% endwith %}
+                            </div>
+                            <span class="ml-3 text-lg font-semibold text-gray-600 dark:text-gray-300">
+                                {{ comedyshow.rating }}/5 • {{ comedyshow.popularity }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Comedy Details Cards -->
+            <section
+                class="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-6 sm:p-8 border border-yellow-100 dark:border-yellow-800/30">
+                <div class="flex items-center mb-6">
+                    <div class="w-2 h-10 bg-gradient-to-b from-yellow-400 to-orange-500 rounded-full mr-4"></div>
+                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Show Details</h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Date Card -->
+                    <div
+                        class="bg-gradient-to-br from-blue-50 to-cyan-100 dark:from-blue-900/20 dark:to-cyan-800/20 rounded-2xl p-6 border border-blue-200 dark:border-blue-700 transform hover:scale-105 transition duration-300">
+                        <div class="flex items-center mb-4">
+                            <div class="p-3 bg-blue-500 rounded-xl mr-4">
+                                <span class="text-2xl">📅</span>
+                            </div>
+                            <h3 class="font-bold text-gray-900 dark:text-white text-lg">Show Date</h3>
+                        </div>
+                        <p class="text-gray-700 dark:text-gray-300 text-xl font-bold">{{ comedyshow.date|date:"F d, Y"
+                            }}</p>
+                    </div>
+
+                    <!-- Time Card -->
+                    <div
+                        class="bg-gradient-to-br from-purple-50 to-pink-100 dark:from-purple-900/20 dark:to-pink-800/20 rounded-2xl p-6 border border-purple-200 dark:border-purple-700 transform hover:scale-105 transition duration-300">
+                        <div class="flex items-center mb-4">
+                            <div class="p-3 bg-purple-500 rounded-xl mr-4">
+                                <span class="text-2xl">⏰</span>
+                            </div>
+                            <h3 class="font-bold text-gray-900 dark:text-white text-lg">Show Time</h3>
+                        </div>
+                        <p class="text-gray-700 dark:text-gray-300 text-xl font-bold">{{ comedyshow.time|time:"g:i A" }}
+                        </p>
+                        <p class="text-gray-500 dark:text-gray-400">{{ comedyshow.duration }} minutes of pure laughter
+                        </p>
+                    </div>
+
+                    <!-- Venue Card -->
+                    <div
+                        class="bg-gradient-to-br from-green-50 to-emerald-100 dark:from-green-900/20 dark:to-emerald-800/20 rounded-2xl p-6 border border-green-200 dark:border-green-700 transform hover:scale-105 transition duration-300">
+                        <div class="flex items-center mb-4">
+                            <div class="p-3 bg-green-500 rounded-xl mr-4">
+                                <span class="text-2xl">🏢</span>
+                            </div>
+                            <h3 class="font-bold text-gray-900 dark:text-white text-lg">Comedy Venue</h3>
+                        </div>
+                        <p class="text-gray-700 dark:text-gray-300 text-xl font-bold">{{ comedyshow.location }}</p>
+                    </div>
+
+                    <!-- Seats Card -->
+                    <div
+                        class="bg-gradient-to-br from-orange-50 to-red-100 dark:from-orange-900/20 dark:to-red-800/20 rounded-2xl p-6 border border-orange-200 dark:border-orange-700 transform hover:scale-105 transition duration-300">
+                        <div class="flex items-center mb-4">
+                            <div class="p-3 bg-orange-500 rounded-xl mr-4">
+                                <span class="text-2xl">💺</span>
+                            </div>
+                            <h3 class="font-bold text-gray-900 dark:text-white text-lg">Available Seats</h3>
+                        </div>
+                        <p class="text-gray-700 dark:text-gray-300 text-xl font-bold">{{ comedyshow.available_seats }}
+                            Seats</p>
+                        <p class="text-gray-500 dark:text-gray-400">Don't miss out - laughter guaranteed!</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Comedy Vibe Section -->
+            <section
+                class="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-6 sm:p-8 border border-pink-100 dark:border-pink-800/30">
+                <div class="flex items-center mb-6">
+                    <div class="w-2 h-10 bg-gradient-to-b from-pink-400 to-rose-500 rounded-full mr-4"></div>
+                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white">What's The Vibe? 🤔</h2>
+                </div>
+
+                <div class="space-y-4">
+                    <div
+                        class="flex items-start p-5 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-2xl border border-purple-200 dark:border-purple-700 transform hover:scale-102 transition duration-300">
+                        <div class="flex-shrink-0 mt-1">
+                            <span class="text-2xl">😂</span>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="font-bold text-gray-900 dark:text-white text-lg">Laughter Therapy</h3>
+                            <p class="text-gray-600 dark:text-gray-400 mt-1">Get ready for an evening of side-splitting
+                                jokes, relatable humor, and comedy that will have you crying with laughter!</p>
+                        </div>
+                    </div>
+
+                    <div
+                        class="flex items-start p-5 bg-gradient-to-r from-orange-50 to-yellow-50 dark:from-orange-900/20 dark:to-yellow-900/20 rounded-2xl border border-orange-200 dark:border-orange-700 transform hover:scale-102 transition duration-300">
+                        <div class="flex-shrink-0 mt-1">
+                            <span class="text-2xl">🎤</span>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="font-bold text-gray-900 dark:text-white text-lg">Interactive Fun</h3>
+                            <p class="text-gray-600 dark:text-gray-400 mt-1">{{ comedyshow.comedian_name }} might just
+                                roast the front row - be prepared for some good-natured audience interaction!</p>
+                        </div>
+                    </div>
+
+                    <div
+                        class="flex items-start p-5 bg-gradient-to-r from-red-50 to-pink-50 dark:from-red-900/20 dark:to-pink-900/20 rounded-2xl border border-red-200 dark:border-red-700 transform hover:scale-102 transition duration-300">
+                        <div class="flex-shrink-0 mt-1">
+                            <span class="text-2xl">⚠️</span>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="font-bold text-gray-900 dark:text-white text-lg">Important Notes</h3>
+                            <p class="text-gray-600 dark:text-gray-400 mt-1">Tickets are non-refundable. Please arrive
+                                30 minutes before showtime. Age restriction: {{ comedyshow.age_limit }}+. Warning: May
+                                cause excessive laughter!</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Right Column -->
+        <div class="lg:col-span-1">
+            <!-- Fixed Right Column Container -->
+            <div class="sticky top-24 space-y-6">
+                <!-- Booking Card -->
+                <div
+                    class="bg-gradient-to-br from-orange-500 to-purple-600 rounded-3xl shadow-2xl p-6 text-white transform hover:scale-105 transition duration-300">
+                    <h3 class="text-2xl font-bold mb-3 flex items-center">
+                        <span class="mr-2 animate-bounce">🎟️</span>
+                        Grab Your Spot!
+                    </h3>
+                    <p class="text-orange-100 mb-6">Secure your seat for the funniest night of your life! 🤣</p>
+
+                    <div class="bg-white/20 backdrop-blur-lg rounded-2xl p-5 mb-6 border border-white/30">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-orange-100 font-semibold">Ticket Price</span>
+                            <span
+                                class="text-3xl font-bold bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
+                                ₹ {{ comedyshow.ticket_price }}
+                            </span>
+                        </div>
+                        <div class="flex items-center justify-between text-orange-100">
+                            <span>Seats Available</span>
+                            <span class="font-semibold flex items-center">
+                                <span class="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></span>
+                                {{ comedyshow.available_seats }} remaining
+                            </span>
+                        </div>
+                    </div>
+
+                    <button
+                        class="w-full bg-white text-orange-600 hover:bg-orange-50 font-bold py-4 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-2xl flex items-center justify-center mb-4 group">
+                        <span class="group-hover:animate-bounce mr-2">🤣</span>
+                        Book My Laugh Session!
+                    </button>
+
+                    <div class="flex items-center justify-center text-orange-100 text-sm text-center">
+                        <span class="mr-2">🔒</span>
+                        Secure checkout • Laughter guaranteed or your money back!
+                    </div>
+                </div>
+
+                <!-- Share & Social Section -->
+                <div
+                    class="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-6 border border-purple-200 dark:border-purple-700">
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center">
+                        <span class="mr-2">📢</span>
+                        Spread the Laughter!
+                    </h3>
+
+                    <div class="grid grid-cols-2 gap-3 mb-4">
+                        <button
+                            class="py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-xl flex items-center justify-center text-sm font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg">
+                            <span class="mr-2">👍</span>
+                            Facebook
+                        </button>
+                        <button
+                            class="py-3 bg-pink-500 hover:bg-pink-600 text-white rounded-xl flex items-center justify-center text-sm font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg">
+                            <span class="mr-2">📷</span>
+                            Instagram
+                        </button>
+                        <button
+                            class="py-3 bg-blue-400 hover:bg-blue-500 text-white rounded-xl flex items-center justify-center text-sm font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg">
+                            <span class="mr-2">🐦</span>
+                            Twitter
+                        </button>
+                        <button
+                            class="py-3 bg-green-500 hover:bg-green-600 text-white rounded-xl flex items-center justify-center text-sm font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg">
+                            <span class="mr-2">📱</span>
+                            WhatsApp
+                        </button>
+                    </div>
+
+                    <button
+                        class="w-full py-3 border-2 border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white rounded-xl transition-all duration-300 font-semibold flex items-center justify-center group">
+                        <span class="group-hover:animate-pulse mr-2">❤️</span>
+                        Add to Comedy Wishlist
+                    </button>
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="bg-gradient-to-br from-gray-800 to-gray-900 rounded-3xl shadow-2xl p-6 text-white">
+                    <h3 class="text-lg font-bold mb-4 text-center">Show Stats 📊</h3>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-300">Laughs Guaranteed</span>
+                            <span class="font-bold text-green-400">100%</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-300">Funny Level</span>
+                            <span class="font-bold text-yellow-400">Maximum</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-300">Seats Filling Fast</span>
+                            <span class="font-bold text-orange-400">
+                                {% widthratio comedyshow.available_seats 150 100 %}%
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

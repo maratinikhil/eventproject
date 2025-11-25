@@ -1,0 +1,233 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 py-8 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-900 mb-4">Book Your Concert Tickets</h1>
+            <p class="text-lg text-gray-600">Secure your spot for an unforgettable musical experience</p>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+            <div class="md:flex">
+                <!-- Concert Image & Details -->
+                <div class="md:w-2/5 bg-gradient-to-br from-purple-600 to-blue-600 text-white p-8">
+                    {% if concert.image %}
+                    <div class="mb-6">
+                        <img src="{{ concert.image.url }}" alt="{{ concert.title }}"
+                            class="w-full h-48 object-cover rounded-lg shadow-lg">
+                    </div>
+                    {% endif %}
+
+                    <h2 class="text-2xl font-bold mb-4">{{ concert.title }}</h2>
+                    <div class="space-y-3">
+                        <div class="flex items-center">
+                            <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                            <span class="font-semibold">{{ concert.artist_name }}</span>
+                        </div>
+
+                        <div class="flex items-center">
+                            <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                            <span>{{ concert.location }}</span>
+                        </div>
+
+                        <div class="flex items-center">
+                            <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                            <span>{{ concert.date }} at {{ concert.time }}</span>
+                        </div>
+
+                        <div class="flex items-center">
+                            <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                    d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v8a2 2 0 01-2 2h-2a2 2 0 01-2-2V6z" />
+                            </svg>
+                            <span>{{ concert.music_genre }}</span>
+                        </div>
+
+                        <div class="flex items-center">
+                            <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                    d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
+                            </svg>
+                            <span class="font-semibold">{{ concert.available_seats }} seats available</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Booking Form -->
+                <div class="md:w-3/5 p-8">
+                    <form method="POST" class="space-y-6">
+                        {% csrf_token %}
+
+                        {% if messages %}
+                        <div class="mb-4">
+                            {% for message in messages %}
+                            <div
+                                class="p-4 rounded-lg {% if message.tags == 'error' %}bg-red-50 text-red-700{% else %}bg-green-50 text-green-700{% endif %}">
+                                {{ message }}
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+
+                        <!-- Ticket Type Selection -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-3">Select Ticket Type</label>
+                            <div class="grid grid-cols-2 gap-4">
+                                <label class="relative flex cursor-pointer">
+                                    <input type="radio" name="ticket_type" value="NORMAL" class="peer sr-only" checked>
+                                    <div
+                                        class="flex-1 rounded-lg border-2 border-gray-200 p-4 transition-all peer-checked:border-purple-500 peer-checked:bg-purple-50">
+                                        <div class="font-semibold text-gray-900">Normal</div>
+                                        <div class="text-lg font-bold text-purple-600">₹{{ concert.normal_ticket_price}}</div>
+                                    </div>
+                                </label>
+
+                                <label class="relative flex cursor-pointer">
+                                    <input type="radio" name="ticket_type" value="COUPLES" class="peer sr-only">
+                                    <div
+                                        class="flex-1 rounded-lg border-2 border-gray-200 p-4 transition-all peer-checked:border-purple-500 peer-checked:bg-purple-50">
+                                        <div class="font-semibold text-gray-900">Couples</div>
+                                        <div class="text-lg font-bold text-purple-600">₹{{ concert.couples_ticket_price}}</div>
+                                    </div>
+                                </label>
+
+                                <label class="relative flex cursor-pointer">
+                                    <input type="radio" name="ticket_type" value="VIP" class="peer sr-only">
+                                    <div
+                                        class="flex-1 rounded-lg border-2 border-gray-200 p-4 transition-all peer-checked:border-purple-500 peer-checked:bg-purple-50">
+                                        <div class="font-semibold text-gray-900">VIP</div>
+                                        <div class="text-lg font-bold text-purple-600">₹{{ concert.vip_ticket_price }}
+                                        </div>
+                                    </div>
+                                </label>
+
+                                <label class="relative flex cursor-pointer">
+                                    <input type="radio" name="ticket_type" value="VVIP" class="peer sr-only">
+                                    <div
+                                        class="flex-1 rounded-lg border-2 border-gray-200 p-4 transition-all peer-checked:border-purple-500 peer-checked:bg-purple-50">
+                                        <div class="font-semibold text-gray-900">VVIP</div>
+                                        <div class="text-lg font-bold text-purple-600">₹{{ concert.vvip_ticket_price }}
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Quantity Selection -->
+                        <div>
+                            <label for="quantity" class="block text-sm font-medium text-gray-700 mb-2">Number of
+                                Tickets</label>
+                            <div class="flex items-center space-x-4">
+                                <button type="button" onclick="decrementQuantity()" title="Decrease quantity"
+                                    class="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-50">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M20 12H4" />
+                                    </svg>
+                                </button>
+                                <input type="number" name="quantity" id="quantity" value="1" min="1"
+                                    max="{{ concert.available_seats }}"
+                                    class="w-20 text-center border-0 text-lg font-semibold text-gray-900">
+                                <button type="button" onclick="incrementQuantity()" title="Increase quantity"
+                                    class="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-50">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 4v16m8-8H4" />
+                                    </svg>
+                                </button>
+                                <span class="text-sm text-gray-500">Max: {{ concert.available_seats }} tickets</span>
+                            </div>
+                        </div>
+
+                        <!-- Price Breakdown -->
+                        <div class="bg-gray-50 rounded-lg p-4">
+                            <h3 class="font-semibold text-gray-900 mb-3">Price Breakdown</h3>
+                            <div class="space-y-2 text-sm">
+                                <!-- Base Price -->
+                                <div class="flex justify-between">
+                                    <span>Base Price:</span>
+                                    <span id="basePrice">₹0.00</span>
+                                </div>
+                        
+                                <!-- GST Breakdown -->
+                                <div class="flex justify-between">
+                                    <span>GST ({{ concert.gst_percentage }}%):</span>
+                                    <span id="gstAmount">₹0.00</span>
+                                </div>
+                        
+                                <!-- Fees Breakdown -->
+                                <div class="space-y-1 pl-4 border-l-2 border-gray-200">
+                                    <div class="flex justify-between text-xs text-gray-600">
+                                        <span>• Platform Fee:</span>
+                                        <span id="platformFee">₹0.00</span>
+                                    </div>
+                                    <div class="flex justify-between text-xs text-gray-600">
+                                        <span>• Convenience Fee:</span>
+                                        <span id="convenienceFee">₹0.00</span>
+                                    </div>
+                                    <div class="flex justify-between text-xs text-gray-600">
+                                        <span>• Charity Fee:</span>
+                                        <span id="charityFee">₹0.00</span>
+                                    </div>
+                                </div>
+                        
+                                <!-- Total Fees -->
+                                <div class="flex justify-between pt-1">
+                                    <span class="font-medium">Total Fees:</span>
+                                    <span id="feesAmount" class="font-medium">₹0.00</span>
+                                </div>
+                        
+                                <!-- Grand Total -->
+                                <div class="border-t pt-2 flex justify-between font-semibold text-lg">
+                                    <span>Total Amount:</span>
+                                    <span id="totalAmount" class="text-purple-600">₹0.00</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="flex space-x-4 pt-4">
+                            <a href="{% url 'liveconcerts_view' concert.id %}"
+                                class="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors text-center">
+                                Back to Concerts
+                            </a>
+                            <button type="submit"
+                                class="flex-1 px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg font-medium hover:from-purple-700 hover:to-blue-700 transition-all shadow-lg">
+                                Book Now
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="concert-data" 
+    data-normal-price="{{ concert.normal_ticket_price }}"
+    data-couples-price="{{ concert.couples_ticket_price }}" 
+    data-vip-price="{{ concert.vip_ticket_price }}"
+    data-vvip-price="{{ concert.vvip_ticket_price }}" 
+    data-province-fee="{{ concert.province_fee }}"
+    data-convenience-fee="{{ concert.convenience_fee }}" 
+    data-charity-fee="{{ concert.charity_fee }}"
+    data-gst-percentage="{{ concert.gst_percentage }}" 
+    data-available-seats="{{ concert.available_seats }}"
+    class="hidden">
+</div>
+
+<script src="{% static 'js/bookings/liveconcerts_bookticket.js' %}"></script>
+{% endblock %}

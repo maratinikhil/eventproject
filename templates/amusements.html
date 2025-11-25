@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Amusement Parks{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 py-8">
+    <div class="container mx-auto px-4">
+        <!-- Header Section -->
+        <div class="text-center mb-12">
+            <h1
+                class="text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4">
+                🎡 Amusement Parks
+            </h1>
+            <p class="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+                Discover magical worlds of adventure, thrilling rides, and unforgettable family experiences
+            </p>
+        </div>
+
+        <!-- Stats Bar -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+            <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 text-center shadow-lg">
+                <div class="text-3xl font-bold text-blue-600">{{ amusement|length }}+</div>
+                <div class="text-gray-500 dark:text-gray-400">Parks</div>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 text-center shadow-lg">
+                <div class="text-3xl font-bold text-green-600">100+</div>
+                <div class="text-gray-500 dark:text-gray-400">Thrill Rides</div>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 text-center shadow-lg">
+                <div class="text-3xl font-bold text-purple-600">Family</div>
+                <div class="text-gray-500 dark:text-gray-400">Friendly</div>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 text-center shadow-lg">
+                <div class="text-3xl font-bold text-orange-600">⭐ 4.8</div>
+                <div class="text-gray-500 dark:text-gray-400">Avg Rating</div>
+            </div>
+        </div>
+
+        <!-- Parks Grid -->
+        <div class="grid lg:grid-cols-2 xl:grid-cols-3 gap-8">
+            {% for park in amusement %}
+            <div
+                class="group bg-white dark:bg-gray-800 rounded-3xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2">
+                <!-- Image Section -->
+                <a href="{% url 'amusements_view' park.id %}" class="block">
+                    <div class="h-48 bg-gradient-to-br from-blue-400 to-purple-500 relative overflow-hidden">
+                        <div class="absolute inset-0 bg-black bg-opacity-20">
+                            {% if park.image %}
+                            <img src="{{ park.image.url }}" alt="{{ park.park_name }}"
+                                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            {% else %}
+                            <div class="w-full h-full bg-gradient-to-r from-green-400 to-blue-500"></div>
+                            {% endif %}
+                        </div>
+                        <div class="absolute bottom-4 left-4">
+                            <span
+                                class="bg-white bg-opacity-90 backdrop-blur-sm text-gray-800 px-3 py-1 rounded-full text-sm font-semibold">
+                                🎢 {{ park.rides_available }} Rides
+                            </span>
+                        </div>
+                        {% if park.family_friendly %}
+                        <div class="absolute top-4 right-4">
+                            <span
+                                class="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1">
+                                👪 Family Friendly
+                            </span>
+                        </div>
+                        {% endif %}
+                    </div>
+                </a>
+
+                <!-- Content -->
+                <div class="p-6">
+                    <div class="flex justify-between items-start mb-3">
+                        <a href="{% url 'amusements_view' park.id %}" class="block flex-1">
+                            <h2
+                                class="text-2xl font-bold text-gray-800 dark:text-white group-hover:text-blue-600 transition-colors">
+                                {{ park.park_name }}
+                            </h2>
+                        </a>
+                        <span
+                            class="bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 text-sm px-3 py-1 rounded-full font-semibold ml-4">
+                            ₹{{ park.ticket_price }}
+                        </span>
+                    </div>
+
+                    <p class="text-gray-600 dark:text-gray-300 mb-4 leading-relaxed">
+                        {{ park.description|truncatewords:20 }}
+                    </p>
+
+                    <!-- Features -->
+                    <div class="space-y-2 mb-6">
+                        <div class="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                            <span class="w-5 mr-2">📍</span>
+                            <span>{{ park.location }}</span>
+                        </div>
+                        <div class="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                            <span class="w-5 mr-2">⏰</span>
+                            <span>Open: 9:00 AM - 10:00 PM</span>
+                        </div>
+                        <div class="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                            <span class="w-5 mr-2">⭐</span>
+                            <span>4.8 (2.4K reviews)</span>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex gap-3">
+                        <a href="{% url 'amusements_book_tickets' park.id %}"
+                            class="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white py-3 px-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl text-center">
+                            Book Tickets
+                        </a>
+                        <button
+                            class="w-12 h-12 border-2 border-gray-300 dark:border-gray-600 text-gray-400 hover:text-blue-600 hover:border-blue-600 rounded-xl flex items-center justify-center transition-all duration-300">
+                            ♡
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- CTA Section -->
+        <div class="mt-16 text-center">
+            <div class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-3xl p-12 text-white">
+                <h2 class="text-3xl font-bold mb-4">Ready for an Adventure?</h2>
+                <p class="text-blue-100 text-lg mb-6 max-w-2xl mx-auto">
+                    Join thousands of happy visitors and create unforgettable memories with your loved ones
+                </p>
+                <a href="{% url 'amusements' %}"
+                    class="inline-block bg-white text-blue-600 hover:bg-gray-100 font-bold py-4 px-8 rounded-xl text-lg transition-all duration-300 transform hover:scale-105 shadow-2xl">
+                    Explore All Parks 🎡
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Floating Action Button -->
+<div class="fixed bottom-8 right-8">
+    <button
+        class="w-16 h-16 bg-gradient-to-r from-green-500 to-blue-500 text-white rounded-full shadow-2xl flex items-center justify-center text-2xl hover:scale-110 transition-transform duration-300">
+        🎫
+    </button>
+</div>
+{% endblock %}

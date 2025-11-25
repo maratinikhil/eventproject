@@ -1,0 +1,187 @@
+{% extends "base.html" %}
+{% block title %}
+  Refund & Policy
+{% endblock  %}
+{% block content %}
+<div class="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-12">
+        <div class="max-w-4xl mx-auto fade-in">
+            <!-- Page Header -->
+            <div class="text-center mb-12">
+                <h1 class="text-4xl font-bold text-gray-800 dark:text-white mb-4">Refund Policy</h1>
+                <p class="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">Our policies regarding refunds,
+                    cancellations, and ticket transfers for EventHub events.</p>
+            </div>
+
+            <!-- Policy Content -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 mb-8 transition-colors duration-300">
+                <!-- General Refund Policy -->
+                <div class="mb-10">
+                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4 flex items-center">
+                        <i class="fas fa-exchange-alt text-purple-600 dark:text-purple-400 mr-3"></i>
+                        General Refund Policy
+                    </h2>
+                    <p class="text-gray-700 dark:text-gray-300 mb-4">
+                        At EventHub, we strive to provide the best experience for our users. Our refund policy is
+                        designed to be fair to both event organizers and attendees.
+                    </p>
+                    <div
+                        class="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg border-l-4 border-purple-500 dark:border-purple-400">
+                        <p class="text-purple-800 dark:text-purple-300 font-medium">
+                            <i class="fas fa-info-circle mr-2"></i>
+                            Most refund requests must be submitted at least 48 hours before the event start time.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Refund Eligibility -->
+                <div class="mb-10">
+                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4 flex items-center">
+                        <i class="fas fa-check-circle text-green-600 dark:text-green-400 mr-3"></i>
+                        Refund Eligibility
+                    </h2>
+                    <ul class="list-disc pl-5 text-gray-700 dark:text-gray-300 space-y-2">
+                        <li>Refunds are available for canceled events</li>
+                        <li>Refunds may be available if an event is rescheduled and you cannot attend the new date</li>
+                        <li>Refunds are available if the event description is significantly different from the actual
+                            event</li>
+                        <li>Refunds are available if you can't attend due to certain emergency situations (documentation
+                            may be required)</li>
+                    </ul>
+                </div>
+
+                <!-- Non-Refundable Situations -->
+                <div class="mb-10">
+                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4 flex items-center">
+                        <i class="fas fa-times-circle text-red-600 dark:text-red-400 mr-3"></i>
+                        Non-Refundable Situations
+                    </h2>
+                    <ul class="list-disc pl-5 text-gray-700 dark:text-gray-300 space-y-2">
+                        <li>Change of mind or personal schedule conflicts</li>
+                        <li>Failure to attend the event without prior cancellation</li>
+                        <li>Partial attendance of an event</li>
+                        <li>Events specifically marked as "No Refund" at the time of purchase</li>
+                    </ul>
+                </div>
+
+                <!-- Processing Time -->
+                <div class="mb-10">
+                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4 flex items-center">
+                        <i class="fas fa-clock text-blue-600 dark:text-blue-400 mr-3"></i>
+                        Refund Processing Time
+                    </h2>
+                    <p class="text-gray-700 dark:text-gray-300 mb-4">
+                        Once your refund is approved, it may take 5-10 business days for the funds to appear in your
+                        account, depending on your payment method and financial institution.
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+                        <div
+                            class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg text-center transition-colors duration-300">
+                            <i class="fas fa-credit-card text-blue-600 dark:text-blue-400 text-2xl mb-2"></i>
+                            <h3 class="font-bold text-blue-800 dark:text-blue-300">Credit/Debit Cards</h3>
+                            <p class="text-sm text-blue-700 dark:text-blue-400 mt-1">5-7 business days</p>
+                        </div>
+                        <div
+                            class="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg text-center transition-colors duration-300">
+                            <i class="fab fa-paypal text-green-600 dark:text-green-400 text-2xl mb-2"></i>
+                            <h3 class="font-bold text-green-800 dark:text-green-300">PayPal</h3>
+                            <p class="text-sm text-green-700 dark:text-green-400 mt-1">3-5 business days</p>
+                        </div>
+                        <div
+                            class="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg text-center transition-colors duration-300">
+                            <i class="fas fa-wallet text-purple-600 dark:text-purple-400 text-2xl mb-2"></i>
+                            <h3 class="font-bold text-purple-800 dark:text-purple-300">EventHub Wallet</h3>
+                            <p class="text-sm text-purple-700 dark:text-purple-400 mt-1">24-48 hours</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- How to Request a Refund -->
+                <div class="mb-10">
+                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4 flex items-center">
+                        <i class="fas fa-hand-pointer text-orange-600 dark:text-orange-400 mr-3"></i>
+                        How to Request a Refund
+                    </h2>
+                    <div
+                        class="bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg p-6 transition-colors duration-300">
+                        <ol class="list-decimal pl-5 text-gray-700 dark:text-gray-300 space-y-4">
+                            <li class="pb-2">
+                                <span class="font-bold">Log in to your EventHub account</span>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Go to the EventHub website and
+                                    sign in to your account.</p>
+                            </li>
+                            <li class="pb-2">
+                                <span class="font-bold">Navigate to "My Tickets"</span>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Find the section that shows
+                                    your upcoming events and tickets.</p>
+                            </li>
+                            <li class="pb-2">
+                                <span class="font-bold">Select the event</span>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Click on the event for which
+                                    you want to request a refund.</p>
+                            </li>
+                            <li class="pb-2">
+                                <span class="font-bold">Click "Request Refund"</span>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Follow the prompts to complete
+                                    your refund request.</p>
+                            </li>
+                            <li>
+                                <span class="font-bold">Wait for confirmation</span>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">You'll receive an email
+                                    confirmation once your request is processed.</p>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+
+                <!-- Event Cancellations -->
+                <div class="mb-10">
+                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4 flex items-center">
+                        <i class="fas fa-calendar-times text-red-500 dark:text-red-400 mr-3"></i>
+                        Event Cancellations
+                    </h2>
+                    <p class="text-gray-700 dark:text-gray-300 mb-4">
+                        If an event is canceled by the organizer, you will automatically receive a full refund to your
+                        original payment method. No action is required on your part.
+                    </p>
+                    <div class="bg-red-50 dark:bg-red-900/20 p-4 rounded-lg transition-colors duration-300">
+                        <p class="text-red-800 dark:text-red-300">
+                            <i class="fas fa-exclamation-triangle mr-2"></i>
+                            In case of event cancellation, refunds are processed within 10 business days.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Contact Information -->
+                <div
+                    class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg border border-gray-200 dark:border-gray-600 transition-colors duration-300">
+                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4 flex items-center">
+                        <i class="fas fa-headset text-gray-600 dark:text-gray-400 mr-3"></i>
+                        Need Help?
+                    </h2>
+                    <p class="text-gray-700 dark:text-gray-300 mb-4">
+                        If you have questions about our refund policy or need assistance with a refund request, please
+                        contact our support team.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <a href="mailto:support@eventhub.com"
+                            class="bg-purple-600 hover:bg-purple-700 dark:bg-purple-700 dark:hover:bg-purple-800 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-300 text-center">
+                            <i class="fas fa-envelope mr-2"></i>Email Support
+                        </a>
+                        <a href="#"
+                            class="bg-gray-800 hover:bg-gray-900 dark:bg-gray-600 dark:hover:bg-gray-700 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-300 text-center">
+                            <i class="fas fa-comments mr-2"></i>Live Chat
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Last Updated -->
+            <div class="text-center text-gray-500 dark:text-gray-400 text-sm">
+                <p>Last updated: October 15, 2023</p>
+            </div>
+        </div>
+    </main>
+</div>
+{% endblock %}

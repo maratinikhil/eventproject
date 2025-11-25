@@ -1,0 +1,38 @@
+/* static/admin/css/amusement_booking.css */
+.field-base_price input, 
+.field-discount_percent input, 
+.field-gst_percent input,
+.field-subtotal input, 
+.field-gst_amount input, 
+.field-total_with_gst input {
+    background-color: #f8f9fa !important;
+    border-color: #dee2e6 !important;
+    color: #6c757d !important;
+    font-weight: 500 !important;
+}
+
+.loading-price {
+    background-color: #fff3cd !important;
+    color: #856404 !important;
+    border-color: #ffeaa7 !important;
+}
+
+/* Ensure ticket_type field is visible by default */
+.field-ticket_type {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* JavaScript will add this class to hide the field */
+.field-ticket_type.force-hidden {
+    display: none !important;
+}
+
+select option:disabled {
+    display: none;
+}
+
+select[id$="-ticket_type"] {
+    min-width: 250px;
+}

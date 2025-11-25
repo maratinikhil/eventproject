@@ -1,0 +1,495 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Book Tickets - {{ park.park_name }}{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 py-8">
+    <div class="container mx-auto px-4 max-w-6xl">
+        <!-- Header Section -->
+        <div class="text-center mb-8">
+            <a href="{% url 'amusements' %}" class="inline-flex items-center text-blue-600 hover:text-blue-700 mb-4">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                </svg>
+                Back to Parks
+            </a>
+            <h1
+                class="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
+                Book Tickets - {{ park.park_name }}
+            </h1>
+            <p class="text-gray-600 dark:text-gray-300">{{ park.location }}</p>
+        </div>
+
+        <div class="grid lg:grid-cols-3 gap-8">
+            <!-- Booking Form -->
+            <div class="lg:col-span-2">
+                <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-6">
+                    <form method="POST" id="bookingForm">
+                        {% csrf_token %}
+
+                        <!-- Customer Information -->
+                        <div class="mb-8">
+                            <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">Customer Information</h2>
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                        Full Name *
+                                    </label>
+                                    <input type="text" name="customer_name" required
+                                        class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                                        placeholder="Enter your full name">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                        Email Address *
+                                    </label>
+                                    <input type="email" name="customer_email" required
+                                        class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                                        placeholder="Enter your email">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                        Phone Number *
+                                    </label>
+                                    <input type="tel" name="customer_phone" required
+                                        class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                                        placeholder="Enter your phone number">
+                                </div>
+                                <div>
+                                    <label for="visit_date"
+                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                        Visit Date *
+                                    </label>
+                                    <input id="visit_date" type="date" name="visit_date" required
+                                        title="Select your visit date" placeholder="Select visit date"
+                                        class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Ticket Selection -->
+                        <div class="mb-8">
+                            <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">Ticket Selection</h2>
+
+                            {% if is_wonderla %}
+                            <!-- Wonderla Ticket Types -->
+                            <div id="wonderlaTickets">
+                                <div class="space-y-6" id="ticketItems">
+                                    <!-- Regular Tickets Section -->
+                                    <div
+                                        class="ticket-category border-2 border-blue-200 dark:border-blue-800 rounded-2xl overflow-hidden">
+                                        <div class="category-header bg-blue-50 dark:bg-blue-900 p-4 cursor-pointer"
+                                            onclick="toggleCategory(this)">
+                                            <div class="flex justify-between items-center">
+                                                <div>
+                                                    <h3 class="text-xl font-bold text-blue-800 dark:text-blue-200">
+                                                        REGULAR TICKET</h3>
+                                                    <p class="text-blue-600 dark:text-blue-300 text-sm mt-1">Unlimited
+                                                        access to land and water
+                                                        rides</p>
+                                                </div>
+                                                <div class="flex items-center">
+                                                    <span class="text-blue-600 dark:text-blue-300 mr-3">Click to
+                                                        expand</span>
+                                                    <svg class="w-6 h-6 text-blue-600 dark:text-blue-300 transform transition-transform"
+                                                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="category-content hidden p-6 bg-white dark:bg-gray-800">
+                                            <div class="grid md:grid-cols-3 gap-6">
+                                                <!-- Adult Ticket -->
+                                                <div
+                                                    class="ticket-option border border-gray-200 dark:border-gray-700 rounded-xl p-4 hover:shadow-md transition-shadow">
+                                                    <div class="flex justify-between items-start mb-3">
+                                                        <h4 class="font-semibold text-gray-800 dark:text-white">Adult
+                                                        </h4>
+                                                        <span class="text-lg font-bold text-green-600">₹1200</span>
+                                                    </div>
+                                                    <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">Standard
+                                                        adult admission</p>
+                                                    <div class="flex items-center justify-between">
+                                                        <label
+                                                            class="text-sm text-gray-700 dark:text-gray-300">Quantity:</label>
+                                                        <input type="number" min="0" value="0" title="Quantity for Regular Adult tickets" placeholder="0"
+                                                            class="ticket-quantity w-20 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                                                            data-price="1200" data-type="regular_adult">
+                                                    </div>
+                                                </div>
+
+                                                <!-- Child Ticket -->
+                                                <div
+                                                    class="ticket-option border border-gray-200 dark:border-gray-700 rounded-xl p-4 hover:shadow-md transition-shadow">
+                                                    <div class="flex justify-between items-start mb-3">
+                                                        <h4 class="font-semibold text-gray-800 dark:text-white">Child
+                                                        </h4>
+                                                        <span class="text-lg font-bold text-green-600">₹1000</span>
+                                                    </div>
+                                                    <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">For
+                                                        children (Age 3-12)</p>
+                                                    <div class="flex items-center justify-between">
+                                                        <label
+                                                            class="text-sm text-gray-700 dark:text-gray-300">Quantity:</label>
+                                                        <input type="number" min="0" value="0" title="Quantity for Regular Child tickets" placeholder="0"
+                                                            class="ticket-quantity w-20 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                                                            data-price="1000" data-type="regular_child">
+                                                    </div>
+                                                </div>
+
+                                                <!-- Senior Citizen Ticket -->
+                                                <div
+                                                    class="ticket-option border border-gray-200 dark:border-gray-700 rounded-xl p-4 hover:shadow-md transition-shadow">
+                                                    <div class="flex justify-between items-start mb-3">
+                                                        <h4 class="font-semibold text-gray-800 dark:text-white">Senior
+                                                            Citizen</h4>
+                                                        <span class="text-lg font-bold text-green-600">₹900</span>
+                                                    </div>
+                                                    <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">25%
+                                                        discount with valid Govt ID</p>
+                                                    <div class="flex items-center justify-between">
+                                                        <label
+                                                            class="text-sm text-gray-700 dark:text-gray-300">Quantity:</label>
+                                                        <input type="number" min="0" value="0" title="Quantity for Senior Citizen tickets" placeholder="0"
+                                                            class="ticket-quantity w-20 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                                                            data-price="900" data-type="regular_senior">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Offer Tickets Section -->
+                                    <div
+                                        class="ticket-category border-2 border-green-200 dark:border-green-800 rounded-2xl overflow-hidden">
+                                        <div class="category-header bg-green-50 dark:bg-green-900 p-4 cursor-pointer"
+                                            onclick="toggleCategory(this)">
+                                            <div class="flex justify-between items-center">
+                                                <div>
+                                                    <h3 class="text-xl font-bold text-green-800 dark:text-green-200">
+                                                        OFFER TICKETS</h3>
+                                                    <p class="text-green-600 dark:text-green-300 text-sm mt-1">
+                                                        Limited-time offers—grab yours!
+                                                    </p>
+                                                </div>
+                                                <div class="flex items-center">
+                                                    <span class="text-green-600 dark:text-green-300 mr-3">Click to
+                                                        expand</span>
+                                                    <svg class="w-6 h-6 text-green-600 dark:text-green-300 transform transition-transform"
+                                                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="category-content hidden p-6 bg-white dark:bg-gray-800">
+                                            <div class="grid md:grid-cols-2 gap-6">
+                                                <!-- Student Offer -->
+                                                <div
+                                                    class="ticket-option border border-gray-200 dark:border-gray-700 rounded-xl p-4 hover:shadow-md transition-shadow">
+                                                    <div class="flex justify-between items-start mb-3">
+                                                        <h4 class="font-semibold text-gray-800 dark:text-white">Student
+                                                            ID Offer</h4>
+                                                        <span class="text-lg font-bold text-green-600">₹950</span>
+                                                    </div>
+                                                    <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">25% off
+                                                        with valid school/college
+                                                        ID (Age up to 21)</p>
+                                                    <div class="flex items-center justify-between">
+                                                        <label
+                                                            class="text-sm text-gray-700 dark:text-gray-300">Quantity:</label>
+                                                        <input type="number" min="0" value="0" title="Quantity for Student ID Offer tickets" placeholder="0"
+                                                            class="ticket-quantity w-20 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 dark:bg-gray-700 dark:text-white"
+                                                            data-price="950" data-type="offer_student">
+                                                    </div>
+                                                </div>
+
+                                                <!-- Defence Family -->
+                                                <div
+                                                    class="ticket-option border border-gray-200 dark:border-gray-700 rounded-xl p-4 hover:shadow-md transition-shadow">
+                                                    <div class="flex justify-between items-start mb-3">
+                                                        <h4 class="font-semibold text-gray-800 dark:text-white">Defence
+                                                            Family</h4>
+                                                        <span class="text-lg font-bold text-green-600">₹900</span>
+                                                    </div>
+                                                    <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">Special
+                                                        offer for defence families
+                                                        with valid ID</p>
+                                                    <div class="flex items-center justify-between">
+                                                        <label
+                                                            class="text-sm text-gray-700 dark:text-gray-300">Quantity:</label>
+                                                        <input type="number" min="0" value="0" title="Quantity for Defence Family tickets" placeholder="0"
+                                                            class="ticket-quantity w-20 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 dark:bg-gray-700 dark:text-white"
+                                                            data-price="900" data-type="offer_defence">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Fasttrack Section -->
+                                    <div
+                                        class="ticket-category border-2 border-purple-200 dark:border-purple-800 rounded-2xl overflow-hidden">
+                                        <div class="category-header bg-purple-50 dark:bg-purple-900 p-4 cursor-pointer"
+                                            onclick="toggleCategory(this)">
+                                            <div class="flex justify-between items-center">
+                                                <div>
+                                                    <h3 class="text-xl font-bold text-purple-800 dark:text-purple-200">
+                                                        FASTTRACK</h3>
+                                                    <p class="text-purple-600 dark:text-purple-300 text-sm mt-1">Skip
+                                                        The Que | 75% Faster</p>
+                                                </div>
+                                                <div class="flex items-center">
+                                                    <span class="text-purple-600 dark:text-purple-300 mr-3">Click to
+                                                        expand</span>
+                                                    <svg class="w-6 h-6 text-purple-600 dark:text-purple-300 transform transition-transform"
+                                                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="category-content hidden p-6 bg-white dark:bg-gray-800">
+                                            <div class="grid md:grid-cols-2 gap-6">
+                                                <!-- Fasttrack Adult + Buffet -->
+                                                <div
+                                                    class="ticket-option border border-gray-200 dark:border-gray-700 rounded-xl p-4 hover:shadow-md transition-shadow">
+                                                    <div class="flex justify-between items-start mb-3">
+                                                        <h4 class="font-semibold text-gray-800 dark:text-white">
+                                                            Fasttrack Adult + Buffet</h4>
+                                                        <span class="text-lg font-bold text-green-600">₹2400</span>
+                                                    </div>
+                                                    <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">Height
+                                                        above 140 cms</p>
+                                                    <div class="flex items-center justify-between">
+                                                        <label
+                                                            class="text-sm text-gray-700 dark:text-gray-300">Quantity:</label>
+                                                        <input type="number" min="0" value="0" title="Quantity for Fasttrack Adult + Buffet tickets" placeholder="0"
+                                                            class="ticket-quantity w-20 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 dark:bg-gray-700 dark:text-white"
+                                                            data-price="2400" data-type="fasttrack_adult_buffet">
+                                                    </div>
+                                                </div>
+
+                                                <!-- Fasttrack Child + Buffet -->
+                                                <div
+                                                    class="ticket-option border border-gray-200 dark:border-gray-700 rounded-xl p-4 hover:shadow-md transition-shadow">
+                                                    <div class="flex justify-between items-start mb-3">
+                                                        <h4 class="font-semibold text-gray-800 dark:text-white">
+                                                            Fasttrack Child + Buffet</h4>
+                                                        <span class="text-lg font-bold text-green-600">₹1900</span>
+                                                    </div>
+                                                    <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">Height
+                                                        between 85-140 cms (Free
+                                                        below 85 cms)</p>
+                                                    <div class="flex items-center justify-between">
+                                                        <label
+                                                            class="text-sm text-gray-700 dark:text-gray-300">Quantity:</label>
+                                                        <input type="number" min="0" value="0" title="Quantity for Fasttrack Child + Buffet tickets" placeholder="0"
+                                                            class="ticket-quantity w-20 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 dark:bg-gray-700 dark:text-white"
+                                                            data-price="1900" data-type="fasttrack_child_buffet">
+                                                    </div>
+                                                </div>
+
+                                                <!-- Fasttrack Adult -->
+                                                <div
+                                                    class="ticket-option border border-gray-200 dark:border-gray-700 rounded-xl p-4 hover:shadow-md transition-shadow">
+                                                    <div class="flex justify-between items-start mb-3">
+                                                        <h4 class="font-semibold text-gray-800 dark:text-white">
+                                                            Fasttrack Adult</h4>
+                                                        <span class="text-lg font-bold text-green-600">₹2100</span>
+                                                    </div>
+                                                    <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">Height
+                                                        above 140 cms</p>
+                                                    <div class="flex items-center justify-between">
+                                                        <label
+                                                            class="text-sm text-gray-700 dark:text-gray-300">Quantity:</label>
+                                                        <input type="number" min="0" value="0" title="Quantity for Fasttrack Adult tickets" placeholder="0"
+                                                            class="ticket-quantity w-20 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 dark:bg-gray-700 dark:text-white"
+                                                            data-price="2100" data-type="fasttrack_adult">
+                                                    </div>
+                                                </div>
+
+                                                <!-- Fasttrack Child -->
+                                                <div
+                                                    class="ticket-option border border-gray-200 dark:border-gray-700 rounded-xl p-4 hover:shadow-md transition-shadow">
+                                                    <div class="flex justify-between items-start mb-3">
+                                                        <h4 class="font-semibold text-gray-800 dark:text-white">
+                                                            Fasttrack Child</h4>
+                                                        <span class="text-lg font-bold text-green-600">₹1500</span>
+                                                    </div>
+                                                    <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">Height
+                                                        between 85-140 cms (Free
+                                                        below 85 cms)</p>
+                                                    <div class="flex items-center justify-between">
+                                                        <label
+                                                            class="text-sm text-gray-700 dark:text-gray-300">Quantity:</label>
+                                                        <input type="number" min="0" value="0" title="Quantity for Fasttrack Child tickets" placeholder="0"
+                                                            class="ticket-quantity w-20 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 dark:bg-gray-700 dark:text-white"
+                                                            data-price="1500" data-type="fasttrack_child">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Selected Tickets Summary -->
+                                <div id="selectedTicketsSummary"
+                                    class="mt-8 p-6 bg-gray-50 dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700">
+                                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-4">Selected Tickets
+                                    </h3>
+                                    <div id="ticketSummaryContent" class="text-gray-600 dark:text-gray-300">
+                                        <p class="text-center py-4">No tickets selected yet</p>
+                                    </div>
+                                    <div
+                                        class="flex justify-between items-center mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">Total
+                                            Amount:</span>
+                                        <span id="totalAmount" class="text-2xl font-bold text-green-600">₹0</span>
+                                    </div>
+                                </div>
+                            </div>
+                            {% else %}
+                            <!-- Simple Booking for Other Parks -->
+                            <div id="simpleBooking">
+                                <div class="grid md:grid-cols-2 gap-6">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                            Number of Tickets *
+                                        </label>
+                                        <input type="number" name="quantity" id="simpleQuantity" min="1" value="1"
+                                            required title="Number of tickets" placeholder="Enter number of tickets"
+                                            class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                            Price per Ticket
+                                        </label>
+                                        <input type="text" readonly value="₹{{ park.ticket_price }}"
+                                            title="Price per ticket" placeholder="Price per ticket"
+                                            class="w-full px-4 py-3 bg-gray-100 dark:bg-gray-600 border border-gray-300 dark:border-gray-600 rounded-xl dark:text-white">
+                                    </div>
+                                </div>
+                                <div class="mt-4 p-4 bg-blue-50 dark:bg-blue-900 rounded-xl">
+                                    <p class="text-sm text-blue-700 dark:text-blue-300">
+                                        💡 <strong>Simple Booking:</strong> General admission tickets for {{
+                                        park.park_name }}.
+                                        All tickets include full park access.
+                                    </p>
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Payment Method -->
+                        <div class="mb-8">
+                            <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">Payment Method</h2>
+                            <div class="grid md:grid-cols-3 gap-4">
+                                <label
+                                    class="flex items-center p-4 border-2 border-gray-300 dark:border-gray-600 rounded-2xl cursor-pointer hover:border-blue-500 transition-colors">
+                                    <input type="radio" name="payment_method" value="card" class="mr-3" checked>
+                                    <div>
+                                        <div class="font-semibold text-gray-800 dark:text-white">Credit Card</div>
+                                        <div class="text-sm text-gray-500 dark:text-gray-400">Pay with your card</div>
+                                    </div>
+                                </label>
+                                <label
+                                    class="flex items-center p-4 border-2 border-gray-300 dark:border-gray-600 rounded-2xl cursor-pointer hover:border-blue-500 transition-colors">
+                                    <input type="radio" name="payment_method" value="upi" class="mr-3">
+                                    <div>
+                                        <div class="font-semibold text-gray-800 dark:text-white">UPI</div>
+                                        <div class="text-sm text-gray-500 dark:text-gray-400">Google Pay, PhonePe, etc.
+                                        </div>
+                                    </div>
+                                </label>
+                                <label
+                                    class="flex items-center p-4 border-2 border-gray-300 dark:border-gray-600 rounded-2xl cursor-pointer hover:border-blue-500 transition-colors">
+                                    <input type="radio" name="payment_method" value="netbanking" class="mr-3">
+                                    <div>
+                                        <div class="font-semibold text-gray-800 dark:text-white">Net Banking</div>
+                                        <div class="text-sm text-gray-500 dark:text-gray-400">Bank transfer</div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <button type="submit" id="paymentButton"
+                            class="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white py-4 px-6 rounded-2xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                            Proceed to Payment - <span id="paymentTotalAmount">₹0.00</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Order Summary -->
+            <div class="lg:col-span-1">
+                <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-6 sticky top-8">
+                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">Order Summary</h2>
+
+                    <!-- Park Info -->
+                    <div class="flex items-center mb-6 p-4 bg-gray-50 dark:bg-gray-700 rounded-2xl">
+                        {% if park.image %}
+                        <img src="{{ park.image.url }}" alt="{{ park.park_name }}"
+                            class="w-16 h-16 rounded-xl object-cover mr-4">
+                        {% else %}
+                        <div
+                            class="w-16 h-16 bg-gradient-to-r from-blue-400 to-purple-500 rounded-xl flex items-center justify-center text-white text-2xl mr-4">
+                            🎡
+                        </div>
+                        {% endif %}
+                        <div>
+                            <h3 class="font-bold text-gray-800 dark:text-white">{{ park.park_name }}</h3>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">{{ park.location }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Ticket Breakdown -->
+                    <div class="space-y-4 mb-6">
+                        <div id="ticketBreakdown">
+                            <!-- Dynamic content will be inserted here -->
+                        </div>
+                    </div>
+
+                    <!-- Price Breakdown -->
+                    <div class="space-y-3 border-t border-gray-200 dark:border-gray-600 pt-4">
+                        <div class="flex justify-between text-gray-600 dark:text-gray-400">
+                            <span>Subtotal</span>
+                            <span id="subtotalAmount">₹0.00</span>
+                        </div>
+                        <div class="flex justify-between text-gray-600 dark:text-gray-400">
+                            <span>GST (18%)</span>
+                            <span id="gstAmount">₹0.00</span>
+                        </div>
+                        <div class="flex justify-between text-lg font-bold text-gray-800 dark:text-white">
+                            <span>Total Amount</span>
+                            <span id="finalAmount">₹0.00</span>
+                        </div>
+                    </div>
+
+                    <!-- Park Features -->
+                    <div class="mt-6 p-4 bg-blue-50 dark:bg-blue-900 rounded-2xl">
+                        <h4 class="font-semibold text-blue-800 dark:text-blue-200 mb-2">Park Features</h4>
+                        <ul class="text-sm text-blue-700 dark:text-blue-300 space-y-1">
+                            <li>🎢 {{ park.rides_available }} Thrill Rides</li>
+                            <li>👪 Family Friendly Environment</li>
+                            <li>⏰ Open: 9:00 AM - 10:00 PM</li>
+                            <li>🅿️ Free Parking Available</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Data attributes for passing Django variables to JavaScript -->
+<div id="booking-data" data-is-wonderla="{% if is_wonderla %}true{% else %}false{% endif %}"
+    data-ticket-price="{% if park.ticket_price %}{{ park.ticket_price }}{% else %}0{% endif %}" style="display: none;">
+</div>
+
+<script src="{% static 'js/bookings/amusements_booktickets.js' %}"></script>
+{% endblock %}

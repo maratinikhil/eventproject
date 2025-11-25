@@ -1,0 +1,412 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="transition-colors duration-500">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}EventHub - Your Gateway to Unforgettable Experiences{% endblock %}</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Enable dark mode via class strategy
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-in-out',
+                        'slide-down': 'slideDown 0.3s ease-out',
+                        'bounce-gentle': 'bounceGentle 2s infinite',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideDown: {
+                            '0%': { transform: 'translateY(-10px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        },
+                        bounceGentle: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-5px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Pass Django context variables to JavaScript -->
+    <script>
+        // Authentication and URL configuration
+        window.isAuthenticated = {% if request.session.user_authenticated %}true{% else %} false{% endif %};
+        window.loginUrl = "{% url 'login' %}";
+        window.logoutUrl = "{% url 'logout' %}";
+        window.homeUrl = "{% url 'home' %}";
+        window.currentPath = "{{ request.path }}";
+
+        // Check if current page is public (server-side check)
+        window.isPublicPage = {% if request.path == '/' or request.path == '/login/' or request.path == '/signup/' or request.path == '/contactus/' or request.path == '/aboutus/' or request.path == '/help-center/' or request.path == '/terms-conditions/' or request.path == '/privacy-policy/' or request.path == '/refund-policy/' or request.path == '/login/otp/' or request.path == '/login/password/' %}true{% else %} false{% endif %};
+    </script>
+</head>
+
+<body
+    class="bg-gradient-to-br from-gray-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 text-gray-900 dark:text-gray-100 min-h-screen font-sans transition-colors duration-500">
+
+    <!-- Navbar -->
+    <nav
+        class="bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border-b border-gray-200/50 dark:border-gray-700/50 shadow-sm sticky top-0 z-50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+
+                <!-- Logo/Brand -->
+                <div class="flex items-center space-x-3">
+                    <div
+                        class="flex items-center justify-center w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl shadow-lg group hover:shadow-xl transition-all duration-300">
+                        <svg class="h-5 w-5 text-white transform group-hover:scale-110 transition-transform" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                    </div>
+                    <a href="{% url 'home' %}" class="group">
+                        <span
+                            class="font-bold text-xl bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent group-hover:from-blue-700 group-hover:to-purple-700 transition-all duration-300">EventHub</span>
+                    </a>
+                </div>
+
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex items-center space-x-1">
+                    <!-- Home -->
+                    <a href="{% url 'home' %}"
+                        class="flex items-center space-x-2 px-4 py-2 rounded-xl text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-200 group">
+                        <span class="text-lg group-hover:scale-110 transition-transform">🏠</span>
+                        <span class="font-medium">Home</span>
+                    </a>
+
+                    <!-- Events Dropdown -->
+                    <div class="relative group">
+                        <button
+                            class="flex items-center space-x-2 px-4 py-2 rounded-xl text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-200">
+                            <span class="text-lg">🎪</span>
+                            <span class="font-medium">Events</span>
+                            <svg class="w-4 h-4 transform group-hover:rotate-180 transition-transform duration-200"
+                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+
+                        <!-- Dropdown Menu -->
+                        <div
+                            class="absolute left-0 mt-2 w-64 bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-gray-200/50 dark:border-gray-700/50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top-left scale-95 group-hover:scale-100">
+                            <div class="p-2">
+                                <a href="{% url 'events' %}"
+                                    class="flex items-center px-4 py-3 rounded-xl hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-200 group/item">
+                                    <div
+                                        class="flex items-center justify-center w-8 h-8 bg-blue-100 dark:bg-blue-900/30 rounded-lg mr-3">
+                                        <span class="text-blue-600 dark:text-blue-400 text-sm">📅</span>
+                                    </div>
+                                    <div>
+                                        <div class="font-semibold text-gray-800 dark:text-white">Business Events</div>
+                                        <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">Browse all events
+                                        </div>
+                                    </div>
+                                    <svg class="w-4 h-4 text-gray-400 ml-auto transform group-hover/item:translate-x-1 transition-transform"
+                                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 5l7 7-7 7" />
+                                    </svg>
+                                </a>
+
+                                <div class="grid grid-cols-2 gap-1 mt-2">
+                                    <a href="{% url 'movies' %}"
+                                        class="flex flex-col items-center p-3 rounded-xl hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-200 group/item">
+                                        <div
+                                            class="w-10 h-10 bg-red-100 dark:bg-red-900/30 rounded-lg flex items-center justify-center mb-2">
+                                            <span class="text-red-600 dark:text-red-400 text-lg">🎬</span>
+                                        </div>
+                                        <span class="text-sm font-medium text-gray-700 dark:text-gray-200">Movies</span>
+                                        <span class="text-xs text-gray-500 dark:text-gray-400 mt-1">Blockbusters</span>
+                                    </a>
+
+                                    <a href="{% url 'comedyshows' %}"
+                                        class="flex flex-col items-center p-3 rounded-xl hover:bg-yellow-50 dark:hover:bg-yellow-900/20 transition-all duration-200 group/item">
+                                        <div
+                                            class="w-10 h-10 bg-yellow-100 dark:bg-yellow-900/30 rounded-lg flex items-center justify-center mb-2">
+                                            <span class="text-yellow-600 dark:text-yellow-400 text-lg">🎤</span>
+                                        </div>
+                                        <span class="text-sm font-medium text-gray-700 dark:text-gray-200">Comedy</span>
+                                        <span class="text-xs text-gray-500 dark:text-gray-400 mt-1">Laugh out
+                                            loud</span>
+                                    </a>
+
+                                    <a href="{% url 'amusements' %}"
+                                        class="flex flex-col items-center p-3 rounded-xl hover:bg-green-50 dark:hover:bg-green-900/20 transition-all duration-200 group/item">
+                                        <div
+                                            class="w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center mb-2">
+                                            <span class="text-green-600 dark:text-green-400 text-lg">🎢</span>
+                                        </div>
+                                        <span
+                                            class="text-sm font-medium text-gray-700 dark:text-gray-200">Amusements</span>
+                                        <span class="text-xs text-gray-500 dark:text-gray-400 mt-1">Thrilling
+                                            rides</span>
+                                    </a>
+
+                                    <a href="{% url 'liveconcerts' %}"
+                                        class="flex flex-col items-center p-3 rounded-xl hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-all duration-200 group/item">
+                                        <div
+                                            class="w-10 h-10 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center mb-2">
+                                            <span class="text-purple-600 dark:text-purple-400 text-lg">🎸</span>
+                                        </div>
+                                        <span
+                                            class="text-sm font-medium text-gray-700 dark:text-gray-200">Concerts</span>
+                                        <span class="text-xs text-gray-500 dark:text-gray-400 mt-1">Live music</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Cart with Badge
+                    <a href="#"
+                        class="flex items-center space-x-2 px-4 py-2 rounded-xl text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-200 group relative">
+                        <span class="text-lg group-hover:scale-110 transition-transform">🛒</span>
+                        <span class="font-medium">Cart</span>
+                        <span
+                            class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center animate-pulse">3</span>
+                    </a> -->
+                </div>
+
+                <!-- User Section & Mobile Menu -->
+                <div class="flex items-center space-x-2">
+
+                    {% if request.session.user_authenticated %}
+                    <!-- User Profile Dropdown -->
+                    <div class="relative group">
+                        <button
+                            class="flex items-center space-x-2 px-3 py-2 rounded-xl bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 border border-blue-200/50 dark:border-blue-700/30 hover:shadow-md transition-all duration-200">
+                            <div
+                                class="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                                <span class="text-white text-sm font-semibold">{{ request.session.user_name|first|upper }}</span>
+                            </div>
+                            <span class="font-medium text-gray-700 dark:text-gray-200 hidden lg:block">Hi, {{ request.session.user_name }}</span>
+                            <svg class="w-4 h-4 text-gray-500 transform group-hover:rotate-180 transition-transform duration-200"
+                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+
+                        <!-- User Dropdown -->
+                        <div
+                            class="absolute right-0 mt-2 w-56 bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-gray-200/50 dark:border-gray-700/50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top-right scale-95 group-hover:scale-100">
+                            <div class="p-2">
+                                <div class="px-3 py-2 border-b border-gray-200/50 dark:border-gray-700/50">
+                                    <p class="text-sm font-semibold text-gray-800 dark:text-white">{{ request.session.user_name }}</p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400">Welcome back!</p>
+                                </div>
+
+                                <a href="#"
+                                    class="flex items-center px-3 py-2 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-200 group/item">
+                                    <span class="text-gray-600 dark:text-gray-400 mr-3">👤</span>
+                                    <span class="text-sm text-gray-700 dark:text-gray-200">Profile</span>
+                                </a>
+
+                                <a href="#"
+                                    class="flex items-center px-3 py-2 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-200 group/item">
+                                    <span class="text-gray-600 dark:text-gray-400 mr-3">⚙️</span>
+                                    <span class="text-sm text-gray-700 dark:text-gray-200">Settings</span>
+                                </a>
+
+                                <div class="border-t border-gray-200/50 dark:border-gray-700/50 mt-1 pt-1">
+                                    <a href="{% url 'logout' %}"
+                                        class="flex items-center px-3 py-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-red-600 dark:text-red-400 transition-all duration-200 group/item">
+                                        <span class="mr-3">🚪</span>
+                                        <span class="text-sm font-medium">Logout</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% else %}
+                    <!-- Login/Signup -->
+                    <div class="hidden md:flex items-center space-x-2">
+                        <a href="{% url 'login' %}"
+                            class="px-4 py-2 text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-all duration-200">
+                            Login
+                        </a>
+                        <a href="{% url 'signup' %}"
+                            class="px-6 py-2 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-xl font-medium shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200">
+                            Sign Up
+                        </a>
+                    </div>
+                    {% endif %}
+
+                    <!-- Theme Toggle -->
+                    <button id="theme-toggle"
+                        class="p-2 rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-400 transition-all duration-200 group">
+                        <span class="block dark:hidden group-hover:scale-110 transition-transform">🌙</span>
+                        <span class="hidden dark:block group-hover:scale-110 transition-transform">☀️</span>
+                    </button>
+
+                    <!-- Mobile menu button -->
+                    <button id="mobile-menu-button"
+                        class="md:hidden p-2 rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-400 transition-all duration-200">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu"
+            class="md:hidden bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl border-b border-gray-200/50 dark:border-gray-700/50 hidden transition-all duration-300">
+            <div class="px-4 py-3 space-y-1">
+                <a href="{% url 'home' %}"
+                    class="flex items-center space-x-3 px-3 py-3 rounded-xl hover:bg-blue-50 dark:hover:bg-blue-900/20 transition">
+                    <span>🏠</span>
+                    <span class="font-medium">Home</span>
+                </a>
+                <a href="{% url 'events' %}"
+                    class="flex items-center space-x-3 px-3 py-3 rounded-xl hover:bg-blue-50 dark:hover:bg-blue-900/20 transition">
+                    <span>📅</span>
+                    <span class="font-medium">Business Events</span>
+                </a>
+                <a href="{% url 'movies' %}"
+                    class="flex items-center space-x-3 px-3 py-3 rounded-xl hover:bg-red-50 dark:hover:bg-red-900/20 transition">
+                    <span>🎬</span>
+                    <span class="font-medium">Movies</span>
+                </a>
+                <a href="{% url 'comedyshows' %}"
+                    class="flex items-center space-x-3 px-3 py-3 rounded-xl hover:bg-yellow-50 dark:hover:bg-yellow-900/20 transition">
+                    <span>🎤</span>
+                    <span class="font-medium">Comedy Shows</span>
+                </a>
+                <a href="{% url 'amusements' %}"
+                    class="flex items-center space-x-3 px-3 py-3 rounded-xl hover:bg-green-50 dark:hover:bg-green-900/20 transition">
+                    <span>🎢</span>
+                    <span class="font-medium">Amusements</span>
+                </a>
+                <a href="{% url 'liveconcerts' %}"
+                    class="flex items-center space-x-3 px-3 py-3 rounded-xl hover:bg-purple-50 dark:hover:bg-purple-900/20 transition">
+                    <span>🎸</span>
+                    <span class="font-medium">Live Concerts</span>
+                </a>
+                <a href="#"
+                    class="flex items-center space-x-3 px-3 py-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition">
+                    <span>🛒</span>
+                    <span class="font-medium">Cart</span>
+                    <span
+                        class="ml-auto bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">3</span>
+                </a>
+
+                {% if request.session.user_authenticated %}
+                <div class="border-t border-gray-200 dark:border-gray-600 pt-2 mt-2">
+                    <div class="flex items-center space-x-3 px-3 py-2 text-gray-600 dark:text-gray-300">
+                        <div
+                            class="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                            <span class="text-white text-sm font-semibold">{{ request.session.user_name|first|upper
+                                }}</span>
+                        </div>
+                        <span>Hi, {{ request.session.user_name }}</span>
+                    </div>
+                    <a href="{% url 'logout' %}"
+                        class="flex items-center space-x-3 px-3 py-2 rounded-xl hover:bg-red-50 dark:hover:bg-red-900/20 text-red-600 dark:text-red-400 transition">
+                        <span>🚪</span>
+                        <span>Logout</span>
+                    </a>
+                </div>
+                {% else %}
+                <div class="border-t border-gray-200 dark:border-gray-600 pt-2 mt-2 space-y-2">
+                    <a href="{% url 'login' %}"
+                        class="block px-3 py-3 rounded-xl hover:bg-blue-50 dark:hover:bg-blue-900/20 transition text-center font-medium">
+                        Login
+                    </a>
+                    <a href="{% url 'signup' %}"
+                        class="block px-3 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl hover:from-blue-600 hover:to-purple-700 transition text-center font-medium">
+                        Sign Up
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <!-- Messages -->
+    <div class="hidden" id="django-messages">
+        {% if messages %}
+        {% for message in messages %}
+        <div class="message" data-type="{{ message.tags }}" data-content="{{ message|escapejs }}"></div>
+        {% endfor %}
+        {% endif %}
+    </div>
+
+    <!-- Main content -->
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 mt-6 mb-12 animate-fade-in">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 dark:bg-gray-900 text-white py-12 mt-16">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4 flex items-center space-x-2">
+                        <span>🎪</span>
+                        <span>EventHub</span>
+                    </h3>
+                    <p class="text-gray-400">
+                        Your gateway to unforgettable experiences. Discover events that create lasting memories.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Quick Links</h4>
+                    <div class="space-y-2 text-gray-400">
+                        <a href="{% url 'home' %}" class="block hover:text-white transition">Home</a>
+                        <a href="{% url 'events' %}" class="block hover:text-white transition">All Events</a>
+                        <a href="{% url 'aboutus' %}" class="block hover:text-white transition">About Us</a>
+                        <a href="{% url 'contactus' %}" class="block hover:text-white transition">Contact</a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Categories</h4>
+                    <div class="space-y-2 text-gray-400">
+                        <a href="{% url 'movies' %}" class="block hover:text-white transition">Movies</a>
+                        <a href="{% url 'comedyshows' %}" class="block hover:text-white transition">Comedy Shows</a>
+                        <a href="{% url 'amusements' %}" class="block hover:text-white transition">Amusements</a>
+                        <a href="{% url 'liveconcerts' %}" class="block hover:text-white transition">Live Concerts</a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Support</h4>
+                    <div class="space-y-2 text-gray-400">
+                        <a href="{% url 'helpcenter' %}" class="block hover:text-white transition">Help Center</a>
+                        <a href="{% url 'privacy & policy' %}" class="block hover:text-white transition">Privacy &
+                            Policy</a>
+                        <a href="{% url 'terms & conditions' %}" class="block hover:text-white transition">Terms &
+                            Conditions</a>
+                        <a href="{% url 'refund & policy' %}" class="block hover:text-white transition">Refund
+                            Policy</a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2024 EventHub. All rights reserved. Made with ❤️ for amazing experiences.</p>
+            </div>
+        </div>
+    </footer>
+    <!-- Toast Container -->
+    <div id="toast-container" class="fixed top-4 right-4 z-50 space-y-2 max-w-sm w-full"></div>
+    <!-- Scripts -->
+    <script src="{% static 'js/base.js' %}"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,201 @@
+{% extends "base.html" %}
+{% block title %}
+  About Us
+{% endblock  %}
+{% block content %}
+<div class="font-poppins bg-white dark:bg-gray-900 transition-colors duration-300">
+    <!-- About Us Content -->
+    <div class="max-w-7xl mx-auto px-4 py-12">
+        <!-- Header Section -->
+        <div class="text-center mb-16">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-800 dark:text-white mb-4">About EventHub</h1>
+            <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">Your premier destination for
+                unforgettable entertainment experiences - from comedy shows and movies to special events and live
+                concerts.</p>
+        </div>
+
+        <!-- Our Story Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-20">
+            <div>
+                <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-6">Our Story</h2>
+                <p class="text-gray-600 dark:text-gray-300 mb-4">Founded in 2018, EventHub began as a small platform for
+                    local comedy shows. Our founders, passionate about entertainment, recognized the need for a
+                    centralized hub where people could discover and book tickets for diverse entertainment experiences.
+                </p>
+                <p class="text-gray-600 dark:text-gray-300 mb-4">Over the years, we've expanded to include movies,
+                    special events, and live concerts, becoming the go-to platform for entertainment enthusiasts across
+                    the country.</p>
+                <p class="text-gray-600 dark:text-gray-300">Today, we partner with hundreds of venues and artists to
+                    bring you the best entertainment experiences, from intimate comedy clubs to massive concert arenas.
+                </p>
+            </div>
+            <div
+                class="bg-gradient-to-br from-purple-500 to-amber-500 rounded-2xl p-8 text-white flex flex-col justify-center">
+                <h3 class="text-2xl font-bold mb-4">Why Choose EventHub?</h3>
+                <ul class="space-y-3">
+                    <li class="flex items-start">
+                        <i class="fas fa-check-circle mt-1 mr-3"></i>
+                        <span>Curated selection of top-rated events</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-check-circle mt-1 mr-3"></i>
+                        <span>Easy booking and secure payments</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-check-circle mt-1 mr-3"></i>
+                        <span>Personalized recommendations</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-check-circle mt-1 mr-3"></i>
+                        <span>Exclusive deals and early access</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- What We Offer Section -->
+        <div class="mb-20">
+            <h2 class="text-3xl font-bold text-center text-gray-800 dark:text-white mb-12">What We Offer</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div
+                    class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 text-center transition-colors duration-300">
+                    <div
+                        class="bg-purple-100 dark:bg-purple-900 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-theater-masks text-purple-600 dark:text-purple-400 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-3">Comedy Shows</h3>
+                    <p class="text-gray-600 dark:text-gray-300">From stand-up to improv, discover laughter around every
+                        corner.</p>
+                </div>
+                <div
+                    class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 text-center transition-colors duration-300">
+                    <div
+                        class="bg-blue-100 dark:bg-blue-900 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-film text-purple-600 dark:text-purple-400 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-3">Movies</h3>
+                    <p class="text-gray-600 dark:text-gray-300">Blockbusters, indie films, and special screenings for
+                        every taste.</p>
+                </div>
+                <div
+                    class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 text-center transition-colors duration-300">
+                    <div
+                        class="bg-amber-100 dark:bg-amber-900 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-calendar-alt text-amber-600 dark:text-amber-400 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-3">Special Events</h3>
+                    <p class="text-gray-600 dark:text-gray-300">Festivals, conventions, and unique experiences you won't
+                        find elsewhere.</p>
+                </div>
+                <div
+                    class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 text-center transition-colors duration-300">
+                    <div
+                        class="bg-green-100 dark:bg-green-900 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-music text-purple-600 dark:text-purple-400 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-3">Live Concerts</h3>
+                    <p class="text-gray-600 dark:text-gray-300">From intimate gigs to stadium tours, feel the music come
+                        alive.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Section -->
+        <div class="bg-gradient-to-r from-purple-500 to-amber-500 rounded-2xl p-8 text-white mb-20">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                <div>
+                    <h3 class="text-4xl font-bold mb-2">50K+</h3>
+                    <p class="text-lg">Events Hosted</p>
+                </div>
+                <div>
+                    <h3 class="text-4xl font-bold mb-2">200+</h3>
+                    <p class="text-lg">Partner Venues</p>
+                </div>
+                <div>
+                    <h3 class="text-4xl font-bold mb-2">1M+</h3>
+                    <p class="text-lg">Happy Customers</p>
+                </div>
+                <div>
+                    <h3 class="text-4xl font-bold mb-2">25+</h3>
+                    <p class="text-lg">Cities Covered</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mission & Values Section -->
+        <div class="mb-20">
+            <h2 class="text-3xl font-bold text-center text-gray-800 dark:text-white mb-12">Our Mission & Values</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div
+                    class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 transition-colors duration-300">
+                    <div class="bg-purple-600 w-12 h-12 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-laugh-beam text-white text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-3">Create Joy</h3>
+                    <p class="text-gray-600 dark:text-gray-300">We believe in the power of entertainment to bring people
+                        together and create lasting memories.</p>
+                </div>
+                <div
+                    class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 transition-colors duration-300">
+                    <div class="bg-amber-500 w-12 h-12 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-users text-white text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-3">Connect Communities</h3>
+                    <p class="text-gray-600 dark:text-gray-300">We build bridges between artists, venues, and audiences
+                        to foster vibrant entertainment ecosystems.</p>
+                </div>
+                <div
+                    class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 transition-colors duration-300">
+                    <div class="bg-purple-600 w-12 h-12 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-star text-white text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-3">Quality Experiences</h3>
+                    <p class="text-gray-600 dark:text-gray-300">We curate only the best events to ensure every
+                        experience is memorable and worth your time.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Team Section -->
+        <div class="mb-20">
+            <h2 class="text-3xl font-bold text-center text-gray-800 dark:text-white mb-12">Meet Our Team</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="text-center">
+                    <div class="bg-gradient-to-br from-purple-500 to-amber-500 w-32 h-32 rounded-full mx-auto mb-4">
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-1">Sarah Johnson</h3>
+                    <p class="text-purple-600 dark:text-purple-400 mb-4">CEO & Founder</p>
+                </div>
+                <div class="text-center">
+                    <div class="bg-gradient-to-br from-amber-500 to-purple-500 w-32 h-32 rounded-full mx-auto mb-4">
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-1">Michael Chen</h3>
+                    <p class="text-purple-600 dark:text-purple-400 mb-4">CTO</p>
+                </div>
+                <div class="text-center">
+                    <div class="bg-gradient-to-br from-purple-500 to-amber-500 w-32 h-32 rounded-full mx-auto mb-4">
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-1">Emma Rodriguez</h3>
+                    <p class="text-purple-600 dark:text-purple-400 mb-4">Head of Partnerships</p>
+                </div>
+                <div class="text-center">
+                    <div class="bg-gradient-to-br from-amber-500 to-purple-500 w-32 h-32 rounded-full mx-auto mb-4">
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-1">David Kim</h3>
+                    <p class="text-purple-600 dark:text-purple-400 mb-4">Marketing Director</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA Section -->
+        <div class="bg-gray-800 dark:bg-gray-700 rounded-2xl p-8 text-white text-center transition-colors duration-300">
+            <h2 class="text-3xl font-bold mb-6">Ready to Find Your Next Experience?</h2>
+            <p class="text-xl max-w-2xl mx-auto mb-8">Join thousands of entertainment enthusiasts discovering their next
+                favorite event through EventHub.</p>
+            <button
+                class="bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 rounded-lg font-medium transition">Browse
+                Events</button>
+        </div>
+    </div>
+</div>
+{% endblock %}

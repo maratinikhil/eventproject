@@ -1,0 +1,510 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+  Terms & Conditions
+{% endblock %}
+{% block content %}
+<div class="font-poppins bg-white dark:bg-gray-900 transition-colors duration-300 min-h-screen">
+    <!-- Terms of Service Content -->
+    <div class="max-w-4xl mx-auto px-4 py-12">
+        <!-- Header Section -->
+        <div class="text-center mb-16">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-800 dark:text-white mb-4">Terms and Conditions</h1>
+            <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">Last updated: December 1, 2023</p>
+            <div class="mt-6 flex flex-wrap justify-center gap-4">
+                <span
+                    class="bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 px-4 py-2 rounded-full text-sm font-medium">Legal
+                    Agreement</span>
+                <span
+                    class="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-4 py-2 rounded-full text-sm font-medium">User
+                    Guidelines</span>
+                <span
+                    class="bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 px-4 py-2 rounded-full text-sm font-medium">Booking
+                    Terms</span>
+            </div>
+        </div>
+
+        <!-- Quick Navigation -->
+        <div class="bg-gray-50 dark:bg-gray-800 rounded-2xl p-6 mb-12 sticky top-4 z-10 shadow-sm">
+            <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Quick Navigation</h3>
+            <div class="flex flex-wrap gap-3">
+                <a href="#acceptance"
+                    class="bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg text-sm hover:bg-purple-50 dark:hover:bg-gray-600 transition">Acceptance</a>
+                <a href="#accounts"
+                    class="bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg text-sm hover:bg-purple-50 dark:hover:bg-gray-600 transition">Accounts</a>
+                <a href="#bookings"
+                    class="bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg text-sm hover:bg-purple-50 dark:hover:bg-gray-600 transition">Bookings</a>
+                <a href="#payments"
+                    class="bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg text-sm hover:bg-purple-50 dark:hover:bg-gray-600 transition">Payments</a>
+                <a href="#cancellations"
+                    class="bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg text-sm hover:bg-purple-50 dark:hover:bg-gray-600 transition">Cancellations</a>
+                <a href="#conduct"
+                    class="bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg text-sm hover:bg-purple-50 dark:hover:bg-gray-600 transition">User
+                    Conduct</a>
+            </div>
+        </div>
+
+        <!-- Important Notice -->
+        <div class="bg-amber-50 dark:bg-amber-900/20 border-l-4 border-amber-500 p-6 rounded-r-lg mb-8">
+            <div class="flex items-start">
+                <i class="fas fa-exclamation-triangle text-amber-600 dark:text-amber-400 text-xl mt-1 mr-4"></i>
+                <div>
+                    <h4 class="font-bold text-amber-800 dark:text-amber-200 mb-2">Important Legal Notice</h4>
+                    <p class="text-amber-700 dark:text-amber-300">
+                        Please read these Terms of Service carefully before using EventHub. By accessing or using our
+                        platform, you agree to be bound by these terms and our Privacy Policy.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Introduction -->
+        <div class="mb-12">
+            <p class="text-gray-600 dark:text-gray-300 mb-4">
+                Welcome to EventHub. These Terms of Service govern your use of our platform for booking comedy shows,
+                movies, events, and live concerts. EventHub ("we," "our," or "us") provides services through our website
+                and mobile applications.
+            </p>
+            <p class="text-gray-600 dark:text-gray-300">
+                We reserve the right to update these terms at any time. Continued use of our services after changes
+                constitutes acceptance of the new terms.
+            </p>
+        </div>
+
+        <!-- Acceptance of Terms -->
+        <section id="acceptance" class="mb-16 scroll-mt-20">
+            <div class="flex items-center mb-8">
+                <div
+                    class="bg-purple-100 dark:bg-purple-900 w-12 h-12 rounded-full flex items-center justify-center mr-4">
+                    <i class="fas fa-handshake text-purple-600 dark:text-purple-400 text-xl"></i>
+                </div>
+                <h2 class="text-3xl font-bold text-gray-800 dark:text-white">1. Acceptance of Terms</h2>
+            </div>
+
+            <div
+                class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+                <div class="space-y-4 text-gray-600 dark:text-gray-300">
+                    <p>
+                        By accessing or using EventHub services, you acknowledge that you have read, understood, and
+                        agree to be bound by these Terms of Service and our Privacy Policy.
+                    </p>
+
+                    <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                        <h4 class="font-bold text-gray-800 dark:text-white mb-2">Key Agreements:</h4>
+                        <ul class="list-disc list-inside space-y-2">
+                            <li>You are at least 18 years old or have parental consent</li>
+                            <li>You will provide accurate and complete information</li>
+                            <li>You are responsible for maintaining account security</li>
+                            <li>You agree to comply with all applicable laws</li>
+                        </ul>
+                    </div>
+
+                    <p>
+                        If you do not agree to these terms, you must immediately discontinue use of EventHub services.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- User Accounts -->
+        <section id="accounts" class="mb-16 scroll-mt-20">
+            <div class="flex items-center mb-8">
+                <div class="bg-blue-100 dark:bg-blue-900 w-12 h-12 rounded-full flex items-center justify-center mr-4">
+                    <i class="fas fa-user-circle text-blue-600 dark:text-blue-400 text-xl"></i>
+                </div>
+                <h2 class="text-3xl font-bold text-gray-800 dark:text-white">2. User Accounts</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div
+                    class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700">
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-4 flex items-center">
+                        <i class="fas fa-user-plus text-green-600 dark:text-green-400 mr-3"></i>
+                        Account Registration
+                    </h3>
+                    <ul class="space-y-3 text-gray-600 dark:text-gray-300">
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                            <span>Must provide accurate and current information</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                            <span>One account per individual</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                            <span>Maintain account security credentials</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                            <span>Immediately notify us of unauthorized access</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div
+                    class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700">
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-4 flex items-center">
+                        <i class="fas fa-ban text-red-600 dark:text-red-400 mr-3"></i>
+                        Prohibited Activities
+                    </h3>
+                    <ul class="space-y-3 text-gray-600 dark:text-gray-300">
+                        <li class="flex items-start">
+                            <i class="fas fa-times-circle text-red-500 mt-1 mr-3"></i>
+                            <span>Creating fake or duplicate accounts</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-times-circle text-red-500 mt-1 mr-3"></i>
+                            <span>Impersonating other individuals</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-times-circle text-red-500 mt-1 mr-3"></i>
+                            <span>Sharing account credentials</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-times-circle text-red-500 mt-1 mr-3"></i>
+                            <span>Using others' accounts without permission</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Event Bookings -->
+        <section id="bookings" class="mb-16 scroll-mt-20">
+            <div class="flex items-center mb-8">
+                <div
+                    class="bg-green-100 dark:bg-green-900 w-12 h-12 rounded-full flex items-center justify-center mr-4">
+                    <i class="fas fa-ticket-alt text-green-600 dark:text-green-400 text-xl"></i>
+                </div>
+                <h2 class="text-3xl font-bold text-gray-800 dark:text-white">3. Event Bookings</h2>
+            </div>
+
+            <div
+                class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+                <div class="space-y-6">
+                    <div class="flex items-start">
+                        <div
+                            class="bg-purple-100 dark:bg-purple-900 w-10 h-10 rounded-full flex items-center justify-center mr-4 flex-shrink-0">
+                            <i class="fas fa-calendar-check text-purple-600 dark:text-purple-400"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-gray-800 dark:text-white mb-2">Booking Process</h4>
+                            <p class="text-gray-600 dark:text-gray-300">All bookings are subject to availability and
+                                confirmation. We reserve the right to refuse or cancel any booking at our discretion.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start">
+                        <div
+                            class="bg-blue-100 dark:bg-blue-900 w-10 h-10 rounded-full flex items-center justify-center mr-4 flex-shrink-0">
+                            <i class="fas fa-info-circle text-blue-600 dark:text-blue-400"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-gray-800 dark:text-white mb-2">Event Information</h4>
+                            <p class="text-gray-600 dark:text-gray-300">Event details, including dates, times, venues,
+                                and artists, are subject to change. We will notify you of any significant changes.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start">
+                        <div
+                            class="bg-amber-100 dark:bg-amber-900 w-10 h-10 rounded-full flex items-center justify-center mr-4 flex-shrink-0">
+                            <i class="fas fa-id-card text-amber-600 dark:text-amber-400"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-gray-800 dark:text-white mb-2">Ticket Delivery</h4>
+                            <p class="text-gray-600 dark:text-gray-300">Tickets are typically delivered electronically.
+                                You are responsible for ensuring you can access and present your tickets at the event.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                    <h5 class="font-bold text-blue-800 dark:text-blue-200 mb-2">Important Note:</h5>
+                    <p class="text-blue-700 dark:text-blue-300 text-sm">
+                        EventHub acts as an intermediary between you and event organizers. We are not responsible for
+                        the quality, content, or execution of events.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Payments and Fees -->
+        <section id="payments" class="mb-16 scroll-mt-20">
+            <div class="flex items-center mb-8">
+                <div
+                    class="bg-amber-100 dark:bg-amber-900 w-12 h-12 rounded-full flex items-center justify-center mr-4">
+                    <i class="fas fa-credit-card text-amber-600 dark:text-amber-400 text-xl"></i>
+                </div>
+                <h2 class="text-3xl font-bold text-gray-800 dark:text-white">4. Payments and Fees</h2>
+            </div>
+
+            <div
+                class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm text-left text-gray-600 dark:text-gray-300">
+                        <thead class="text-xs text-gray-700 dark:text-gray-300 uppercase bg-gray-50 dark:bg-gray-700">
+                            <tr>
+                                <th class="px-4 py-3">Fee Type</th>
+                                <th class="px-4 py-3">Description</th>
+                                <th class="px-4 py-3">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b border-gray-200 dark:border-gray-600">
+                                <td class="px-4 py-3 font-medium">Service Fee</td>
+                                <td class="px-4 py-3">Platform maintenance and support</td>
+                                <td class="px-4 py-3">2.5% of ticket price</td>
+                            </tr>
+                            <tr class="border-b border-gray-200 dark:border-gray-600">
+                                <td class="px-4 py-3 font-medium">Processing Fee</td>
+                                <td class="px-4 py-3">Payment gateway charges</td>
+                                <td class="px-4 py-3">$1.50 per ticket</td>
+                            </tr>
+                            <tr class="border-b border-gray-200 dark:border-gray-600">
+                                <td class="px-4 py-3 font-medium">Convenience Fee</td>
+                                <td class="px-4 py-3">Electronic delivery and management</td>
+                                <td class="px-4 py-3">$2.00 per order</td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 py-3 font-medium">Taxes</td>
+                                <td class="px-4 py-3">Applicable sales taxes</td>
+                                <td class="px-4 py-3">As required by law</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg">
+                        <h5 class="font-bold text-green-800 dark:text-green-200 mb-2">Accepted Payment Methods</h5>
+                        <ul class="text-green-700 dark:text-green-300 text-sm space-y-1">
+                            <li>• Credit/Debit Cards (Visa, MasterCard, American Express)</li>
+                            <li>• PayPal</li>
+                            <li>• Apple Pay & Google Pay</li>
+                            <li>• EventHub Gift Cards</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-red-50 dark:bg-red-900/20 p-4 rounded-lg">
+                        <h5 class="font-bold text-red-800 dark:text-red-200 mb-2">Payment Security</h5>
+                        <p class="text-red-700 dark:text-red-300 text-sm">
+                            All payments are processed through secure, encrypted channels. We do not store your full
+                            payment card details on our servers.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Cancellations and Refunds -->
+        <section id="cancellations" class="mb-16 scroll-mt-20">
+            <div class="flex items-center mb-8">
+                <div class="bg-red-100 dark:bg-red-900 w-12 h-12 rounded-full flex items-center justify-center mr-4">
+                    <i class="fas fa-times-circle text-red-600 dark:text-red-400 text-xl"></i>
+                </div>
+                <h2 class="text-3xl font-bold text-gray-800 dark:text-white">5. Cancellations and Refunds</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div
+                    class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700">
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-4">Customer Cancellations</h3>
+                    <div class="space-y-4 text-gray-600 dark:text-gray-300">
+                        <div class="flex items-start">
+                            <i class="fas fa-clock text-amber-500 mt-1 mr-3"></i>
+                            <div>
+                                <strong>24+ Hours Before Event:</strong>
+                                <p class="text-sm">Full refund minus processing fees</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <i class="fas fa-exclamation-triangle text-red-500 mt-1 mr-3"></i>
+                            <div>
+                                <strong>Less than 24 Hours:</strong>
+                                <p class="text-sm">No refunds available</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <i class="fas fa-theater-masks text-purple-500 mt-1 mr-3"></i>
+                            <div>
+                                <strong>Comedy Shows:</strong>
+                                <p class="text-sm">48-hour cancellation policy</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700">
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-4">Event Cancellations</h3>
+                    <div class="space-y-4 text-gray-600 dark:text-gray-300">
+                        <div class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                            <div>
+                                <strong>Event Canceled:</strong>
+                                <p class="text-sm">Full refund including fees</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <i class="fas fa-sync-alt text-blue-500 mt-1 mr-3"></i>
+                            <div>
+                                <strong>Event Rescheduled:</strong>
+                                <p class="text-sm">Tickets valid for new date or refund available</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <i class="fas fa-cloud-rain text-gray-500 mt-1 mr-3"></i>
+                            <div>
+                                <strong>Weather & Force Majeure:</strong>
+                                <p class="text-sm">Subject to organizer's policy</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- User Conduct -->
+        <section id="conduct" class="mb-16 scroll-mt-20">
+            <div class="flex items-center mb-8">
+                <div
+                    class="bg-indigo-100 dark:bg-indigo-900 w-12 h-12 rounded-full flex items-center justify-center mr-4">
+                    <i class="fas fa-users text-indigo-600 dark:text-indigo-400 text-xl"></i>
+                </div>
+                <h2 class="text-3xl font-bold text-gray-800 dark:text-white">6. User Conduct and Prohibited Activities
+                </h2>
+            </div>
+
+            <div
+                class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="font-bold text-gray-800 dark:text-white mb-4">Prohibited Content</h4>
+                        <ul class="space-y-2 text-gray-600 dark:text-gray-300">
+                            <li class="flex items-start">
+                                <i class="fas fa-ban text-red-500 mt-1 mr-3"></i>
+                                <span>False or misleading information</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-ban text-red-500 mt-1 mr-3"></i>
+                                <span>Harassment or abusive content</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-ban text-red-500 mt-1 mr-3"></i>
+                                <span>Commercial solicitation</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-ban text-red-500 mt-1 mr-3"></i>
+                                <span>Copyright infringement</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 class="font-bold text-gray-800 dark:text-white mb-4">Prohibited Activities</h4>
+                        <ul class="space-y-2 text-gray-600 dark:text-gray-300">
+                            <li class="flex items-start">
+                                <i class="fas fa-ban text-red-500 mt-1 mr-3"></i>
+                                <span>Scalping or reselling tickets above face value</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-ban text-red-500 mt-1 mr-3"></i>
+                                <span>Automated booking or scraping</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-ban text-red-500 mt-1 mr-3"></i>
+                                <span>Fraudulent transactions</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-ban text-red-500 mt-1 mr-3"></i>
+                                <span>Interfering with platform operations</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="mt-6 p-4 bg-red-50 dark:bg-red-900/20 rounded-lg">
+                    <h5 class="font-bold text-red-800 dark:text-red-200 mb-2">Consequences of Violation:</h5>
+                    <p class="text-red-700 dark:text-red-300 text-sm">
+                        Violation of these conduct rules may result in account suspension, cancellation of bookings, and
+                        legal action where appropriate.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Limitation of Liability -->
+        <section class="mb-16">
+            <div class="flex items-center mb-8">
+                <div class="bg-gray-100 dark:bg-gray-800 w-12 h-12 rounded-full flex items-center justify-center mr-4">
+                    <i class="fas fa-balance-scale text-gray-600 dark:text-gray-400 text-xl"></i>
+                </div>
+                <h2 class="text-3xl font-bold text-gray-800 dark:text-white">7. Limitation of Liability</h2>
+            </div>
+
+            <div
+                class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-2xl p-6">
+                <div class="space-y-4 text-yellow-800 dark:text-yellow-200">
+                    <p>
+                        <strong>EventHub acts as a booking platform and intermediary service.</strong> We are not
+                        responsible for:
+                    </p>
+                    <ul class="list-disc list-inside space-y-2">
+                        <li>The quality, safety, or content of events</li>
+                        <li>Actions or omissions of event organizers, venues, or artists</li>
+                        <li>Event cancellations, postponements, or changes</li>
+                        <li>Personal injury or property damage at events</li>
+                        <li>Technical issues beyond our reasonable control</li>
+                    </ul>
+                    <p class="text-sm mt-4">
+                        Our maximum liability to you for any claim related to our services shall not exceed the total
+                        amount you paid for the specific booking in question.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact and Disputes -->
+        <div class="bg-gray-50 dark:bg-gray-800 rounded-2xl p-8 text-center">
+            <h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Questions or Disputes?</h3>
+            <p class="text-gray-600 dark:text-gray-300 mb-6 max-w-2xl mx-auto">
+                For questions about these terms or to resolve disputes, please contact us first. We're committed to
+                finding amicable solutions.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="mailto:legal@eventhub.com"
+                    class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-medium transition">
+                    <i class="fas fa-gavel mr-2"></i>Contact Legal Team
+                </a>
+                <a href="/contact"
+                    class="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-white px-6 py-3 rounded-lg font-medium transition">
+                    <i class="fas fa-headset mr-2"></i>General Support
+                </a>
+            </div>
+        </div>
+
+        <!-- Governing Law -->
+        <div class="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700">
+            <h4 class="font-bold text-gray-800 dark:text-white mb-4">Governing Law and Jurisdiction</h4>
+            <p class="text-gray-600 dark:text-gray-300 text-sm">
+                These Terms of Service are governed by the laws of the State of California. Any disputes shall be
+                resolved in the courts of San Francisco County, California.
+            </p>
+        </div>
+
+        <!-- Last Updated -->
+        <div class="mt-8 pt-8 border-t border-gray-200 dark:border-gray-700 text-center">
+            <p class="text-gray-500 dark:text-gray-400 text-sm">
+                These Terms of Service were last updated on December 1, 2023. We recommend reviewing them periodically
+                for changes.
+            </p>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'js/terms&conditions.js' %}"></script>
+{% endblock %}

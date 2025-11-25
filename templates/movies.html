@@ -1,0 +1,401 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Movies{% endblock %}
+
+{% block content %}
+
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+    <div class="container mx-auto px-4 py-8">
+
+        <!-- Hero Section -->
+        <div class="text-center mb-16">
+            <div class="max-w-4xl mx-auto">
+                <h1
+                    class="text-5xl md:text-7xl font-black text-gray-900 dark:text-white mb-6 bg-gradient-to-r from-red-600 to-purple-600 bg-clip-text text-transparent">
+                    Now Showing
+                </h1>
+                <p class="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
+                    Immerse yourself in cinematic excellence. Book your seats for an unforgettable movie experience.
+                </p>
+
+                <!-- Hero Search -->
+                <div class="max-w-2xl mx-auto relative">
+                    <div class="relative">
+                        <input type="text" placeholder="Search movies, actors, directors..."
+                            class="w-full pl-16 pr-6 py-5 rounded-2xl border-0 bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl text-gray-900 dark:text-white text-lg shadow-2xl focus:ring-4 focus:ring-red-500/20 focus:bg-white dark:focus:bg-gray-800 transition-all duration-300">
+                        <svg class="absolute left-6 top-5 h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                        <button
+                            class="absolute right-3 top-3 px-6 py-2 bg-red-500 hover:bg-red-600 text-white rounded-xl font-semibold transition-all duration-300 transform hover:scale-105">
+                            Search
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Filters -->
+        <div class="flex flex-wrap justify-center gap-3 mb-12">
+            <button
+                class="px-6 py-3 bg-red-500 text-white rounded-full font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 flex items-center gap-2">
+                <span>All Movies</span>
+                <span class="bg-white/20 px-2 py-1 rounded-full text-sm">{{ movies|length }}</span>
+            </button>
+            {% for genre in genres|slice:":6" %}
+            <button
+                class="px-6 py-3 bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl text-gray-700 dark:text-gray-300 rounded-full font-medium shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 hover:bg-red-500 hover:text-white">
+                {{ genre }}
+            </button>
+            {% endfor %}
+            <button
+                class="px-6 py-3 bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl text-gray-700 dark:text-gray-300 rounded-full font-medium shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 border-2 border-dashed border-gray-300 dark:border-gray-600">
+                More +
+            </button>
+        </div>
+
+        <!-- Advanced Filters Card -->
+        <div
+            class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-3xl shadow-2xl p-8 mb-12 border border-white/20">
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                <div class="lg:col-span-1">
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Refine Your Search</h3>
+                    <p class="text-gray-600 dark:text-gray-300">Find your perfect movie match</p>
+                </div>
+
+                <div class="lg:col-span-3 grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Genre</label>
+                        <select
+                            class="w-full px-4 py-3 rounded-xl border-0 bg-white/50 dark:bg-gray-700/50 text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500 shadow-lg">
+                            <option>All Genres</option>
+                            <option>Action</option>
+                            <option>Comedy</option>
+                            <option>Drama</option>
+                            <option>Thriller</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label
+                            class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Language</label>
+                        <select
+                            class="w-full px-4 py-3 rounded-xl border-0 bg-white/50 dark:bg-gray-700/50 text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500 shadow-lg">
+                            <option>All Languages</option>
+                            <option>English</option>
+                            <option>Hindi</option>
+                            <option>Regional</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Date</label>
+                        <select
+                            class="w-full px-4 py-3 rounded-xl border-0 bg-white/50 dark:bg-gray-700/50 text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500 shadow-lg">
+                            <option>Any Date</option>
+                            <option>Today</option>
+                            <option>This Week</option>
+                            <option>Next Week</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Filters -->
+            <div class="mt-8 pt-8 border-t border-gray-200 dark:border-gray-700">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Rating</label>
+                        <select
+                            class="w-full px-4 py-3 rounded-xl border-0 bg-white/50 dark:bg-gray-700/50 text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500 shadow-lg">
+                            <option>Any Rating</option>
+                            <option>4.5+ Stars</option>
+                            <option>4.0+ Stars</option>
+                            <option>3.5+ Stars</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label
+                            class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Duration</label>
+                        <select
+                            class="w-full px-4 py-3 rounded-xl border-0 bg-white/50 dark:bg-gray-700/50 text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500 shadow-lg">
+                            <option>Any Duration</option>
+                            <option>Under 2 hours</option>
+                            <option>2-3 hours</option>
+                            <option>Over 3 hours</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Format</label>
+                        <select
+                            class="w-full px-4 py-3 rounded-xl border-0 bg-white/50 dark:bg-gray-700/50 text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500 shadow-lg">
+                            <option>All Formats</option>
+                            <option>2D</option>
+                            <option>3D</option>
+                            <option>IMAX</option>
+                        </select>
+                    </div>
+
+                    <div class="flex items-end">
+                        <button
+                            class="w-full px-6 py-3 bg-gradient-to-r from-red-500 to-purple-500 hover:from-red-600 hover:to-purple-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
+                            Apply Filters
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Header -->
+        <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8">
+            <div class="mb-6 lg:mb-0">
+                <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+                    Featured Movies
+                    <span class="text-red-500 ml-2">{{ movies|length }}</span>
+                </h2>
+                <p class="text-gray-600 dark:text-gray-300">Curated selection of must-watch films</p>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-4">
+                <div
+                    class="flex items-center gap-4 bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl p-3 shadow-lg">
+                    <span class="text-sm font-semibold text-gray-700 dark:text-gray-300">Sort by:</span>
+                    <select
+                        class="bg-transparent border-0 text-gray-900 dark:text-white focus:ring-0 text-sm font-medium">
+                        <option>Popularity</option>
+                        <option>Newest First</option>
+                        <option>Rating: High to Low</option>
+                        <option>Price: Low to High</option>
+                        <option>Price: High to Low</option>
+                    </select>
+                </div>
+
+                <div
+                    class="flex border border-gray-300 dark:border-gray-600 rounded-2xl overflow-hidden bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl shadow-lg">
+                    <button
+                        class="p-3 border-r border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <svg class="w-5 h-5 text-gray-700 dark:text-gray-300" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                        </svg>
+                    </button>
+                    <button class="p-3 bg-red-500 text-white">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Movies Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mb-16">
+            {% for movie in movies %}
+            <div
+            class="group relative bg-white dark:bg-gray-800 rounded-3xl shadow-2xl overflow-hidden hover:shadow-3xl transition-all duration-500 transform hover:-translate-y-2 border border-white/20">
+            <a href="{% url 'movie_view' movie.id %}" class="block">
+
+                <!-- Movie Poster with Gradient Overlay -->
+                <div class="relative overflow-hidden h-64">
+                    {% if movie.image %}
+                    <img src="{{ movie.image.url }}" alt="{{ movie.title }}"
+                        class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    {% else %}
+                    <div
+                        class="w-full h-full bg-gradient-to-br from-gray-300 to-gray-400 dark:from-gray-600 dark:to-gray-700 flex items-center justify-center">
+                        <span class="text-white font-medium">No Image</span>
+                    </div>
+                    {% endif %}
+
+                    <!-- Gradient Overlay -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-90">
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div
+                        class="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <button
+                            class="w-10 h-10 bg-white/20 backdrop-blur-xl rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                            </svg>
+                        </button>
+                        <button
+                            class="w-10 h-10 bg-white/20 backdrop-blur-xl rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- Rating Badge -->
+                    <div class="absolute top-4 left-4">
+                        <div
+                            class="flex items-center gap-1 bg-black/60 backdrop-blur-xl text-white px-3 py-2 rounded-2xl">
+                            <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                            </svg>
+                            <span class="font-bold text-sm">{{ movie.rating|default:"4.0" }}</span>
+                        </div>
+                    </div>
+
+                    <!-- Genre & Language -->
+                    <div class="absolute bottom-4 left-4 right-4">
+                        <div class="flex flex-wrap gap-2 mb-3">
+                            <span class="bg-red-500 text-white px-3 py-1 rounded-full text-xs font-bold">
+                                {{ movie.genre|default:"MOVIE" }}
+                            </span>
+                            <span
+                                class="bg-white/20 backdrop-blur-xl text-white px-3 py-1 rounded-full text-xs font-medium">
+                                {{ movie.language|default:"ENG" }}
+                            </span>
+                        </div>
+
+                        <!-- Date & Duration -->
+                        <div class="flex justify-between items-center text-white text-sm">
+                            <span class="font-semibold">{{ movie.date|date:"M d, Y"|default:"Coming Soon" }}</span>
+                            <span>{{ movie.duration|default:"120min" }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Movie Content -->
+                <div class="p-6">
+                    <!-- Title & Director -->
+                    <div class="mb-4">
+                        <h3
+                            class="text-xl font-bold text-gray-900 dark:text-white mb-2 line-clamp-1 group-hover:text-red-500 transition-colors">
+                            {{ movie.title }}
+                        </h3>
+                        <p class="text-gray-600 dark:text-gray-300 text-sm line-clamp-1">
+                            Directed by {{ movie.director|default:"Movie Director" }}
+                        </p>
+                    </div>
+
+                    <!-- Description -->
+                    <p class="text-gray-500 dark:text-gray-400 text-sm mb-6 line-clamp-2 leading-relaxed">
+                        {{ movie.description|truncatechars:100|default:"An exciting cinematic journey awaits. Experience the magic on the big screen." }}
+                    </p>
+
+                    <!-- Location & Time -->
+                    <div class="space-y-3 mb-6">
+                        <div class="flex items-center text-gray-600 dark:text-gray-300 text-sm">
+                            <svg class="w-4 h-4 mr-3 text-red-500 flex-shrink-0" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                            </svg>
+                            <span class="truncate">{{ movie.location|default:"Multiple Cinemas" }}</span>
+                        </div>
+                        <div class="flex items-center text-gray-600 dark:text-gray-300 text-sm">
+                            <svg class="w-4 h-4 mr-3 text-red-500 flex-shrink-0" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            {% if movie.time %}
+                            {{ movie.time|time:"g:i A" }}
+                            {% else %}
+                            Various Showtimes
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Price & Booking -->
+                    <div class="flex justify-between items-center pt-4 border-t border-gray-200 dark:border-gray-600">
+                        <div>
+                            <div class="text-2xl font-bold text-green-600 dark:text-green-400">
+                                ₹{{ movie.ticket_price|default:"299" }}
+                            </div>
+                            <div class="text-xs text-gray-500 dark:text-gray-400">
+                                {{ movie.available_seats|default:"50" }} seats left
+                            </div>
+                        </div>
+
+                        <a href="{% url 'book_movie_tickets' movie.id %}"
+                            class="px-6 py-3 bg-gradient-to-r from-red-500 to-purple-500 hover:from-red-600 hover:to-purple-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 flex items-center gap-2">
+                            <span>Book Now</span>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Hover Effect Border -->
+                <div
+                    class="absolute inset-0 border-2 border-transparent group-hover:border-red-500/30 rounded-3xl transition-all duration-500 pointer-events-none">
+                </div>
+            <!-- </a> -->
+            </div>
+            {% empty %}
+
+            <!-- Empty State -->
+            <div class="col-span-full text-center py-20">
+                <div class="max-w-md mx-auto">
+                    <div
+                        class="w-32 h-32 mx-auto mb-6 bg-gradient-to-r from-red-500 to-purple-500 rounded-full flex items-center justify-center shadow-2xl">
+                        <svg class="w-16 h-16 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">No Movies Available</h3>
+                    <p class="text-gray-600 dark:text-gray-300 text-lg mb-8">We're working on bringing amazing movies to
+                        your screen. Check back soon!</p>
+                    <button
+                        class="px-8 py-4 bg-gradient-to-r from-red-500 to-purple-500 hover:from-red-600 hover:to-purple-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 text-lg">
+                        Notify Me
+                    </button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Load More -->
+        {% if movies %}
+        <div class="text-center">
+            <button
+                class="px-12 py-4 border-2 border-red-500 text-red-500 hover:bg-red-500 hover:text-white font-semibold rounded-2xl transition-all duration-300 transform hover:scale-105 text-lg shadow-lg hover:shadow-xl">
+                Load More Movies
+                <svg class="w-5 h-5 inline-block ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+            </button>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Floating Action Button -->
+<div class="fixed bottom-8 right-8 z-50">
+    <button
+        class="group relative w-20 h-20 bg-gradient-to-r from-red-500 to-purple-500 text-white rounded-2xl shadow-2xl flex items-center justify-center text-2xl hover:scale-110 transition-all duration-300 hover:shadow-3xl">
+        🎬
+        <span
+            class="absolute -top-2 -right-2 w-8 h-8 bg-red-500 rounded-full text-sm flex items-center justify-center text-white font-bold shadow-lg">
+            {{ movies|length }}
+        </span>
+
+        <!-- Tooltip -->
+        <div
+            class="absolute right-full mr-4 top-1/2 transform -translate-y-1/2 bg-gray-900 text-white px-4 py-2 rounded-xl text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
+            {{ movies|length }} Movies Available
+            <div
+                class="absolute left-full top-1/2 transform -translate-y-1/2 border-8 border-transparent border-l-gray-900">
+            </div>
+        </div>
+    </button>
+</div>
+
+{% endblock %}
