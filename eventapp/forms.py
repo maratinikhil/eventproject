@@ -1,5 +1,5 @@
 from django import forms
-from .models import Event, ComedyShow, Movie, LiveConcert, AmusementPark,AmusementTicket
+from .models import Event, ComedyShow, Movie, LiveConcert, AmusementPark,AmusementTicket,BookingComedyShow
 
 class EventForm(forms.ModelForm):
     class Meta:
@@ -11,6 +11,42 @@ class ComedyShowForm(forms.ModelForm):
     class Meta:
         model = ComedyShow
         fields = "__all__"
+
+class BookingComedyShowForm(forms.ModelForm):
+    class Meta:
+        model = BookingComedyShow
+        fields = ['number_of_tickets']
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance and self.instance.pk:
+            # Show available seats info for existing bookings
+            available = self.instance.comedy_show.available_seats
+            self.fields['number_of_tickets'].help_text = f"Available seats: {available}"
+        elif self.initial.get('comedy_show'):
+            # For new bookings with pre-selected comedy show
+            comedy_show = ComedyShow.objects.get(pk=self.initial['comedy_show'])
+            available = comedy_show.available_seats
+            self.fields['number_of_tickets'].help_text = f"Available seats: {available}"
+        else:
+            # For new booking without comedy show selected
+            self.fields['number_of_tickets'].help_text = "Select a comedy show to see available seats"    
+    
+    def clean(self):
+        cleaned_data = super().clean()
+        comedy_show = cleaned_data.get('comedy_show')
+        number_of_tickets = cleaned_data.get('number_of_tickets')
+        
+        if comedy_show and number_of_tickets:
+            current_available = comedy_show.available_seats
+            if number_of_tickets > current_available:
+                raise forms.ValidationError(
+                    f"Only {current_available} seats available. You requested {number_of_tickets}."
+                )
+            if number_of_tickets <= 0:
+                raise forms.ValidationError("Number of tickets must be at least 1.")
+        
+        return cleaned_data
 
 class MovieForm(forms.ModelForm):
     class Meta:

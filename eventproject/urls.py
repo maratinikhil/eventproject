@@ -61,6 +61,7 @@ urlpatterns = [
     path('liveconcerts/ticket_booking/<int:concert_id>/',views.liveconcerts_book_ticket,name="liveconcerts_book_ticket"),
     path('liveconcerts/ticket_success/<int:booking_id>/',views.ticket_success,name="ticket_success"),
     path('amusements/amusements_book_tickets/<int:park_id>/',views.amusements_book_tickets,name="amusements_book_tickets"),
+    path('comedy_shows/book_comedy_tickets/<int:pk>/',views.book_comedy_tickets,name="book_comedy_tickets"),
     
     
     # Models Code

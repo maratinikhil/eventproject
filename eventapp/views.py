@@ -3,6 +3,7 @@ from django.contrib import messages
 from eventapp.models import User
 from functools import wraps
 from django.http import JsonResponse
+from .forms import BookingComedyShowForm
 import json
 from django.core.mail import send_mail
 from django.contrib.auth import login as auth_login, logout as auth_logout
@@ -317,6 +318,26 @@ def comedyshows(request):
 def comedyshows_view(request,id):
     comedyshow = get_object_or_404(ComedyShow, id=id)
     return render(request,'comedyshows_view.html',{"comedyshow":comedyshow})
+
+
+@login_required_session
+def book_comedy_tickets(request,pk):
+    comedy_show = get_object_or_404(ComedyShow,pk=pk)
+    if request.method == "POST":
+        form = BookingComedyShowForm(request.POST)
+        if form.is_valid():
+            booking = form.save(commit=False)
+            booking.user = request.user
+            booking.comedy_show = comedy_show
+            booking.total_price = booking.number_of_tickets * comedy_show.ticket_price
+            booking.save()
+            return redirect('booking_success')
+    else:
+        form = BookingComedyShowForm()
+    return render(request, 'book_tickets/comedy_show_book_tickets.html',{
+        "comedy_show":comedy_show,
+        "form":form
+    })
 
 @login_required_session
 def contactus(request):

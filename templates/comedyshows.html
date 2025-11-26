@@ -21,7 +21,7 @@
                     class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-yellow-500 focus:border-transparent">
             </div>
             <div class="flex flex-wrap gap-3 w-full lg:w-auto">
-                <select
+                <select title="Comedian type" aria-label="Comedian type"
                     class="flex-1 min-w-[150px] px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-yellow-500 focus:border-transparent">
                     <option>All Comedians</option>
                     <option>Roast</option>
@@ -29,14 +29,14 @@
                     <option>Improv</option>
                     <option>Sketch</option>
                 </select>
-                <select
+                <select title="Date filter" aria-label="Date filter"
                     class="flex-1 min-w-[150px] px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-yellow-500 focus:border-transparent">
                     <option>Any Date</option>
                     <option>This Weekend</option>
                     <option>Next Week</option>
                     <option>This Month</option>
                 </select>
-                <select
+                <select title="Age group filter" aria-label="Age group filter"
                     class="flex-1 min-w-[150px] px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-yellow-500 focus:border-transparent">
                     <option>All Ages</option>
                     <option>18+ Only</option>
@@ -170,11 +170,11 @@
                             class="w-10 h-10 border-2 border-gray-300 dark:border-gray-600 text-gray-400 hover:text-yellow-600 hover:border-yellow-600 rounded-xl flex items-center justify-center transition-all duration-300">
                             ♡
                         </button>
-                        <button
+                        <a href="{% url 'book_comedy_tickets' show.id %}"
                             class="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white py-2 px-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-2">
                             <span>Get Tickets</span>
                             <span>🎫</span>
-                        </button>
+                        </a>
                     </div>
                 </div>
             </div>

@@ -1,9 +1,10 @@
 from django.contrib import admin
 from django.utils.safestring import mark_safe
 from django import forms
-from .models import Event,ComedyShow,Movie,LiveConcert,AmusementPark,TicketBooking,MovieScreen,TheaterSeat,LiveConcertTicketBooking,AmusementTicket,AmusementBooking,AmusementBookingItem,OtherAmusementBooking,ComedyShowSeat,BookingComedyShow
+from django.utils.html import format_html
+from .models import Event,ComedyShow,Movie,LiveConcert,AmusementPark,TicketBooking,MovieScreen,TheaterSeat,LiveConcertTicketBooking,AmusementTicket,AmusementBooking,AmusementBookingItem,OtherAmusementBooking,BookingComedyShow
 
-from .forms import AmusementTicketForm
+from .forms import AmusementTicketForm,BookingComedyShowForm
 
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
@@ -18,151 +19,58 @@ class MovieAdmin(admin.ModelAdmin):
     search_fields = ['title', 'language', 'genre','director','cast']
     list_filter = ['language', 'genre','date']
 
-from django import forms
-from django.contrib import admin
 
-class BookingComedyShowForm(forms.ModelForm):
-    class Meta:
-        model = BookingComedyShow
-        fields = '__all__'
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        
-        # Filter seats based on comedy_show
-        if self.instance and self.instance.pk:
-            # For existing booking - show booked seats + available seats for the same show
-            booked_seats = self.instance.seats.all()
-            available_seats = ComedyShowSeat.objects.filter(
-                comedy_show=self.instance.comedy_show,
-                is_booked=False
-            )
-            self.fields['seats'].queryset = (booked_seats | available_seats).distinct()
-        else:
-            # For new booking
-            if 'comedy_show' in self.data and self.data['comedy_show']:
-                try:
-                    comedy_show_id = int(self.data.get('comedy_show'))
-                    self.fields['seats'].queryset = ComedyShowSeat.objects.filter(
-                        comedy_show_id=comedy_show_id,
-                        is_booked=False
-                    )
-                except (ValueError, TypeError):
-                    self.fields['seats'].queryset = ComedyShowSeat.objects.none()
-            elif self.instance.comedy_show_id:
-                self.fields['seats'].queryset = ComedyShowSeat.objects.filter(
-                    comedy_show_id=self.instance.comedy_show_id,
-                    is_booked=False
-                )
-            else:
-                self.fields['seats'].queryset = ComedyShowSeat.objects.none()
-
-        if not self.instance.pk:
-            self.fields['seats'].required = False
-
-    def clean(self):
-        cleaned_data = super().clean()
-        comedy_show = cleaned_data.get('comedy_show')
-        seats = cleaned_data.get('seats')
-        
-        if comedy_show and seats:
-            for seat in seats:
-                if seat.comedy_show != comedy_show:
-                    raise forms.ValidationError(
-                        f"Seat {seat} does not belong to the selected comedy show."
-                    )
-        
-        return cleaned_data
-
-class AvailableSeatsFilter(admin.SimpleListFilter):
-    title = 'seat availability'
-    parameter_name = 'is_booked'
-
-    def lookups(self, request, model_admin):
-        return (
-            ('available', 'Available'),
-            ('booked', 'Booked'),
-        )
-
-    def queryset(self, request, queryset):
-        if self.value() == 'available':
-            return queryset.filter(is_booked=False)
-        if self.value() == 'booked':
-            return queryset.filter(is_booked=True)
-        return queryset
-
-class ComedyShowSeatInline(admin.TabularInline):
-    model = ComedyShowSeat
-    extra = 0
-    readonly_fields = ('row', 'number', 'seat_type', 'price', 'is_booked')
-    can_delete = False
-    show_change_link = True
-    fields = ('row', 'number', 'seat_type', 'price', 'is_booked')
-    
-    def get_queryset(self, request):
-        qs = super().get_queryset(request)
-        return qs
 
 @admin.register(ComedyShow)
 class ComedyShowAdmin(admin.ModelAdmin):
-    list_display = ('title', 'location', 'date', 'time', 'comedian_name', 'available_seats', 'get_booked_seats_count')
+    list_display = ('title', 'location', 'date', 'time', 'comedian_name', 'total_seats', 'available_seats_display', 'ticket_price')
     search_fields = ('title', 'comedian_name', 'location')
     list_filter = ('comedy_type', 'date', 'popularity')
-    inlines = (ComedyShowSeatInline,)
-    readonly_fields = ('image_preview',)
-
-    def get_booked_seats_count(self, obj):
-        return obj.seats.filter(is_booked=True).count()
-    get_booked_seats_count.short_description = 'Booked Seats'
-
-    def image_preview(self, obj):
-        if obj.image:
-            return mark_safe(f'<img src="{obj.image.url}" style="max-height:200px;">')
-        return "(No image)"
-    image_preview.short_description = "Image preview"
-
-@admin.register(ComedyShowSeat)
-class ComedyShowSeatAdmin(admin.ModelAdmin):
-    list_display = ('comedy_show', 'row', 'number', 'get_seat_type_display', 'price', 'is_booked')
-    list_filter = (AvailableSeatsFilter, 'seat_type', 'comedy_show')
-    search_fields = ('row', 'number', 'comedy_show__title')
+    readonly_fields = ('available_seats_display',)
     
-    def get_queryset(self, request):
-        # By default, show all seats but you can modify this
-        return super().get_queryset(request)
+    def available_seats_display(self, obj):
+        """Display available seats with color coding"""
+        available = obj.available_seats
+        total = obj.total_seats
+        
+        if available == 0:
+            color = 'red'
+            text = 'SOLD OUT'
+        elif available < total * 0.2:  # Less than 20% seats left
+            color = 'red'
+            text = f'{available} / {total}'
+        elif available < total * 0.5:  # Less than 50% seats left
+            color = 'orange'
+            text = f'{available} / {total}'
+        else:
+            color = 'green'
+            text = f'{available} / {total}'
+            
+        return format_html(
+            '<span style="color: {}; font-weight: bold;">{}</span>',
+            color, text
+        )
+    available_seats_display.short_description = 'Available Seats'
 
 @admin.register(BookingComedyShow)
 class BookingComedyShowAdmin(admin.ModelAdmin):
     form = BookingComedyShowForm
-    list_display = ('booking_id', 'user', 'comedy_show', 'ticket_price_total', 'gst_amount', 'grand_total', 'booking_date', 'get_seats_count')
-    search_fields = ('booking_id', 'user__username', 'user__email', 'comedy_show__title')
-    readonly_fields = ('booking_id', 'ticket_price_total', 'gst_amount', 'grand_total', 'booking_date')
-    filter_horizontal = ('seats',)
+    list_display = ('booking_id', 'user', 'comedy_show', 'number_of_tickets', 'total_price', 'booking_date')
+    search_fields = ('booking_id', 'user__username', 'comedy_show__title')
+    readonly_fields = ('booking_id', 'total_price', 'booking_date')
+    list_filter = ('booking_date', 'comedy_show')
     
-    def get_seats_count(self, obj):
-        return obj.seats.count()
-    get_seats_count.short_description = 'Seats Booked'
-
     def save_model(self, request, obj, form, change):
         super().save_model(request, obj, form, change)
-        if obj.seats.exists():
-            obj.seats.update(is_booked=True)            
-            comedy_show = obj.comedy_show
-            total_seats = ComedyShowSeat.objects.filter(comedy_show=comedy_show).count()
-            booked_seats = ComedyShowSeat.objects.filter(comedy_show=comedy_show, is_booked=True).count()
-            comedy_show.available_seats = total_seats - booked_seats
-            comedy_show.save() 
+        # Force update of available seats
+        obj.comedy_show.update_available_seats()
 
-    def delete(self, *args, **kwargs):
-        seats = self.seats.all()
-        super().delete(*args, **kwargs)
-        seats.update(is_booked=False) 
-        comedy_show = self.comedy_show
-        total_seats = ComedyShowSeat.objects.filter(comedy_show=comedy_show).count()
-        booked_seats = ComedyShowSeat.objects.filter(comedy_show=comedy_show, is_booked=True).count()
-        comedy_show.available_seats = total_seats - booked_seats
-        comedy_show.save()
-
+    def delete_model(self, request, obj):
+        # Update seats before deletion
+        comedy_show = obj.comedy_show
+        super().delete_model(request, obj)
+        comedy_show.update_available_seats()
 
 @admin.register(LiveConcert)
 class LiveConcertAdmin(admin.ModelAdmin):

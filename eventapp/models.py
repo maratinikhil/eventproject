@@ -1,7 +1,8 @@
 from django.db import models
 from decimal import Decimal
+from django.db.models import Sum 
 from django.contrib.auth.models import User
-from django.db.models.signals import m2m_changed,post_save
+from django.db.models.signals import m2m_changed,post_save,post_delete
 from django.dispatch import receiver
 import math
 import uuid
@@ -236,19 +237,6 @@ def update_seat_status(sender, instance, action, pk_set, **kwargs):
     if action == "post_remove":
         TheaterSeat.objects.filter(pk__in=pk_set).update(status="Available")
 
-
-def index_to_row_label(index: int) -> str:
-    # index: 0 -> 'A', 25 -> 'Z', 26 -> 'AA', ...
-    label = ""
-    while True:
-        index, rem = divmod(index, 26)
-        label = chr(65 + rem) + label
-        if index == 0:
-            break
-        index -= 1
-    return label
-
-
 class ComedyShow(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
@@ -257,6 +245,7 @@ class ComedyShow(models.Model):
     time = models.TimeField()
     comedian_name = models.CharField(max_length=100)
     age_limit = models.PositiveIntegerField(default=18)
+    total_seats = models.PositiveIntegerField()
     ticket_price = models.DecimalField(max_digits=8,decimal_places=2)
     available_seats = models.PositiveIntegerField()
     image = models.ImageField(upload_to='comedy/',blank=True,null=True)
@@ -280,97 +269,51 @@ class ComedyShow(models.Model):
     def __str__(self):
         return self.title
     
+    def save(self,*args,**kwargs):
+        if not self.pk:
+            self.available_seats = self.total_seats
+        super().save(*args,**kwargs)
 
-class ComedyShowSeat(models.Model):
-    SEAT_TYPES = [
-        ("VIP_EARLY_A_E","VIP Early bird (A-E)"),
-        ("VIP_EARLY_F_M","VIP Early bird (F-M)"),
-        ("PREMIUM","Premium"),
-        ("BALCONY","Balcony"),
-    ]
-
-    comedy_show = models.ForeignKey(ComedyShow,on_delete=models.CASCADE,related_name='seats')
-    row = models.CharField(max_length=2)
-    number = models.PositiveIntegerField()
-    seat_type = models.CharField(max_length=50,choices=SEAT_TYPES)
-    price = models.DecimalField(max_digits=8,decimal_places=2)
-    is_booked = models.BooleanField(default=False)
-
-    class Meta:
-        unique_together = ('comedy_show', 'row', 'number')
-
-    def __str(self):
-        return f"{self.row}{self.number} - {self.get_seat_type_display()} - {self.price}"
-
+    def update_available_seats(self):
+        total_booked = BookingComedyShow.objects.filter(
+            comedy_show=self
+        ).aggregate(total_tickets=Sum('number_of_tickets'))['total_tickets'] or 0
+        self.available_seats = self.total_seats - total_booked
+        ComedyShow.objects.filter(pk=self.pk).update(available_seats = self.available_seats)
 
 class BookingComedyShow(models.Model):
-    booking_id = models.CharField(max_length=20,unique=True,editable=False)
-    user = models.ForeignKey('auth.User',on_delete=models.CASCADE)
-    comedy_show = models.ForeignKey(ComedyShow,on_delete=models.CASCADE)
-    seats = models.ManyToManyField(ComedyShowSeat)
-    booking_date = models.DateTimeField()
-    ticket_price_total = models.DecimalField(max_digits=10,decimal_places=2,default=0)
-    gst_percentage = models.DecimalField(max_digits=5,decimal_places=2,default=0)
-    gst_amount = models.DecimalField(max_digits=10,decimal_places=2,default=0)
-    grand_total = models.DecimalField(max_digits=10,decimal_places=2,default=0)
-
+    booking_id = models.CharField(max_length=20, unique=True, editable=False)
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    comedy_show = models.ForeignKey(ComedyShow, on_delete=models.CASCADE)
+    number_of_tickets = models.PositiveIntegerField(default=1)
+    booking_date = models.DateTimeField(auto_now_add=True)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    
     def save(self, *args, **kwargs):
         if not self.booking_id:
-            self.booking_id = f"BK-{uuid.uuid4().hex[:12].upper()}"
+            self.booking_id = f"CM-{uuid.uuid4().hex[:8].upper()}"
+        
+        # Calculate total price
+        self.total_price = self.number_of_tickets * self.comedy_show.ticket_price
+        
         super().save(*args, **kwargs)
-        seats_qs = self.seats.all()
-        if seats_qs.exists():
-            total_price = sum([seat.price for seat in seats_qs])
-            total_price = Decimal(total_price).quantize(Decimal('0.01'))
-            self.ticket_price_total = total_price
-            self.gst_amount = (self.ticket_price_total * self.gst_percentage / Decimal('100.00')).quantize(Decimal('0.01'))
-            self.grand_total = (self.ticket_price_total + self.gst_amount).quantize(Decimal('0.01'))
-            super().save(update_fields=['ticket_price_total', 'gst_amount', 'grand_total'])
-
-    def __str__(self):
-        return f"{self.booking_id} - {self.user.username}"
+        
+        # Update available seats for the comedy show
+        self.comedy_show.update_available_seats()
     
-@receiver(post_save, sender=ComedyShow)
-def generate_comedy_show_seats(sender, instance, created, **kwargs):
-    """
-    Generate seats only when a ComedyShow is first created.
-    Section row allocation (non-overlapping):
-      - VIP_EARLY_A_E : rows A-E (5 rows)      : 6 seats per row
-      - VIP_EARLY_F_M : rows F-M (8 rows)      : 6 seats per row
-      - PREMIUM       : rows N-S (6 rows)      : 8 seats per row
-      - BALCONY       : rows T-AE (12 rows)    : 12 seats per row
-    (Rows are contiguous and unique across sections.)
-    """
-    if not created:
-        return
+    def delete(self, *args, **kwargs):
+        comedy_show = self.comedy_show
+        super().delete(*args, **kwargs)
+        # Update available seats when booking is deleted
+        comedy_show.update_available_seats()
+    
+    def __str__(self):
+        return f"{self.booking_id} - {self.user.username} - {self.number_of_tickets} tickets"
 
-    # seat_plan entry: (row_start_index, number_of_rows, seats_per_row)
-    seat_plan = {
-        'VIP_EARLY_A_E': (0, 5, 6),   # A..E
-        'VIP_EARLY_F_M': (5, 8, 6),   # F..M
-        'PREMIUM':       (13, 6, 8),  # N..S (N index=13)
-        'BALCONY':       (19, 12, 12) # T.. (12 rows)
-    }
-
-    # create seats
-    for seat_type, (start_index, rows_count, seats_per_row) in seat_plan.items():
-        for i in range(rows_count):
-            row_label = index_to_row_label(start_index + i)
-            for number in range(1, seats_per_row + 1):
-                # create seat
-                ComedyShowSeat.objects.create(
-                    comedy_show=instance,
-                    row=row_label,
-                    number=number,
-                    seat_type=seat_type,
-                    price=instance.ticket_price,
-                    is_booked=False
-                )
-
-    total_seats = ComedyShowSeat.objects.filter(comedy_show=instance).count()
-    instance.available_seats = total_seats
-    ComedyShow.objects.filter(pk=instance.pk).update(available_seats=total_seats)     
-
+@receiver([post_save, post_delete], sender=BookingComedyShow)
+def update_comedy_show_seats(sender, instance, **kwargs):
+    """Update available seats whenever bookings are saved or deleted"""
+    instance.comedy_show.update_available_seats()
 
 class LiveConcert(models.Model):
     title = models.CharField(max_length=200)

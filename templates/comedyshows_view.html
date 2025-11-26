@@ -82,11 +82,11 @@
                                 ₹ {{ comedyshow.ticket_price }}
                             </span>
                         </div>
-                        <button
+                        <a href="{% url 'book_comedy_tickets' comedyshow.id %}"
                             class="w-full bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700 text-white font-bold py-3 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center justify-center group">
                             <span class="group-hover:animate-bounce mr-2">😂</span>
                             Laugh My Way In!
-                        </button>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -308,11 +308,11 @@
                         </div>
                     </div>
 
-                    <button
+                    <a href="{% url 'book_comedy_tickets' comedyshow.id %}"
                         class="w-full bg-white text-orange-600 hover:bg-orange-50 font-bold py-4 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-2xl flex items-center justify-center mb-4 group">
                         <span class="group-hover:animate-bounce mr-2">🤣</span>
                         Book My Laugh Session!
-                    </button>
+                    </a>
 
                     <div class="flex items-center justify-center text-orange-100 text-sm text-center">
                         <span class="mr-2">🔒</span>

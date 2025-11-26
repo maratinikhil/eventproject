@@ -26,7 +26,7 @@
     <section>
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
             <div>
-                <h2 class="text-2xl md:text-3xl font-bold">🎫 Featured Events</h2>
+                <h2 class="text-2xl md:text-3xl font-bold">🎫 Business Events</h2>
                 <p class="text-gray-600 dark:text-gray-300 mt-2">Don't miss out on these exciting events</p>
             </div>
             <a href="{% url 'events' %}" class="text-blue-600 hover:underline font-medium flex items-center self-end sm:self-auto">
@@ -326,10 +326,10 @@
                                 </span>
                                 <span class="text-xs text-gray-500 dark:text-gray-400 block">per ticket</span>
                             </div>
-                            <button
+                            <a href="{% url 'book_comedy_tickets' comedy.id %}"
                                 class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1.5 md:px-4 md:py-2 rounded-lg text-xs md:text-sm font-medium transition transform hover:scale-105 active:scale-95">
                                 Get Tickets
-                            </button>
+                            </a>
                         </div>
                     </div>
                 </div>
