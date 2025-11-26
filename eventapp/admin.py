@@ -2,23 +2,212 @@ from django.contrib import admin
 from django.utils.safestring import mark_safe
 from django import forms
 from django.utils.html import format_html
-from .models import Event,ComedyShow,Movie,LiveConcert,AmusementPark,TicketBooking,MovieScreen,TheaterSeat,LiveConcertTicketBooking,AmusementTicket,AmusementBooking,AmusementBookingItem,OtherAmusementBooking,BookingComedyShow
-
+from .models import Event,ComedyShow,Movie,LiveConcert,AmusementPark,TicketBooking,MovieScreen,TheaterSeat,LiveConcertTicketBooking,AmusementTicket,AmusementBooking,AmusementBookingItem,OtherAmusementBooking,BookingComedyShow,BookingsEvent
 from .forms import AmusementTicketForm,BookingComedyShowForm
+
 
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
-    list_display = ['name', 'location', 'date', 'time', 'ticket_price', 'available_seats']
+    list_display = [
+        'name', 
+        'location', 
+        'date', 
+        'time', 
+        'ticket_price', 
+        'total_seats',
+        'available_seats_display',
+        'booked_seats',
+        'booking_percentage_display',
+        'is_sold_out_display'
+    ]
     search_fields = ['name', 'location']
     list_filter = ['date', 'location']
+    readonly_fields = ['available_seats', 'booked_seats', 'booking_percentage']
 
+    def available_seats_display(self, obj):
+        if obj.available_seats == 0:
+            return format_html('<span style="color: red; font-weight: bold;">SOLD OUT (0)</span>')
+        elif obj.available_seats <= 10:
+            return format_html('<span style="color: orange; font-weight: bold;">{} (Low)</span>', obj.available_seats)
+        else:
+            return format_html('<span style="color: green; font-weight: bold;">{}</span>', obj.available_seats)
+    available_seats_display.short_description = 'Available Seats'
+
+    def booking_percentage_display(self, obj):
+        percentage = obj.booking_percentage
+        if percentage >= 90:
+            color = 'red'
+            status = 'Almost Full'
+        elif percentage >= 70:
+            color = 'orange'
+            status = 'Filling Up'
+        else:
+            color = 'green'
+            status = 'Available'
+        
+        return format_html(
+            '<span style="color: {}; font-weight: bold;">{}% ({})</span>',
+            color, int(percentage), status
+        )
+    booking_percentage_display.short_description = 'Booking Status'
+
+    def is_sold_out_display(self, obj):
+        if obj.is_sold_out:
+            return format_html('<span style="color: red; font-weight: bold;">SOLD OUT</span>')
+        else:
+            return format_html('<span style="color: green;">✓ Available</span>')
+    is_sold_out_display.short_description = 'Status'
+
+@admin.register(BookingsEvent)
+class BookingsAdmin(admin.ModelAdmin):
+    list_display = [
+        'get_booking_id', 
+        'get_customer_name', 
+        'get_event_name', 
+        'get_event_date',
+        'number_of_tickets', 
+        'total_amount', 
+        'status', 
+        'payment_status',
+        'booking_date',
+        'user'
+    ]
+
+    list_filter = [
+        'status', 
+        'payment_status', 
+        'booking_date', 
+        'event__date',
+        'event__location',
+        'user'
+    ]
+
+    search_fields = [
+        'booking_id', 
+        'customer_name', 
+        'customer_email',
+        'event__name',
+        'user__username' 
+    ]
+
+    readonly_fields = [
+        'get_booking_id_readonly', 
+        'booking_date', 
+        'total_amount',
+        'get_user_display'
+    ]
+
+    exclude = ['user']
+
+    fieldsets = (
+        ('Booking Information', {
+            'fields': (
+                'get_booking_id_readonly', 
+                'booking_date', 
+                'status',
+                'payment_status',
+                'get_user_display'
+            )
+        }),
+        ('Event Details', {
+            'fields': (
+                'event', 
+                'number_of_tickets', 
+                'total_amount'
+            )
+        }),
+        ('Customer Information', {
+            'fields': (
+                'customer_name', 
+                'customer_email', 
+                'customer_phone',
+                'special_request'
+            )
+        }),
+    )
+    
+    def get_booking_id(self, obj):
+        return obj.booking_id
+    get_booking_id.short_description = "Booking ID"
+
+    def get_customer_name(self, obj):
+        return obj.customer_name
+    get_customer_name.short_description = "Customer Name"
+
+    def get_user_display(self, obj):
+        if obj.user:
+            return f"{obj.user.username} ({obj.user.email})"
+        return "No user assigned"
+    get_user_display.short_description = "User"
+
+    def get_event_name(self, obj):
+        return obj.event.name
+    get_event_name.short_description = "Event Name"
+
+    def get_event_date(self, obj):
+        return obj.event.date
+    get_event_date.short_description = "Event Date"
+
+    def get_booking_id_readonly(self, obj):
+        return obj.booking_id
+    get_booking_id_readonly.short_description = "Booking ID"
+
+    def available_seats_info(self, obj):
+        if obj.pk:  # For existing bookings
+            event = obj.event
+            return f"Total: {event.total_seats}, Available: {event.available_seats}, Booked: {event.booked_seats}"
+        else:  # For new bookings
+            return "Select an event to see available seats"
+    available_seats_info.short_description = "Event Seats Info"
+
+    # Auto-set the current user when creating a booking
+    def save_model(self, request, obj, form, change):
+        if not obj.pk:  # Only for new objects
+            obj.user = request.user
+            
+            # Validate available seats for new confirmed bookings
+            if obj.status == 'confirmed' and obj.event:
+                if obj.number_of_tickets > obj.event.available_seats:
+                    from django.contrib import messages
+                    messages.error(request, f"Only {obj.event.available_seats} seats available!")
+                    return
+        
+        super().save_model(request, obj, form, change)
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "event":
+            # Only show events that have available seats
+            kwargs["queryset"] = Event.objects.filter(available_seats__gt=0)
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+    actions = ['mark_as_confirmed', 'mark_as_cancelled', 'mark_payment_received']
+
+    def mark_as_confirmed(self, request, queryset):
+        for booking in queryset:
+            if booking.number_of_tickets <= booking.event.available_seats:
+                booking.status = 'confirmed'
+                booking.save()
+            else:
+                from django.contrib import messages
+                messages.error(request, f"Not enough seats for booking {booking.booking_id}")
+    mark_as_confirmed.short_description = "Mark selected bookings as confirmed"
+    
+    def mark_as_cancelled(self, request, queryset):
+        queryset.update(status='cancelled')
+        events_to_update = set(booking.event for booking in queryset if booking.status == 'confirmed')
+        for event in events_to_update:
+            event.update_available_seats()
+    mark_as_cancelled.short_description = "Mark selected bookings as cancelled"
+    
+    def mark_payment_received(self, request, queryset):  
+        queryset.update(payment_status=True)
+    mark_payment_received.short_description = "Mark payment as received for selected bookings"
 
 @admin.register(Movie)
 class MovieAdmin(admin.ModelAdmin):
     list_display = ['title', 'language', 'genre', 'location', 'date', 'time', 'ticket_price', 'available_seats','cast','director','rating','popularity']
     search_fields = ['title', 'language', 'genre','director','cast']
     list_filter = ['language', 'genre','date']
-
 
 
 

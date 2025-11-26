@@ -25,12 +25,96 @@ class Event(models.Model):
     location = models.CharField(max_length=200)
     date = models.DateField()
     time = models.TimeField()
+    total_seats = models.PositiveIntegerField()
     available_seats = models.PositiveIntegerField()
     ticket_price = models.DecimalField(max_digits=8,decimal_places=2)
     image = models.ImageField(upload_to='events/',blank=True,null=True)
 
     def __str__(self):
         return self.name
+    
+    def update_available_seats(self):
+        total_booked = self.event_bookings.filter(status='confirmed').aggregate(
+            total=Sum('number_of_tickets')
+        )['total'] or 0
+        self.available_seats = self.total_seats - total_booked
+        self.save()
+
+    @property
+    def is_sold_out(self):
+        return self.available_seats <= 0
+
+    @property
+    def booked_seats(self):
+        return self.total_seats - self.available_seats
+
+    @property
+    def booking_percentage(self):
+        if self.total_seats > 0:
+            return (self.booked_seats / self.total_seats) * 100
+        return 0
+    
+class BookingsEvent(models.Model):
+    STATUS_CHOICES = [
+        ('confirmed','Confirmed'),
+        ('pending','Pending'),
+        ('cancelled','Cancelled'),
+        ('completed','Completed'),
+    ]
+
+    event = models.ForeignKey(Event,on_delete=models.CASCADE,related_name='event_bookings')
+    user = models.ForeignKey(User,on_delete=models.CASCADE,related_name='event_bookings',null=True,blank=True)
+    booking_date = models.DateTimeField(auto_now_add=True)
+    number_of_tickets = models.PositiveIntegerField(default=1)
+    total_amount = models.DecimalField(max_digits=10,decimal_places=2)
+    status = models.CharField(max_length=20,choices=STATUS_CHOICES)
+    booking_id = models.CharField(max_length=20,unique=True)
+
+    customer_name = models.CharField(max_length=200)
+    customer_email = models.EmailField()
+    customer_phone = models.CharField(max_length=15,blank=True,null=True)
+
+    special_request = models.TextField(blank=True,null=True)
+    payment_status = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ['-booking_date']
+        verbose_name = "Event Booking"
+        verbose_name_plural = "Event Bookings"
+
+    def __str__(self):
+        return f"{self.booking_id} - {self.customer_name} - {self.event.name}"
+
+    def save(self, *args, **kwargs):
+        if not self.booking_id:
+            import uuid
+            self.booking_id = f"EVT{uuid.uuid4().hex[:8].upper()}"
+
+        if not self.total_amount and self.event:
+            self.total_amount = self.number_of_tickets * self.event.ticket_price
+        
+        super().save(*args, **kwargs)
+        
+        if self.status == 'confirmed':
+            self.event.update_available_seats()
+
+    def delete(self, *args, **kwargs):
+        event = self.event
+        super().delete(*args, **kwargs)
+        if self.status == 'confirmed':
+            event.update_available_seats()
+    
+    @property
+    def event_name(self):
+        return self.event.name
+    
+    @property
+    def event_date(self):
+        return self.event.date
+    
+    @property
+    def event_time(self):
+        return self.event.time
     
 class Movie(models.Model):
     title = models.CharField(max_length=200)
