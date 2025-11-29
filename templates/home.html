@@ -29,17 +29,19 @@
                 <h2 class="text-2xl md:text-3xl font-bold">🎫 Business Events</h2>
                 <p class="text-gray-600 dark:text-gray-300 mt-2">Don't miss out on these exciting events</p>
             </div>
-            <a href="{% url 'events' %}" class="text-blue-600 hover:underline font-medium flex items-center self-end sm:self-auto">
+            <a href="{% url 'events' %}"
+                class="text-blue-600 hover:underline font-medium flex items-center self-end sm:self-auto">
                 View All <span class="ml-1">→</span>
             </a>
         </div>
-
+    
         <div class="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
             {% for event in events %}
-            <a href="{% url 'event_view' event.id %}" class="block">
-                <div
-                    class="group bg-white dark:bg-gray-800 rounded-xl md:rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 dark:border-gray-700 transform hover:-translate-y-1 active:translate-y-0">
-                    <!-- Event Header with Gradient -->
+            <div
+                class="group bg-white dark:bg-gray-800 rounded-xl md:rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 dark:border-gray-700 transform hover:-translate-y-1 active:translate-y-0">
+    
+                <!-- Clickable Image -->
+                <a href="{% url 'event_view' event.id %}">
                     <div class="h-28 md:h-32 bg-gradient-to-r from-blue-400 to-purple-500 relative overflow-hidden">
                         {% if event.image %}
                         <img src="{{ event.image.url }}" alt="{{ event.title }}"
@@ -49,7 +51,7 @@
                             <span class="text-white font-bold text-lg">🎭</span>
                         </div>
                         {% endif %}
-                        
+    
                         <span class="absolute top-2 left-2 bg-white text-gray-800 text-xs font-bold px-2 py-1 rounded-full">
                             {{ event.event_type|default:"Event" }}
                         </span>
@@ -57,56 +59,66 @@
                             class="absolute top-2 right-2 bg-white text-gray-800 text-xs font-bold px-2 py-1 rounded-full">
                             {{ event.date|date:"M d"|default:"Soon" }}
                         </span>
-                        <!-- Rating Badge -->
+    
                         <div
                             class="absolute bottom-2 left-2 bg-black bg-opacity-70 text-white text-xs px-2 py-1 rounded-full flex items-center">
                             ⭐ {{ event.rating|default:"4.5" }}/5
                         </div>
                     </div>
-
-                    <div class="p-3 md:p-4">
-                        <h3 class="font-bold text-base md:text-lg mb-2 line-clamp-1">{{ event.name|default:"Event Name" }}</h3>
-
-                        <!-- Event Details -->
-                        <div class="space-y-1 md:space-y-2 mb-2 md:mb-3">
-                            <div class="flex items-center text-xs md:text-sm text-gray-600 dark:text-gray-300">
-                                <svg class="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2 text-blue-500 flex-shrink-0" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                                </svg>
-                                <span class="truncate">{{ event.location|default:"Venue Location" }}</span>
-                            </div>
-                            <div class="flex items-center text-xs md:text-sm text-gray-600 dark:text-gray-300">
-                                <svg class="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2 text-blue-500 flex-shrink-0" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                                {{ event.time|default:"7:00 PM" }} • {{ event.duration|default:"3h" }}
-                            </div>
+                </a>
+    
+                <div class="p-3 md:p-4">
+    
+                    <!-- Clickable Title -->
+                    <a href="{% url 'event_view' event.id %}">
+                        <h3 class="font-bold text-base md:text-lg mb-2 line-clamp-1">
+                            {{ event.name|default:"Event Name" }}
+                        </h3>
+                    </a>
+    
+                    <!-- Details -->
+                    <div class="space-y-1 md:space-y-2 mb-2 md:mb-3">
+                        <div class="flex items-center text-xs md:text-sm text-gray-600 dark:text-gray-300">
+                            <svg class="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2 text-blue-500 flex-shrink-0" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                            <span class="truncate">{{ event.location|default:"Venue Location" }}</span>
                         </div>
-
-                        <!-- Price and Action -->
-                        <div class="flex justify-between items-center pt-2 md:pt-3 border-t border-gray-200 dark:border-gray-600">
-                            <div>
-                                <span class="text-lg md:text-xl font-bold text-green-600 dark:text-green-400">
-                                    ₹ {% firstof event.ticket_price event.price "399" %}
-                                </span>
-                                <span class="text-xs text-gray-500 dark:text-gray-400 block">per person</span>
-                            </div>
-                            <button
-                                class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 md:px-4 md:py-2 rounded-lg text-xs md:text-sm font-medium transition transform hover:scale-105 active:scale-95">
-                                Book Now
-                            </button>
+    
+                        <div class="flex items-center text-xs md:text-sm text-gray-600 dark:text-gray-300">
+                            <svg class="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2 text-blue-500 flex-shrink-0" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            {{ event.time|default:"7:00 PM" }} • {{ event.duration|default:"3h" }}
                         </div>
                     </div>
+    
+                    <!-- Price + Book Button -->
+                    <div
+                        class="flex justify-between items-center pt-2 md:pt-3 border-t border-gray-200 dark:border-gray-600">
+                        <div>
+                            <span class="text-lg md:text-xl font-bold text-green-600 dark:text-green-400">
+                                ₹ {% firstof event.ticket_price event.price "399" %}
+                            </span>
+                            <span class="text-xs text-gray-500 dark:text-gray-400 block">per person</span>
+                        </div>
+    
+                        <a href="{% url 'event_book_tickets' event.id %}"
+                            class="px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                            Book Now
+                        </a>
+                    </div>
+    
                 </div>
-            </a>
+            </div>
             {% endfor %}
-            
+    
             {% if not events %}
             <div class="col-span-full text-center py-8">
                 <p class="text-gray-500 dark:text-gray-400">No events available at the moment.</p>
@@ -114,6 +126,7 @@
             {% endif %}
         </div>
     </section>
+
 
     <!-- MOVIES SECTION -->
     <section>
@@ -241,17 +254,19 @@
                 <h2 class="text-2xl md:text-3xl font-bold">🎤 Comedy Shows</h2>
                 <p class="text-gray-600 dark:text-gray-300 mt-2">Laugh out loud with top comedians</p>
             </div>
-            <a href="{% url 'comedyshows' %}" class="text-blue-600 hover:underline font-medium flex items-center self-end sm:self-auto">
+            <a href="{% url 'comedyshows' %}"
+                class="text-blue-600 hover:underline font-medium flex items-center self-end sm:self-auto">
                 View All <span class="ml-1">→</span>
             </a>
         </div>
-
+    
         <div class="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
             {% for comedy in comedyshows %}
-            <a href="{% url 'comedyshows_view' comedy.id %}" class="block">
-                <div
-                    class="group bg-white dark:bg-gray-800 rounded-xl md:rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 dark:border-gray-700 transform hover:-translate-y-1 active:translate-y-0">
-                    <!-- Comedy Show Header -->
+            <div
+                class="group bg-white dark:bg-gray-800 rounded-xl md:rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 dark:border-gray-700 transform hover:-translate-y-1 active:translate-y-0 h-full flex flex-col">
+                <!-- Comedy Show Header - Make this part clickable -->
+                <a href="{% url 'comedyshows_view' comedy.id %}" class="block flex-shrink-0"
+                    title="{{ comedy.title|default:'Comedy Show' }}">
                     <div class="h-28 md:h-32 bg-gradient-to-r from-yellow-400 to-orange-500 relative overflow-hidden">
                         {% if comedy.image %}
                         <img src="{{ comedy.image.url }}" alt="{{ comedy.title }}"
@@ -278,64 +293,72 @@
                             {{ comedy.duration|default:"90min" }}
                         </div>
                     </div>
-
-                    <div class="p-3 md:p-4">
-                        <h3 class="font-bold text-base md:text-lg mb-2 line-clamp-1">{{ comedy.title|default:"Comedy Show" }}</h3>
-
-                        <!-- Comedy Details -->
-                        <div class="space-y-1 md:space-y-2 mb-2 md:mb-3">
-                            <div class="flex items-center text-xs md:text-sm text-gray-600 dark:text-gray-300">
-                                <svg class="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2 text-yellow-500 flex-shrink-0" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                                </svg>
-                                <span class="truncate">{{ comedy.location|default:"Comedy Club" }}</span>
-                            </div>
-                            <div class="flex items-center text-xs md:text-sm text-gray-600 dark:text-gray-300">
-                                <svg class="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2 text-yellow-500 flex-shrink-0" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                </svg>
-                                {{ comedy.date|default:"Today" }} • {{ comedy.time|default:"8:00 PM" }}
-                            </div>
+                </a>
+    
+                <div class="p-3 md:p-4 flex-grow flex flex-col">
+                    <!-- Title - Make this clickable too -->
+                    <a href="{% url 'comedyshows_view' comedy.id %}" class="block mb-2">
+                        <h3
+                            class="font-bold text-base md:text-lg line-clamp-1 hover:text-blue-600 dark:hover:text-blue-400">
+                            {{ comedy.title|default:"Comedy Show" }}</h3>
+                    </a>
+    
+                    <!-- Comedy Details -->
+                    <div class="space-y-1 md:space-y-2 mb-2 md:mb-3">
+                        <div class="flex items-center text-xs md:text-sm text-gray-600 dark:text-gray-300">
+                            <svg class="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2 text-yellow-500 flex-shrink-0" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                            <span class="truncate">{{ comedy.location|default:"Comedy Club" }}</span>
                         </div>
-
-                        <!-- Rating -->
-                        <div class="flex items-center justify-between mb-2 md:mb-3 p-2 bg-yellow-50 dark:bg-yellow-900/20 rounded text-xs md:text-sm">
-                            <div class="flex items-center">
-                                <div class="flex text-yellow-400" id="rating-stars-{{ forloop.counter }}">
-                                    ⭐⭐⭐⭐⭐
-                                </div>
-                                <span class="ml-1 text-gray-600 dark:text-gray-300">
-                                    {{ comedy.rating|default:"4.5" }}/5
-                                </span>
-                            </div>
-                            <span class="font-semibold text-yellow-600 dark:text-yellow-400">
-                                {{ comedy.popularity|default:"Popular" }}
-                            </span>
-                        </div>
-
-                        <div class="flex justify-between items-center pt-2 md:pt-3 border-t border-gray-200 dark:border-gray-600">
-                            <div>
-                                <span class="text-lg md:text-xl font-bold text-green-600 dark:text-green-400">
-                                    ₹ {% firstof comedy.ticket_price comedy.price "499" %}
-                                </span>
-                                <span class="text-xs text-gray-500 dark:text-gray-400 block">per ticket</span>
-                            </div>
-                            <a href="{% url 'book_comedy_tickets' comedy.id %}"
-                                class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1.5 md:px-4 md:py-2 rounded-lg text-xs md:text-sm font-medium transition transform hover:scale-105 active:scale-95">
-                                Get Tickets
-                            </a>
+                        <div class="flex items-center text-xs md:text-sm text-gray-600 dark:text-gray-300">
+                            <svg class="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2 text-yellow-500 flex-shrink-0" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                            {{ comedy.date|default:"Today" }} • {{ comedy.time|default:"8:00 PM" }}
                         </div>
                     </div>
+    
+                    <!-- Rating -->
+                    <div
+                        class="flex items-center justify-between mb-2 md:mb-3 p-2 bg-yellow-50 dark:bg-yellow-900/20 rounded text-xs md:text-sm mt-auto">
+                        <div class="flex items-center">
+                            <div class="flex text-yellow-400" id="rating-stars-{{ forloop.counter }}">
+                                ⭐⭐⭐⭐⭐
+                            </div>
+                            <span class="ml-1 text-gray-600 dark:text-gray-300">
+                                {{ comedy.rating|default:"4.5" }}/5
+                            </span>
+                        </div>
+                        <span class="font-semibold text-yellow-600 dark:text-yellow-400">
+                            {{ comedy.popularity|default:"Popular" }}
+                        </span>
+                    </div>
+    
+                    <div
+                        class="flex justify-between items-center pt-2 md:pt-3 border-t border-gray-200 dark:border-gray-600 mt-auto">
+                        <div>
+                            <span class="text-lg md:text-xl font-bold text-green-600 dark:text-green-400">
+                                ₹ {% firstof comedy.ticket_price comedy.price "499" %}
+                            </span>
+                            <span class="text-xs text-gray-500 dark:text-gray-400 block">per ticket</span>
+                        </div>
+    
+                        <a href="{% url 'book_comedy_tickets' comedy.id %}"
+                            class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1.5 md:px-4 md:py-2 rounded-lg text-xs md:text-sm font-medium transition transform hover:scale-105 active:scale-95">
+                            Get Tickets
+                        </a>
+                    </div>
                 </div>
-            </a>
+            </div>
             {% endfor %}
-            
+    
             {% if not comedyshows %}
             <div class="col-span-full text-center py-8">
                 <p class="text-gray-500 dark:text-gray-400">No comedy shows available at the moment.</p>

@@ -5,7 +5,6 @@ from django.utils.html import format_html
 from .models import Event,ComedyShow,Movie,LiveConcert,AmusementPark,TicketBooking,MovieScreen,TheaterSeat,LiveConcertTicketBooking,AmusementTicket,AmusementBooking,AmusementBookingItem,OtherAmusementBooking,BookingComedyShow,BookingsEvent
 from .forms import AmusementTicketForm,BookingComedyShowForm
 
-
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
     list_display = [
@@ -16,25 +15,48 @@ class EventAdmin(admin.ModelAdmin):
         'ticket_price', 
         'total_seats',
         'available_seats_display',
-        'booked_seats',
+        'booked_seats_display',
         'booking_percentage_display',
         'is_sold_out_display'
     ]
+
     search_fields = ['name', 'location']
     list_filter = ['date', 'location']
-    readonly_fields = ['available_seats', 'booked_seats', 'booking_percentage']
+
+    readonly_fields = [
+        'available_seats',
+        'booked_seats',
+        'booking_percentage'
+    ]
+
+    # DISPLAY SAFE FIELDS
+
 
     def available_seats_display(self, obj):
-        if obj.available_seats == 0:
+        if obj.available_seats is None:
+            return "-"
+        
+        seats = obj.available_seats
+
+        if seats == 0:
             return format_html('<span style="color: red; font-weight: bold;">SOLD OUT (0)</span>')
-        elif obj.available_seats <= 10:
-            return format_html('<span style="color: orange; font-weight: bold;">{} (Low)</span>', obj.available_seats)
+        elif seats <= 10:
+            return format_html('<span style="color: orange; font-weight: bold;">{} (Low)</span>', seats)
         else:
-            return format_html('<span style="color: green; font-weight: bold;">{}</span>', obj.available_seats)
+            return format_html('<span style="color: green; font-weight: bold;">{}</span>', seats)
+
     available_seats_display.short_description = 'Available Seats'
 
+    def booked_seats_display(self, obj):
+        if obj.booked_seats is None:
+            return "0"
+        return obj.booked_seats
+
+    booked_seats_display.short_description = 'Booked'
+
     def booking_percentage_display(self, obj):
-        percentage = obj.booking_percentage
+        percentage = obj.booking_percentage or 0
+
         if percentage >= 90:
             color = 'red'
             status = 'Almost Full'
@@ -44,20 +66,20 @@ class EventAdmin(admin.ModelAdmin):
         else:
             color = 'green'
             status = 'Available'
-        
+
         return format_html(
             '<span style="color: {}; font-weight: bold;">{}% ({})</span>',
             color, int(percentage), status
         )
+
     booking_percentage_display.short_description = 'Booking Status'
 
     def is_sold_out_display(self, obj):
         if obj.is_sold_out:
             return format_html('<span style="color: red; font-weight: bold;">SOLD OUT</span>')
-        else:
-            return format_html('<span style="color: green;">✓ Available</span>')
-    is_sold_out_display.short_description = 'Status'
+        return format_html('<span style="color: green;">✓ Available</span>')
 
+    is_sold_out_display.short_description = 'Status'
 @admin.register(BookingsEvent)
 class BookingsAdmin(admin.ModelAdmin):
     list_display = [

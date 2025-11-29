@@ -22,7 +22,7 @@
                     class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent">
             </div>
             <div class="flex gap-4">
-                <select
+                <select aria-label="Filter by category"
                     class="px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                     <option>All Categories</option>
                     <option>Music</option>
@@ -31,7 +31,7 @@
                     <option>Food & Drink</option>
                     <option>Business</option>
                 </select>
-                <select
+                <select aria-label="Filter by date"
                     class="px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                     <option>Any Date</option>
                     <option>Today</option>
@@ -141,10 +141,12 @@
                         </span>
                         <span class="text-sm text-gray-500 dark:text-gray-400 block">per person</span>
                     </div>
-                    <button
-                        class="px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                    <a href="{% url 'event_book_tickets' event.id %}" class="px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 
+                              text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 
+                              shadow-lg hover:shadow-xl">
                         Book Now
-                    </button>
+                    </a>
+
                 </div>
             </div>
         </div>

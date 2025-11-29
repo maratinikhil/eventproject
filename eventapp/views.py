@@ -8,7 +8,9 @@ import json
 from django.core.mail import send_mail
 from django.contrib.auth import login as auth_login, logout as auth_logout
 import random
-from .models import Event,Movie,ComedyShow,AmusementPark,LiveConcert,MovieScreen,TheaterSeat,TicketBooking,LiveConcertTicketBooking,AmusementTicket
+from django.urls import reverse
+from django. db import transaction
+from .models import Event,Movie,ComedyShow,AmusementPark,LiveConcert,MovieScreen,TheaterSeat,TicketBooking,LiveConcertTicketBooking,AmusementTicket,BookingsEvent
 from django.contrib.admin.views.decorators import staff_member_required
 
 
@@ -197,6 +199,59 @@ def events(request):
 def event_view(request,id):
     event = get_object_or_404(Event, id=id)
     return render(request,'event_view.html',{"event":event})
+
+
+def event_book_tickets(request,business_event_id):
+    event = get_object_or_404(Event,pk=business_event_id)
+    
+    if event.is_sold_out:
+        return render(request,"bookings/event_booktickets.html",{"event":event})
+    
+    if request.method == "POST":
+        customer_name = request.POST.get("customer_name","").strip()
+        customer_email = request.POST.get("customer_email","").strip()
+        customer_phone = request.POST.get("customer_phone","").strip()
+        special_request = request.POST.get("special_request","").strip()
+
+        number_of_tickets = int(request.POST.get('number_of_tickets',1))
+
+        if number_of_tickets > event.available_seats:
+            messages.error(
+                request,
+                f"Only {event.available_seats} seats available! Please reduce ticket quantity"
+            )
+            return redirect(reverse("event_book_tickets",args = [event.id]))
+        
+        total_amount = event.ticket_price  * number_of_tickets
+
+        try:
+            with transaction.atomic():
+                booking = BookingsEvent.objects.create(
+                    event = event,
+                    user = request.user if request.user.is_authenticated else None,
+                    number_of_tickets = number_of_tickets,
+                    total_amount = total_amount,
+                    status = "Confirmed",
+                    customer_name = customer_name,
+                    customer_email = customer_email,
+                    customer_phone = customer_phone,
+                    special_request = special_request,
+                    payment_status = False,
+                )
+
+                event.update_available_seats()
+
+                messages.success(request,f"Booking successful! Your booking ID is {booking.booking_id}")
+
+                return redirect(reverse("booking_success",args=[booking.booking_id]))
+        except Exception as e:
+            print("Error:",e)
+            messages.error(request,"Something went wrong while processing your booking")
+            return redirect(reverse("event_book_tickets",args=[event.id]))
+        
+    return render(request,"book_tickets/events_booktickets.html",{"event":event})
+        
+
 
 @login_required_session
 def movies(request):

@@ -26,34 +26,48 @@ class Event(models.Model):
     date = models.DateField()
     time = models.TimeField()
     total_seats = models.PositiveIntegerField()
-    available_seats = models.PositiveIntegerField()
-    ticket_price = models.DecimalField(max_digits=8,decimal_places=2)
-    image = models.ImageField(upload_to='events/',blank=True,null=True)
+    available_seats = models.PositiveIntegerField(default=0)  # Prevent None issues
+    ticket_price = models.DecimalField(max_digits=8, decimal_places=2)
+    image = models.ImageField(upload_to='events/', blank=True, null=True)
 
     def __str__(self):
         return self.name
-    
+
+    def save(self, *args, **kwargs):
+        if self.pk is None:  # New Event
+            # Default: all seats are available initially
+            self.available_seats = self.total_seats or 0
+        
+        super().save(*args, **kwargs)
+
     def update_available_seats(self):
-        total_booked = self.event_bookings.filter(status='confirmed').aggregate(
+        total_booked = self.event_bookings.filter(
+            status='confirmed'
+        ).aggregate(
             total=Sum('number_of_tickets')
         )['total'] or 0
-        self.available_seats = self.total_seats - total_booked
+
+        self.available_seats = max(self.total_seats - total_booked, 0)
         self.save()
 
     @property
     def is_sold_out(self):
+        if self.available_seats is None:
+            return False
         return self.available_seats <= 0
 
     @property
     def booked_seats(self):
-        return self.total_seats - self.available_seats
+        if self.total_seats is None or self.available_seats is None:
+            return 0
+        return max(self.total_seats - self.available_seats, 0)
 
     @property
     def booking_percentage(self):
-        if self.total_seats > 0:
-            return (self.booked_seats / self.total_seats) * 100
-        return 0
-    
+        if not self.total_seats:
+            return 0
+        return (self.booked_seats / self.total_seats) * 100
+        
 class BookingsEvent(models.Model):
     STATUS_CHOICES = [
         ('confirmed','Confirmed'),
