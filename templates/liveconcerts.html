@@ -39,10 +39,10 @@
         <!-- Concerts Grid -->
         <div class="grid lg:grid-cols-2 xl:grid-cols-3 gap-8">
             {% for concert in liveconcert %}
+            <div
+                class="group bg-white dark:bg-gray-800 rounded-3xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-gray-100 dark:border-gray-700">
             <a href="{% url 'liveconcerts_view' concert.id %}" class="block">
 
-                <div
-                    class="group bg-white dark:bg-gray-800 rounded-3xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-gray-100 dark:border-gray-700">
                 <!-- Header with Gradient -->
                 <div class="h-4 bg-gradient-to-r from-purple-500 to-pink-500"></div>
 
