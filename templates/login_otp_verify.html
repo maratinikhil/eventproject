@@ -1,79 +1,627 @@
 {% extends "base.html" %}
 {% block title %}Verify OTP{% endblock %}
+
 {% block content %}
 
-<div class="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center py-8 px-4">
-    <div class="bg-white dark:bg-gray-800 shadow-xl rounded-2xl p-8 w-full max-w-md">
+<style>
+    /* Background animation styles */
+    .gif-background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        object-fit: cover;
+        opacity: 0.15;
+    }
 
-        <!-- Header -->
-        <div class="text-center mb-8">
-            <div
-                class="w-16 h-16 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg class="w-8 h-8 text-green-600 dark:text-green-400" fill="none" stroke="currentColor"
-                    viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+    .gradient-background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(-45deg, #059669, #10b981, #34d399, #a7f3d0);
+        background-size: 400% 400%;
+        animation: gradient 20s ease infinite;
+        z-index: -2;
+    }
+
+    @keyframes gradient {
+        0% {
+            background-position: 0% 50%;
+        }
+
+        50% {
+            background-position: 100% 50%;
+        }
+
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+
+    /* OTP Input Animation */
+    @keyframes shake {
+
+        0%,
+        100% {
+            transform: translateX(0);
+        }
+
+        25% {
+            transform: translateX(-5px);
+        }
+
+        75% {
+            transform: translateX(5px);
+        }
+    }
+
+    .shake {
+        animation: shake 0.5s ease-in-out;
+    }
+
+    @keyframes pulse-glow {
+
+        0%,
+        100% {
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+        }
+
+        50% {
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.6);
+        }
+    }
+
+    .pulse-glow {
+        animation: pulse-glow 2s infinite;
+    }
+
+    @keyframes countdown {
+        from {
+            stroke-dashoffset: 0;
+        }
+
+        to {
+            stroke-dashoffset: 283;
+        }
+    }
+
+    .countdown-circle {
+        stroke-dasharray: 283;
+        stroke-dashoffset: 0;
+        animation: countdown 60s linear forwards;
+    }
+
+    /* Digit Input Animation */
+    @keyframes digit-pop {
+        0% {
+            transform: scale(0.8);
+            opacity: 0;
+        }
+
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    .digit-pop {
+        animation: digit-pop 0.3s ease-out;
+    }
+
+    /* Success Animation */
+    @keyframes success-pulse {
+
+        0%,
+        100% {
+            transform: scale(1);
+        }
+
+        50% {
+            transform: scale(1.1);
+        }
+    }
+
+    .success-pulse {
+        animation: success-pulse 0.5s ease-in-out 3;
+    }
+
+    /* Form Animation */
+    @keyframes slide-up {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .slide-up {
+        animation: slide-up 0.6s ease-out forwards;
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+        .gif-background {
+            opacity: 0.1;
+        }
+    }
+</style>
+
+<!-- Background Options - Choose One -->
+
+<!-- OPTION 1: Animated Gradient Background (Recommended) -->
+<div class="gradient-background"></div>
+
+<!-- OPTION 2: Digital/Code Pattern GIF -->
+<!--
+<div class="gif-background-container relative">
+    <img src="https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif" alt="Digital pattern" class="gif-background">
+    <div class="absolute inset-0 bg-black opacity-10"></div>
+</div>
+-->
+
+<!-- OPTION 3: Security/Shield GIF -->
+<!--
+<div class="gif-background-container relative">
+    <img src="https://media.giphy.com/media/jOZt5tdGYxzz0HvX2a/giphy.gif" alt="Security animation" class="gif-background">
+    <div class="absolute inset-0 bg-black opacity-10"></div>
+</div>
+-->
+
+<!-- OPTION 4: Abstract Particles GIF -->
+<!--
+<div class="gif-background-container relative">
+    <img src="https://media.giphy.com/media/3o7abldj0b3rxrZUxW/giphy.gif" alt="Abstract particles" class="gif-background">
+    <div class="absolute inset-0 bg-black opacity-10"></div>
+</div>
+-->
+
+<div class="min-h-screen flex items-center justify-center py-8 px-4 relative overflow-hidden">
+
+    <!-- Animated Background Elements -->
+    <div class="absolute top-1/4 left-1/4 w-32 h-32 bg-emerald-300/20 rounded-full blur-3xl"></div>
+    <div class="absolute bottom-1/4 right-1/4 w-40 h-40 bg-green-400/20 rounded-full blur-3xl"></div>
+
+    <!-- Floating Security Icons -->
+    <div class="absolute top-10 left-5 opacity-30 animate-bounce">
+        <svg class="w-12 h-12 text-green-400" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z" />
+        </svg>
+    </div>
+    <div class="absolute bottom-10 right-5 opacity-30 animate-bounce" style="animation-delay: 0.5s;">
+        <svg class="w-10 h-10 text-emerald-400" fill="currentColor" viewBox="0 0 24 24">
+            <path
+                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+        </svg>
+    </div>
+
+    <!-- Main Content -->
+    <div class="w-full max-w-md slide-up">
+        <div
+            class="bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl rounded-2xl shadow-2xl p-8 border border-white/20 dark:border-gray-700/30 relative overflow-hidden">
+
+            <!-- Countdown Timer Circle -->
+            <div class="absolute top-4 right-4 w-12 h-12">
+                <svg class="w-full h-full transform -rotate-90">
+                    <circle cx="24" cy="24" r="22" stroke="rgba(16, 185, 129, 0.2)" stroke-width="2" fill="none" />
+                    <circle cx="24" cy="24" r="22" stroke="#10b981" stroke-width="2" fill="none" stroke-linecap="round"
+                        class="countdown-circle" id="countdown-timer" />
                 </svg>
+                <span
+                    class="absolute inset-0 flex items-center justify-center text-xs font-bold text-emerald-600 dark:text-emerald-400"
+                    id="timer-text">60</span>
             </div>
-            <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Verify OTP</h2>
-            <p class="text-gray-600 dark:text-gray-300 text-sm">
-                Enter the 6-digit code sent to your email/mobile
-            </p>
-        </div>
 
-        <!-- Messages -->
-        {% if messages %}
-        <div class="mb-4">
-            {% for message in messages %}
-            <div
-                class="p-3 rounded-lg {% if message.tags == 'error' %}bg-red-100 text-red-700 border border-red-200{% else %}bg-green-100 text-green-700 border border-green-200{% endif %}">
-                {{ message }}
-            </div>
-            {% endfor %}
-        </div>
-        {% endif %}
-
-        <!-- OTP Form -->
-        <form method="post" class="space-y-6">
-            {% csrf_token %}
-
-            <!-- OTP Input -->
-            <div>
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Enter OTP Code
-                </label>
-                <div class="relative">
-                    <input type="text" name="otp" placeholder="Enter 6-digit OTP"
-                        class="w-full border border-gray-300 dark:border-gray-600 rounded-lg p-3 pl-10 focus:ring-2 focus:ring-green-500 focus:border-green-500 dark:bg-gray-700 dark:text-white transition-colors"
-                        required maxlength="6">
-                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <!-- Header -->
+            <div class="text-center mb-8 relative">
+                <div class="relative inline-block mb-4">
+                    <div
+                        class="w-20 h-20 bg-gradient-to-br from-emerald-400 to-green-500 rounded-full flex items-center justify-center mx-auto pulse-glow">
+                        <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
+                    </div>
+                    <!-- Animated Rings -->
+                    <div class="absolute inset-0 border-2 border-emerald-300 rounded-full animate-ping opacity-20">
+                    </div>
+                    <div class="absolute inset-0 border-2 border-emerald-400 rounded-full animate-ping opacity-10"
+                        style="animation-delay: 0.5s;"></div>
+                </div>
+
+                <h2
+                    class="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent mb-2">
+                    Verify Identity
+                </h2>
+                <p class="text-gray-600 dark:text-gray-300 text-sm">
+                    Enter the 6-digit code sent to your device
+                </p>
+
+                <!-- Display Email/Mobile -->
+                {% if request.session.login_email or request.session.login_mobile %}
+                <p
+                    class="text-sm text-emerald-600 dark:text-emerald-400 font-medium mt-2 bg-emerald-50 dark:bg-emerald-900/30 py-2 px-4 rounded-lg inline-block">
+                    <span id="display-contact">
+                        {{ request.session.login_email|default:request.session.login_mobile }}
+                    </span>
+                </p>
+                {% endif %}
+            </div>
+
+            <!-- Messages -->
+            {% if messages %}
+            <div class="mb-6 space-y-2">
+                {% for message in messages %}
+                <div
+                    class="p-4 rounded-xl {% if message.tags == 'error' %}bg-red-100 text-red-800 border border-red-200{% else %}bg-emerald-100 text-emerald-800 border border-emerald-200{% endif %} transform transition-all duration-300 hover:scale-[1.02]">
+                    <div class="flex items-center">
+                        <svg class="w-5 h-5 mr-3 flex-shrink-0 {% if message.tags == 'error' %}text-red-600{% else %}text-emerald-600{% endif %}"
+                            fill="currentColor" viewBox="0 0 20 20">
+                            {% if message.tags == 'error' %}
+                            <path fill-rule="evenodd"
+                                d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                                clip-rule="evenodd" />
+                            {% else %}
+                            <path fill-rule="evenodd"
+                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                clip-rule="evenodd" />
+                            {% endif %}
+                        </svg>
+                        {{ message }}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <!-- OTP Form -->
+            <form method="post" class="space-y-6" id="otp-form">
+                {% csrf_token %}
+
+                <!-- OTP Input -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+                        <span class="flex items-center">
+                            <svg class="w-4 h-4 mr-2 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                            One-Time Password
+                        </span>
+                    </label>
+
+                    <!-- 6-Digit OTP Input -->
+                    <div class="flex justify-between gap-2 mb-4" id="otp-container">
+                        {% for i in "123456" %}
+                        <input type="text" maxlength="1" pattern="[0-9]" inputmode="numeric"
+                            autocomplete="one-time-code"
+                            class="digit-input w-12 h-14 text-center text-2xl font-bold border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 dark:bg-gray-700/50 dark:text-white transition-all duration-200"
+                            data-index="{{ forloop.counter0 }}">
+                        {% endfor %}
+                    </div>
+
+                    <!-- Hidden OTP Field for Form Submission -->
+                    <div class="relative">
+                        <input type="text" name="otp" id="otp-input" placeholder="Enter 6-digit OTP"
+                            class="w-full border-2 border-gray-300 dark:border-gray-600 rounded-xl p-4 pl-12 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 dark:bg-gray-700/50 dark:text-white transition-all duration-300"
+                            required maxlength="6" pattern="[0-9]{6}" title="Please enter exactly 6 digits">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- OTP Instructions -->
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-2 flex items-center">
+                        <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                                clip-rule="evenodd" />
+                        </svg>
+                        Enter the 6-digit code from your authenticator app or SMS
+                    </p>
+                </div>
+
+                <!-- Verify Button -->
+                <button type="submit" id="verify-btn"
+                    class="w-full bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white py-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] shadow-lg hover:shadow-xl group relative overflow-hidden">
+                    <span class="relative z-10 flex items-center justify-center">
+                        <svg class="w-5 h-5 mr-2 group-hover:rotate-12 transition-transform" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        Verify & Continue
+                    </span>
+                    <div
+                        class="absolute inset-0 bg-gradient-to-r from-emerald-700 to-green-700 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                    </div>
+                </button>
+            </form>
+
+            <!-- Resend OTP & Back Options -->
+            <div class="mt-8 pt-6 border-t border-gray-200/50 dark:border-gray-700/50">
+                <div class="flex flex-col space-y-4">
+                    <!-- Resend OTP -->
+                    <div class="text-center">
+                        <p class="text-gray-600 dark:text-gray-300 text-sm mb-2">
+                            Didn't receive the code?
+                        </p>
+                        <button type="button" id="resend-btn"
+                            class="text-emerald-600 hover:text-emerald-500 font-medium transition-all duration-300 hover:underline inline-flex items-center group disabled:opacity-50 disabled:cursor-not-allowed"
+                            disabled>
+                            <svg class="w-4 h-4 mr-2 group-hover:rotate-180 transition-transform duration-500"
+                                fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                            Resend OTP
+                            <span id="resend-timer" class="ml-2 text-sm font-normal">(60s)</span>
+                        </button>
+                    </div>
+
+                    <!-- Back to Login -->
+                    <div class="text-center">
+                        <a href="{% url 'login' %}"
+                            class="text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 font-medium transition-all duration-300 hover:underline inline-flex items-center group">
+                            <svg class="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                            </svg>
+                            Back to Login
+                        </a>
                     </div>
                 </div>
             </div>
-
-            <!-- Verify Button -->
-            <button type="submit"
-                class="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-semibold transition-all duration-200 transform hover:scale-[1.02]">
-                Verify OTP
-            </button>
-        </form>
-
-        <!-- Resend OTP -->
-        <div class="text-center mt-6 pt-6 border-t border-gray-200 dark:border-gray-600">
-            <p class="text-gray-600 dark:text-gray-300 text-sm">
-                Didn't receive OTP?
-                <!-- ADD THIS LINK TO RESEND OTP PAGE -->
-                <a href=""
-                    class="text-green-600 hover:text-green-500 font-medium transition-colors">
-                    Resend OTP
-                </a>
-            </p>
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // OTP Auto-focus and Input Management
+        const otpInputs = document.querySelectorAll('.digit-input');
+        const hiddenInput = document.getElementById('otp-input');
+        const otpForm = document.getElementById('otp-form');
+        const resendBtn = document.getElementById('resend-btn');
+        const timerText = document.getElementById('timer-text');
+        const resendTimer = document.getElementById('resend-timer');
+
+        let currentOTP = '';
+        let countdown = 60;
+        let timerInterval;
+
+        // Initialize OTP input
+        function initializeOTPInputs() {
+            otpInputs.forEach((input, index) => {
+                // Focus first input
+                if (index === 0) {
+                    input.focus();
+                }
+
+                // Handle input
+                input.addEventListener('input', (e) => {
+                    const value = e.target.value;
+
+                    if (value.match(/[0-9]/)) {
+                        // Add pop animation
+                        e.target.classList.add('digit-pop');
+                        setTimeout(() => {
+                            e.target.classList.remove('digit-pop');
+                        }, 300);
+
+                        // Move to next input if available
+                        if (index < otpInputs.length - 1) {
+                            otpInputs[index + 1].focus();
+                        }
+
+                        // Update OTP
+                        updateHiddenOTP();
+                    } else {
+                        e.target.value = '';
+                    }
+                });
+
+                // Handle backspace
+                input.addEventListener('keydown', (e) => {
+                    if (e.key === 'Backspace' && !input.value && index > 0) {
+                        otpInputs[index - 1].focus();
+                    }
+                });
+
+                // Handle paste
+                input.addEventListener('paste', (e) => {
+                    e.preventDefault();
+                    const pastedData = e.clipboardData.getData('text').trim();
+
+                    if (pastedData.match(/^[0-9]{6}$/)) {
+                        for (let i = 0; i < otpInputs.length; i++) {
+                            if (i < pastedData.length) {
+                                otpInputs[i].value = pastedData[i];
+                            }
+                        }
+                        updateHiddenOTP();
+                        otpInputs[5].focus();
+                    } else {
+                        // Invalid paste - show shake animation
+                        otpForm.classList.add('shake');
+                        setTimeout(() => {
+                            otpForm.classList.remove('shake');
+                        }, 500);
+                    }
+                });
+            });
+        }
+
+        function updateHiddenOTP() {
+            currentOTP = Array.from(otpInputs).map(input => input.value).join('');
+            hiddenInput.value = currentOTP;
+
+            // If OTP is complete, enable verify button animation
+            if (currentOTP.length === 6) {
+                document.getElementById('verify-btn').classList.add('success-pulse');
+                setTimeout(() => {
+                    document.getElementById('verify-btn').classList.remove('success-pulse');
+                }, 1500);
+            }
+        }
+
+        // Start countdown timer
+        function startCountdown() {
+            clearInterval(timerInterval);
+            countdown = 60;
+            updateTimerDisplay();
+
+            timerInterval = setInterval(() => {
+                countdown--;
+                updateTimerDisplay();
+
+                if (countdown <= 0) {
+                    clearInterval(timerInterval);
+                    resendBtn.disabled = false;
+                    resendBtn.innerHTML = `
+                        <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"/>
+                        </svg>
+                        Resend OTP
+                    `;
+                    resendTimer.textContent = '';
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            timerText.textContent = countdown;
+            resendTimer.textContent = `(${countdown}s)`;
+        }
+
+        // Handle resend OTP
+        resendBtn.addEventListener('click', function () {
+            if (this.disabled) return;
+
+            this.disabled = true;
+            this.innerHTML = `
+                <svg class="w-4 h-4 mr-2 animate-spin" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"/>
+                </svg>
+                Sending...
+            `;
+
+            // Simulate API call
+            setTimeout(() => {
+                // Reset OTP inputs
+                otpInputs.forEach(input => {
+                    input.value = '';
+                });
+                hiddenInput.value = '';
+                currentOTP = '';
+
+                // Show success message
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'p-4 rounded-xl bg-emerald-100 text-emerald-800 border border-emerald-200 mb-4';
+                messageDiv.innerHTML = `
+                    <div class="flex items-center">
+                        <svg class="w-5 h-5 mr-3 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                        </svg>
+                        New OTP has been sent successfully!
+                    </div>
+                `;
+
+                // Insert before form
+                otpForm.parentNode.insertBefore(messageDiv, otpForm);
+
+                // Remove message after 5 seconds
+                setTimeout(() => {
+                    messageDiv.remove();
+                }, 5000);
+
+                // Restart timer
+                startCountdown();
+
+                // Focus first input
+                otpInputs[0].focus();
+            }, 1500);
+        });
+
+        // Form submission animation
+        otpForm.addEventListener('submit', function (e) {
+            if (currentOTP.length !== 6) {
+                e.preventDefault();
+                otpForm.classList.add('shake');
+                setTimeout(() => {
+                    otpForm.classList.remove('shake');
+                }, 500);
+
+                // Highlight empty inputs
+                otpInputs.forEach(input => {
+                    if (!input.value) {
+                        input.classList.add('border-red-500', 'bg-red-50');
+                        setTimeout(() => {
+                            input.classList.remove('border-red-500', 'bg-red-50');
+                        }, 1000);
+                    }
+                });
+
+                return false;
+            }
+
+            // Add loading state to button
+            const submitBtn = document.getElementById('verify-btn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `
+                <span class="flex items-center justify-center">
+                    <svg class="w-5 h-5 mr-2 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                    </svg>
+                    Verifying...
+                </span>
+            `;
+        });
+
+        // Initialize everything
+        initializeOTPInputs();
+        startCountdown();
+
+        // Add click sound effect for OTP inputs (optional)
+        otpInputs.forEach(input => {
+            input.addEventListener('focus', () => {
+                input.classList.add('ring-2', 'ring-emerald-200');
+            });
+
+            input.addEventListener('blur', () => {
+                input.classList.remove('ring-2', 'ring-emerald-200');
+            });
+        });
+
+        // Mask email/mobile for display
+        const contactDisplay = document.getElementById('display-contact');
+        if (contactDisplay) {
+            const contact = contactDisplay.textContent.trim();
+            if (contact.includes('@')) {
+                // Email masking
+                const [username, domain] = contact.split('@');
+                const masked = username.charAt(0) + '•••••' + username.slice(-1) + '@' + domain;
+                contactDisplay.textContent = masked;
+            } else if (contact.match(/^\d+$/)) {
+                // Phone number masking
+                const masked = '••••••' + contact.slice(-4);
+                contactDisplay.textContent = masked;
+            }
+        }
+    });
+</script>
 
 {% endblock %}

@@ -9,6 +9,244 @@
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Custom Animations CSS -->
+    <style>
+        /* Background Animation Styles */
+        .gif-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -3;
+            object-fit: cover;
+            opacity: 0.4;
+            filter: blur(1px);
+        }
+
+        .gradient-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg,
+                    rgba(59, 130, 246, 0.05) 0%,
+                    rgba(168, 85, 247, 0.05) 25%,
+                    rgba(236, 72, 153, 0.05) 50%,
+                    rgba(239, 68, 68, 0.05) 75%,
+                    rgba(245, 158, 11, 0.05) 100%);
+            background-size: 400% 400%;
+            animation: gradient-shift 20s ease infinite;
+            z-index: -2;
+        }
+
+        @keyframes gradient-shift {
+
+            0%,
+            100% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+
+        /* Floating Particles */
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translate(0, 0) rotate(0deg);
+                opacity: 0.5;
+            }
+
+            25% {
+                transform: translate(20px, -20px) rotate(90deg);
+                opacity: 0.8;
+            }
+
+            50% {
+                transform: translate(0, -40px) rotate(180deg);
+                opacity: 0.5;
+            }
+
+            75% {
+                transform: translate(-20px, -20px) rotate(270deg);
+                opacity: 0.8;
+            }
+        }
+
+        .floating-particle {
+            position: fixed;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0;
+            animation: float 20s linear infinite;
+        }
+
+        /* Transparent Navbar Styles */
+        .navbar-transparent {
+            background: transparent !important;
+            backdrop-filter: blur(0px) !important;
+            border: none !important;
+            box-shadow: none !important;
+        }
+
+        .navbar-scrolled {
+            background: rgba(255, 255, 255, 0.9) !important;
+            backdrop-filter: blur(20px) !important;
+            border-bottom: 1px solid rgba(229, 231, 235, 0.5) !important;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1) !important;
+        }
+
+        .dark .navbar-scrolled {
+            background: rgba(17, 24, 39, 0.9) !important;
+            border-bottom: 1px solid rgba(55, 65, 81, 0.5) !important;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        /* Navbar Text Colors - Light Mode (Transparent) */
+        .navbar-transparent .nav-light-text {
+            color: white !important;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .navbar-transparent .nav-light-hover:hover {
+            color: rgba(255, 255, 255, 0.9) !important;
+            background: rgba(255, 255, 255, 0.1) !important;
+        }
+
+        .navbar-transparent .nav-light-border {
+            border-color: rgba(255, 255, 255, 0.2) !important;
+        }
+
+        .navbar-transparent .nav-light-bg {
+            background: rgba(255, 255, 255, 0.1) !important;
+        }
+
+        .navbar-transparent .nav-light-icon {
+            color: white !important;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+        }
+
+        /* Logo Gradient for Transparent Navbar */
+        .navbar-transparent .logo-gradient {
+            background: linear-gradient(to right, #ffffff, #e2e8f0) !important;
+            -webkit-background-clip: text !important;
+            background-clip: text !important;
+            color: transparent !important;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Dark Mode Navbar (When dark mode is on, navbar is always dark) */
+        .dark .navbar-transparent:not(.navbar-scrolled) {
+            background: transparent !important;
+        }
+
+        .dark .navbar-transparent .nav-light-text {
+            color: #f3f4f6 !important;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .dark .navbar-transparent .nav-light-hover:hover {
+            color: rgba(255, 255, 255, 0.9) !important;
+            background: rgba(255, 255, 255, 0.1) !important;
+        }
+
+        .dark .navbar-transparent .logo-gradient {
+            background: linear-gradient(to right, #f3f4f6, #d1d5db) !important;
+            -webkit-background-clip: text !important;
+            background-clip: text !important;
+            color: transparent !important;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(to bottom, #3b82f6, #8b5cf6);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(to bottom, #2563eb, #7c3aed);
+        }
+
+        /* Ripple Effect */
+        .ripple {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ripple-effect {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.7);
+            transform: scale(0);
+            animation: ripple 0.6s linear;
+            pointer-events: none;
+        }
+
+        @keyframes ripple {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+
+        /* Smooth Transitions */
+        .smooth-transition {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Theme Toggle Animation */
+        @keyframes theme-toggle {
+            0% {
+                transform: scale(1) rotate(0deg);
+            }
+
+            50% {
+                transform: scale(1.2) rotate(180deg);
+            }
+
+            100% {
+                transform: scale(1) rotate(360deg);
+            }
+        }
+
+        .theme-toggle-animate {
+            animation: theme-toggle 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Loading Animation */
+        @keyframes pulse-glow {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        .pulse-glow {
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+    </style>
+
     <script>
         // Enable dark mode via class strategy
         tailwind.config = {
@@ -19,6 +257,10 @@
                         'fade-in': 'fadeIn 0.5s ease-in-out',
                         'slide-down': 'slideDown 0.3s ease-out',
                         'bounce-gentle': 'bounceGentle 2s infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'spin-slow': 'spin 3s linear infinite',
+                        'wiggle': 'wiggle 1s ease-in-out infinite',
                     },
                     keyframes: {
                         fadeIn: {
@@ -32,7 +274,18 @@
                         bounceGentle: {
                             '0%, 100%': { transform: 'translateY(0)' },
                             '50%': { transform: 'translateY(-5px)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        wiggle: {
+                            '0%, 100%': { transform: 'rotate(-3deg)' },
+                            '50%': { transform: 'rotate(3deg)' },
                         }
+                    },
+                    backdropBlur: {
+                        xs: '2px',
                     }
                 }
             }
@@ -54,27 +307,56 @@
 </head>
 
 <body
-    class="bg-gradient-to-br from-gray-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 text-gray-900 dark:text-gray-100 min-h-screen font-sans transition-colors duration-500">
+    class="bg-gradient-to-br from-gray-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 text-gray-900 dark:text-gray-100 min-h-screen font-sans transition-colors duration-500 overflow-x-hidden">
 
-    <!-- Navbar -->
-    <nav
-        class="bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border-b border-gray-200/50 dark:border-gray-700/50 shadow-sm sticky top-0 z-50 transition-all duration-300">
+    <!-- Background Elements -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none z-[-1]">
+        <!-- OPTION 1: Animated Gradient Overlay -->
+        <div class="gradient-overlay"></div>
+
+        <!-- OPTION 2: GIF Background (Uncomment one) -->
+        <!-- <img src="https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif" alt="Animated background" class="gif-background"> -->
+        <!-- <img src="https://media.giphy.com/media/3o7abldj0b3rxrZUxW/giphy.gif" alt="Particles background" class="gif-background"> -->
+        <!-- <img src="https://media.giphy.com/media/26tn33aiTi1jkl6H6/giphy.gif" alt="Celebration background" class="gif-background"> -->
+
+        <!-- Floating Particles -->
+        <div id="particles-container"></div>
+
+        <!-- Floating Decorative Elements -->
+        <div
+            class="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-400/10 rounded-full blur-3xl animate-pulse float-gentle">
+        </div>
+        <div class="absolute bottom-1/4 right-1/4 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl animate-pulse float-gentle"
+            style="animation-delay: 1s;"></div>
+        <div class="absolute top-3/4 left-1/3 w-48 h-48 bg-pink-400/10 rounded-full blur-3xl animate-pulse float-gentle"
+            style="animation-delay: 2s;"></div>
+    </div>
+
+    <!-- Transparent Navbar -->
+    <nav id="main-navbar"
+        class="navbar-transparent fixed top-0 left-0 right-0 z-50 transition-all duration-500 smooth-transition">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
 
                 <!-- Logo/Brand -->
                 <div class="flex items-center space-x-3">
-                    <div
-                        class="flex items-center justify-center w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl shadow-lg group hover:shadow-xl transition-all duration-300">
-                        <svg class="h-5 w-5 text-white transform group-hover:scale-110 transition-transform" fill="none"
-                            stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M13 10V3L4 14h7v7l9-11h-7z" />
-                        </svg>
-                    </div>
+                    <a href="{% url 'home' %}" class="group ripple">
+                        <div
+                            class="flex items-center justify-center w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-110 relative overflow-hidden nav-light-border">
+                            <svg class="h-5 w-5 text-white transform group-hover:rotate-12 transition-transform"
+                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                        </div>
+                    </a>
                     <a href="{% url 'home' %}" class="group">
                         <span
-                            class="font-bold text-xl bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent group-hover:from-blue-700 group-hover:to-purple-700 transition-all duration-300">EventHub</span>
+                            class="font-bold text-xl logo-gradient group-hover:from-blue-700 group-hover:to-purple-700 transition-all duration-300 relative">
+                            EventHub
+                            <span
+                                class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 group-hover:w-full transition-all duration-300"></span>
+                        </span>
                     </a>
                 </div>
 
@@ -82,18 +364,20 @@
                 <div class="hidden md:flex items-center space-x-1">
                     <!-- Home -->
                     <a href="{% url 'home' %}"
-                        class="flex items-center space-x-2 px-4 py-2 rounded-xl text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-200 group">
+                        class="flex items-center space-x-2 px-4 py-2 rounded-xl nav-light-text nav-light-hover transition-all duration-200 group ripple relative smooth-transition">
                         <span class="text-lg group-hover:scale-110 transition-transform">🏠</span>
                         <span class="font-medium">Home</span>
+                        <span
+                            class="absolute -bottom-1 left-4 right-4 h-0.5 bg-blue-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
                     </a>
 
                     <!-- Events Dropdown -->
                     <div class="relative group">
                         <button
-                            class="flex items-center space-x-2 px-4 py-2 rounded-xl text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-200">
+                            class="flex items-center space-x-2 px-4 py-2 rounded-xl nav-light-text nav-light-hover transition-all duration-200 ripple smooth-transition">
                             <span class="text-lg">🎪</span>
                             <span class="font-medium">Events</span>
-                            <svg class="w-4 h-4 transform group-hover:rotate-180 transition-transform duration-200"
+                            <svg class="w-4 h-4 transform group-hover:rotate-180 transition-transform duration-200 nav-light-icon"
                                 fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M19 9l-7 7-7-7" />
@@ -105,9 +389,9 @@
                             class="absolute left-0 mt-2 w-64 bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-gray-200/50 dark:border-gray-700/50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top-left scale-95 group-hover:scale-100">
                             <div class="p-2">
                                 <a href="{% url 'events' %}"
-                                    class="flex items-center px-4 py-3 rounded-xl hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-200 group/item">
+                                    class="flex items-center px-4 py-3 rounded-xl hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-200 group/item ripple">
                                     <div
-                                        class="flex items-center justify-center w-8 h-8 bg-blue-100 dark:bg-blue-900/30 rounded-lg mr-3">
+                                        class="flex items-center justify-center w-8 h-8 bg-blue-100 dark:bg-blue-900/30 rounded-lg mr-3 group-hover/item:scale-110 transition-transform">
                                         <span class="text-blue-600 dark:text-blue-400 text-sm">📅</span>
                                     </div>
                                     <div>
@@ -124,9 +408,9 @@
 
                                 <div class="grid grid-cols-2 gap-1 mt-2">
                                     <a href="{% url 'movies' %}"
-                                        class="flex flex-col items-center p-3 rounded-xl hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-200 group/item">
+                                        class="flex flex-col items-center p-3 rounded-xl hover:bg-red-50 dark:hover:bg-red-900/20 transition-all duration-200 group/item ripple">
                                         <div
-                                            class="w-10 h-10 bg-red-100 dark:bg-red-900/30 rounded-lg flex items-center justify-center mb-2">
+                                            class="w-10 h-10 bg-red-100 dark:bg-red-900/30 rounded-lg flex items-center justify-center mb-2 group-hover/item:scale-110 transition-transform">
                                             <span class="text-red-600 dark:text-red-400 text-lg">🎬</span>
                                         </div>
                                         <span class="text-sm font-medium text-gray-700 dark:text-gray-200">Movies</span>
@@ -134,9 +418,9 @@
                                     </a>
 
                                     <a href="{% url 'comedyshows' %}"
-                                        class="flex flex-col items-center p-3 rounded-xl hover:bg-yellow-50 dark:hover:bg-yellow-900/20 transition-all duration-200 group/item">
+                                        class="flex flex-col items-center p-3 rounded-xl hover:bg-yellow-50 dark:hover:bg-yellow-900/20 transition-all duration-200 group/item ripple">
                                         <div
-                                            class="w-10 h-10 bg-yellow-100 dark:bg-yellow-900/30 rounded-lg flex items-center justify-center mb-2">
+                                            class="w-10 h-10 bg-yellow-100 dark:bg-yellow-900/30 rounded-lg flex items-center justify-center mb-2 group-hover/item:scale-110 transition-transform">
                                             <span class="text-yellow-600 dark:text-yellow-400 text-lg">🎤</span>
                                         </div>
                                         <span class="text-sm font-medium text-gray-700 dark:text-gray-200">Comedy</span>
@@ -145,9 +429,9 @@
                                     </a>
 
                                     <a href="{% url 'amusements' %}"
-                                        class="flex flex-col items-center p-3 rounded-xl hover:bg-green-50 dark:hover:bg-green-900/20 transition-all duration-200 group/item">
+                                        class="flex flex-col items-center p-3 rounded-xl hover:bg-green-50 dark:hover:bg-green-900/20 transition-all duration-200 group/item ripple">
                                         <div
-                                            class="w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center mb-2">
+                                            class="w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center mb-2 group-hover/item:scale-110 transition-transform">
                                             <span class="text-green-600 dark:text-green-400 text-lg">🎢</span>
                                         </div>
                                         <span
@@ -157,9 +441,9 @@
                                     </a>
 
                                     <a href="{% url 'liveconcerts' %}"
-                                        class="flex flex-col items-center p-3 rounded-xl hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-all duration-200 group/item">
+                                        class="flex flex-col items-center p-3 rounded-xl hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-all duration-200 group/item ripple">
                                         <div
-                                            class="w-10 h-10 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center mb-2">
+                                            class="w-10 h-10 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center mb-2 group-hover/item:scale-110 transition-transform">
                                             <span class="text-purple-600 dark:text-purple-400 text-lg">🎸</span>
                                         </div>
                                         <span
@@ -170,15 +454,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- Cart with Badge
-                    <a href="#"
-                        class="flex items-center space-x-2 px-4 py-2 rounded-xl text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-200 group relative">
-                        <span class="text-lg group-hover:scale-110 transition-transform">🛒</span>
-                        <span class="font-medium">Cart</span>
-                        <span
-                            class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center animate-pulse">3</span>
-                    </a> -->
                 </div>
 
                 <!-- User Section & Mobile Menu -->
@@ -188,13 +463,13 @@
                     <!-- User Profile Dropdown -->
                     <div class="relative group">
                         <button
-                            class="flex items-center space-x-2 px-3 py-2 rounded-xl bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 border border-blue-200/50 dark:border-blue-700/30 hover:shadow-md transition-all duration-200">
+                            class="flex items-center space-x-2 px-3 py-2 rounded-xl nav-light-bg border nav-light-border hover:shadow-md transition-all duration-200 ripple smooth-transition">
                             <div
-                                class="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                                class="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
                                 <span class="text-white text-sm font-semibold">{{ request.session.user_name|first|upper }}</span>
                             </div>
-                            <span class="font-medium text-gray-700 dark:text-gray-200 hidden lg:block">Hi, {{ request.session.user_name }}</span>
-                            <svg class="w-4 h-4 text-gray-500 transform group-hover:rotate-180 transition-transform duration-200"
+                            <span class="font-medium nav-light-text hidden lg:block">Hi, {{ request.session.user_name }}</span>
+                            <svg class="w-4 h-4 nav-light-icon transform group-hover:rotate-180 transition-transform duration-200"
                                 fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M19 9l-7 7-7-7" />
@@ -211,21 +486,23 @@
                                 </div>
 
                                 <a href="#"
-                                    class="flex items-center px-3 py-2 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-200 group/item">
-                                    <span class="text-gray-600 dark:text-gray-400 mr-3">👤</span>
+                                    class="flex items-center px-3 py-2 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-200 group/item ripple">
+                                    <span
+                                        class="text-gray-600 dark:text-gray-400 mr-3 group-hover/item:scale-110 transition-transform">👤</span>
                                     <span class="text-sm text-gray-700 dark:text-gray-200">Profile</span>
                                 </a>
 
                                 <a href="#"
-                                    class="flex items-center px-3 py-2 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-200 group/item">
-                                    <span class="text-gray-600 dark:text-gray-400 mr-3">⚙️</span>
+                                    class="flex items-center px-3 py-2 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-200 group/item ripple">
+                                    <span
+                                        class="text-gray-600 dark:text-gray-400 mr-3 group-hover/item:scale-110 transition-transform">⚙️</span>
                                     <span class="text-sm text-gray-700 dark:text-gray-200">Settings</span>
                                 </a>
 
                                 <div class="border-t border-gray-200/50 dark:border-gray-700/50 mt-1 pt-1">
                                     <a href="{% url 'logout' %}"
-                                        class="flex items-center px-3 py-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-red-600 dark:text-red-400 transition-all duration-200 group/item">
-                                        <span class="mr-3">🚪</span>
+                                        class="flex items-center px-3 py-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-red-600 dark:text-red-400 transition-all duration-200 group/item ripple">
+                                        <span class="mr-3 group-hover/item:scale-110 transition-transform">🚪</span>
                                         <span class="text-sm font-medium">Logout</span>
                                     </a>
                                 </div>
@@ -236,27 +513,48 @@
                     <!-- Login/Signup -->
                     <div class="hidden md:flex items-center space-x-2">
                         <a href="{% url 'login' %}"
-                            class="px-4 py-2 text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-all duration-200">
+                            class="px-4 py-2 nav-light-text hover:text-blue-400 font-medium transition-all duration-200 ripple smooth-transition">
                             Login
                         </a>
                         <a href="{% url 'signup' %}"
-                            class="px-6 py-2 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-xl font-medium shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200">
-                            Sign Up
+                            class="px-6 py-2 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-xl font-medium shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 ripple relative overflow-hidden group smooth-transition">
+                            <span class="relative z-10">Sign Up</span>
+                            <div
+                                class="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-700 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                            </div>
                         </a>
                     </div>
                     {% endif %}
 
-                    <!-- Theme Toggle -->
+                    <!-- Enhanced Theme Toggle -->
                     <button id="theme-toggle"
-                        class="p-2 rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-400 transition-all duration-200 group">
-                        <span class="block dark:hidden group-hover:scale-110 transition-transform">🌙</span>
-                        <span class="hidden dark:block group-hover:scale-110 transition-transform">☀️</span>
+                        class="p-2 rounded-xl bg-white/20 dark:bg-gray-800/50 backdrop-blur-sm hover:bg-white/30 dark:hover:bg-gray-700/50 nav-light-text transition-all duration-300 group ripple smooth-transition relative overflow-hidden"
+                        aria-label="Toggle dark mode">
+                        <!-- Sun Icon (Visible in Dark Mode) -->
+                        <svg id="sun-icon"
+                            class="w-5 h-5 hidden dark:block group-hover:rotate-45 transition-transform duration-300"
+                            fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+                                clip-rule="evenodd" />
+                        </svg>
+
+                        <!-- Moon Icon (Visible in Light Mode) -->
+                        <svg id="moon-icon"
+                            class="w-5 h-5 dark:hidden group-hover:-rotate-45 transition-transform duration-300"
+                            fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+                        </svg>
+
+                        <!-- Animated Orb -->
+                        <span id="theme-orb"
+                            class="absolute inset-0 rounded-full bg-gradient-to-r from-yellow-300 to-orange-400 opacity-0 scale-0 transition-all duration-300"></span>
                     </button>
 
                     <!-- Mobile menu button -->
                     <button id="mobile-menu-button"
-                        class="md:hidden p-2 rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-400 transition-all duration-200">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        class="md:hidden p-2 rounded-xl bg-white/20 dark:bg-gray-800/50 backdrop-blur-sm hover:bg-white/30 dark:hover:bg-gray-700/50 nav-light-text transition-all duration-200 ripple smooth-transition">
+                        <svg class="w-5 h-5 nav-light-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
@@ -267,44 +565,37 @@
 
         <!-- Mobile Menu -->
         <div id="mobile-menu"
-            class="md:hidden bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl border-b border-gray-200/50 dark:border-gray-700/50 hidden transition-all duration-300">
+            class="md:hidden bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl border-b border-gray-200/50 dark:border-gray-700/50 hidden transition-all duration-300 max-h-0 overflow-hidden">
             <div class="px-4 py-3 space-y-1">
                 <a href="{% url 'home' %}"
-                    class="flex items-center space-x-3 px-3 py-3 rounded-xl hover:bg-blue-50 dark:hover:bg-blue-900/20 transition">
+                    class="flex items-center space-x-3 px-3 py-3 rounded-xl hover:bg-blue-50 dark:hover:bg-blue-900/20 transition ripple smooth-transition">
                     <span>🏠</span>
                     <span class="font-medium">Home</span>
                 </a>
                 <a href="{% url 'events' %}"
-                    class="flex items-center space-x-3 px-3 py-3 rounded-xl hover:bg-blue-50 dark:hover:bg-blue-900/20 transition">
+                    class="flex items-center space-x-3 px-3 py-3 rounded-xl hover:bg-blue-50 dark:hover:bg-blue-900/20 transition ripple smooth-transition">
                     <span>📅</span>
                     <span class="font-medium">Business Events</span>
                 </a>
                 <a href="{% url 'movies' %}"
-                    class="flex items-center space-x-3 px-3 py-3 rounded-xl hover:bg-red-50 dark:hover:bg-red-900/20 transition">
+                    class="flex items-center space-x-3 px-3 py-3 rounded-xl hover:bg-red-50 dark:hover:bg-red-900/20 transition ripple smooth-transition">
                     <span>🎬</span>
                     <span class="font-medium">Movies</span>
                 </a>
                 <a href="{% url 'comedyshows' %}"
-                    class="flex items-center space-x-3 px-3 py-3 rounded-xl hover:bg-yellow-50 dark:hover:bg-yellow-900/20 transition">
+                    class="flex items-center space-x-3 px-3 py-3 rounded-xl hover:bg-yellow-50 dark:hover:bg-yellow-900/20 transition ripple smooth-transition">
                     <span>🎤</span>
                     <span class="font-medium">Comedy Shows</span>
                 </a>
                 <a href="{% url 'amusements' %}"
-                    class="flex items-center space-x-3 px-3 py-3 rounded-xl hover:bg-green-50 dark:hover:bg-green-900/20 transition">
+                    class="flex items-center space-x-3 px-3 py-3 rounded-xl hover:bg-green-50 dark:hover:bg-green-900/20 transition ripple smooth-transition">
                     <span>🎢</span>
                     <span class="font-medium">Amusements</span>
                 </a>
                 <a href="{% url 'liveconcerts' %}"
-                    class="flex items-center space-x-3 px-3 py-3 rounded-xl hover:bg-purple-50 dark:hover:bg-purple-900/20 transition">
+                    class="flex items-center space-x-3 px-3 py-3 rounded-xl hover:bg-purple-50 dark:hover:bg-purple-900/20 transition ripple smooth-transition">
                     <span>🎸</span>
                     <span class="font-medium">Live Concerts</span>
-                </a>
-                <a href="#"
-                    class="flex items-center space-x-3 px-3 py-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition">
-                    <span>🛒</span>
-                    <span class="font-medium">Cart</span>
-                    <span
-                        class="ml-auto bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">3</span>
                 </a>
 
                 {% if request.session.user_authenticated %}
@@ -318,7 +609,7 @@
                         <span>Hi, {{ request.session.user_name }}</span>
                     </div>
                     <a href="{% url 'logout' %}"
-                        class="flex items-center space-x-3 px-3 py-2 rounded-xl hover:bg-red-50 dark:hover:bg-red-900/20 text-red-600 dark:text-red-400 transition">
+                        class="flex items-center space-x-3 px-3 py-2 rounded-xl hover:bg-red-50 dark:hover:bg-red-900/20 text-red-600 dark:text-red-400 transition ripple smooth-transition">
                         <span>🚪</span>
                         <span>Logout</span>
                     </a>
@@ -326,11 +617,11 @@
                 {% else %}
                 <div class="border-t border-gray-200 dark:border-gray-600 pt-2 mt-2 space-y-2">
                     <a href="{% url 'login' %}"
-                        class="block px-3 py-3 rounded-xl hover:bg-blue-50 dark:hover:bg-blue-900/20 transition text-center font-medium">
+                        class="block px-3 py-3 rounded-xl hover:bg-blue-50 dark:hover:bg-blue-900/20 transition text-center font-medium ripple smooth-transition">
                         Login
                     </a>
                     <a href="{% url 'signup' %}"
-                        class="block px-3 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl hover:from-blue-600 hover:to-purple-700 transition text-center font-medium">
+                        class="block px-3 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl hover:from-blue-600 hover:to-purple-700 transition text-center font-medium ripple smooth-transition">
                         Sign Up
                     </a>
                 </div>
@@ -338,6 +629,9 @@
             </div>
         </div>
     </nav>
+
+    <!-- Add padding to main content to account for fixed navbar -->
+    <div class="pt-16"></div>
 
     <!-- Messages -->
     <div class="hidden" id="django-messages">
@@ -354,12 +648,18 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-gray-800 dark:bg-gray-900 text-white py-12 mt-16">
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <footer class="bg-gray-800 dark:bg-gray-900 text-white py-12 mt-16 relative overflow-hidden">
+        <!-- Footer Background Elements -->
+        <div class="absolute inset-0 overflow-hidden pointer-events-none">
+            <div class="absolute -top-20 -left-20 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl"></div>
+            <div class="absolute -bottom-20 -right-20 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl"></div>
+        </div>
+
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="grid md:grid-cols-4 gap-8">
                 <div>
                     <h3 class="text-xl font-bold mb-4 flex items-center space-x-2">
-                        <span>🎪</span>
+                        <span class="animate-float">🎪</span>
                         <span>EventHub</span>
                     </h3>
                     <p class="text-gray-400">
@@ -369,30 +669,42 @@
                 <div>
                     <h4 class="font-semibold mb-4">Quick Links</h4>
                     <div class="space-y-2 text-gray-400">
-                        <a href="{% url 'home' %}" class="block hover:text-white transition">Home</a>
-                        <a href="{% url 'events' %}" class="block hover:text-white transition">All Events</a>
-                        <a href="{% url 'aboutus' %}" class="block hover:text-white transition">About Us</a>
-                        <a href="{% url 'contactus' %}" class="block hover:text-white transition">Contact</a>
+                        <a href="{% url 'home' %}"
+                            class="block hover:text-white transition ripple smooth-transition">Home</a>
+                        <a href="{% url 'events' %}"
+                            class="block hover:text-white transition ripple smooth-transition">All Events</a>
+                        <a href="{% url 'aboutus' %}"
+                            class="block hover:text-white transition ripple smooth-transition">About Us</a>
+                        <a href="{% url 'contactus' %}"
+                            class="block hover:text-white transition ripple smooth-transition">Contact</a>
                     </div>
                 </div>
                 <div>
                     <h4 class="font-semibold mb-4">Categories</h4>
                     <div class="space-y-2 text-gray-400">
-                        <a href="{% url 'movies' %}" class="block hover:text-white transition">Movies</a>
-                        <a href="{% url 'comedyshows' %}" class="block hover:text-white transition">Comedy Shows</a>
-                        <a href="{% url 'amusements' %}" class="block hover:text-white transition">Amusements</a>
-                        <a href="{% url 'liveconcerts' %}" class="block hover:text-white transition">Live Concerts</a>
+                        <a href="{% url 'movies' %}"
+                            class="block hover:text-white transition ripple smooth-transition">Movies</a>
+                        <a href="{% url 'comedyshows' %}"
+                            class="block hover:text-white transition ripple smooth-transition">Comedy Shows</a>
+                        <a href="{% url 'amusements' %}"
+                            class="block hover:text-white transition ripple smooth-transition">Amusements</a>
+                        <a href="{% url 'liveconcerts' %}"
+                            class="block hover:text-white transition ripple smooth-transition">Live Concerts</a>
                     </div>
                 </div>
                 <div>
                     <h4 class="font-semibold mb-4">Support</h4>
                     <div class="space-y-2 text-gray-400">
-                        <a href="{% url 'helpcenter' %}" class="block hover:text-white transition">Help Center</a>
-                        <a href="{% url 'privacy & policy' %}" class="block hover:text-white transition">Privacy &
+                        <a href="{% url 'helpcenter' %}"
+                            class="block hover:text-white transition ripple smooth-transition">Help Center</a>
+                        <a href="{% url 'privacy & policy' %}"
+                            class="block hover:text-white transition ripple smooth-transition">Privacy &
                             Policy</a>
-                        <a href="{% url 'terms & conditions' %}" class="block hover:text-white transition">Terms &
+                        <a href="{% url 'terms & conditions' %}"
+                            class="block hover:text-white transition ripple smooth-transition">Terms &
                             Conditions</a>
-                        <a href="{% url 'refund & policy' %}" class="block hover:text-white transition">Refund
+                        <a href="{% url 'refund & policy' %}"
+                            class="block hover:text-white transition ripple smooth-transition">Refund
                             Policy</a>
                     </div>
                 </div>
@@ -402,10 +714,285 @@
             </div>
         </div>
     </footer>
+
     <!-- Toast Container -->
     <div id="toast-container" class="fixed top-4 right-4 z-50 space-y-2 max-w-sm w-full"></div>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top"
+        class="fixed bottom-8 right-8 bg-gradient-to-r from-blue-500 to-purple-600 text-white p-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 opacity-0 invisible z-40 smooth-transition">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+        </svg>
+    </button>
+
     <!-- Scripts -->
-    <script src="{% static 'js/base.js' %}"></script>
+    <!-- Enhanced Base JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            console.log('Document loaded, initializing theme toggle...');
+
+            // Create floating particles
+            function createParticles() {
+                const particlesContainer = document.getElementById('particles-container');
+                if (!particlesContainer) return;
+
+                const colors = ['#3B82F6', '#8B5CF6', '#EC4899', '#10B981', '#F59E0B'];
+
+                for (let i = 0; i < 15; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'floating-particle';
+
+                    const size = Math.random() * 20 + 5;
+                    particle.style.width = `${size}px`;
+                    particle.style.height = `${size}px`;
+                    particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    particle.style.borderRadius = '50%';
+                    particle.style.left = `${Math.random() * 100}%`;
+                    particle.style.top = `${Math.random() * 100}%`;
+                    particle.style.animationDelay = `${Math.random() * 20}s`;
+                    particle.style.opacity = Math.random() * 0.5 + 0.2;
+
+                    particlesContainer.appendChild(particle);
+                }
+            }
+
+            createParticles();
+
+            // Navbar scroll effect
+            const navbar = document.getElementById('main-navbar');
+            let lastScroll = 0;
+
+            function updateNavbar() {
+                const currentScroll = window.pageYOffset;
+
+                // Add/remove scrolled class
+                if (currentScroll > 50) {
+                    navbar.classList.add('navbar-scrolled');
+                    navbar.classList.remove('navbar-transparent');
+                } else {
+                    navbar.classList.remove('navbar-scrolled');
+                    navbar.classList.add('navbar-transparent');
+                }
+
+                // Hide/show navbar on scroll (only when scrolled)
+                if (currentScroll > lastScroll && currentScroll > 100) {
+                    navbar.style.transform = 'translateY(-100%)';
+                } else {
+                    navbar.style.transform = 'translateY(0)';
+                }
+
+                lastScroll = currentScroll;
+
+                // Back to top button
+                const backToTop = document.getElementById('back-to-top');
+                if (backToTop) {
+                    if (currentScroll > 300) {
+                        backToTop.classList.remove('opacity-0', 'invisible');
+                        backToTop.classList.add('opacity-100', 'visible');
+                    } else {
+                        backToTop.classList.remove('opacity-100', 'visible');
+                        backToTop.classList.add('opacity-0', 'invisible');
+                    }
+                }
+            }
+
+            window.addEventListener('scroll', updateNavbar);
+            updateNavbar(); // Initial call
+
+            // Back to top button
+            const backToTop = document.getElementById('back-to-top');
+            if (backToTop) {
+                backToTop.addEventListener('click', function () {
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                });
+            }
+
+            // Ripple effect
+            function createRipple(event) {
+                const button = event.currentTarget;
+                const circle = document.createElement('span');
+                const diameter = Math.max(button.clientWidth, button.clientHeight);
+                const radius = diameter / 2;
+
+                circle.style.width = circle.style.height = `${diameter}px`;
+                circle.style.left = `${event.clientX - button.getBoundingClientRect().left - radius}px`;
+                circle.style.top = `${event.clientY - button.getBoundingClientRect().top - radius}px`;
+                circle.classList.add('ripple-effect');
+
+                const ripple = button.getElementsByClassName('ripple-effect')[0];
+                if (ripple) {
+                    ripple.remove();
+                }
+
+                button.appendChild(circle);
+            }
+
+            // Add ripple effect to all ripple buttons
+            const rippleButtons = document.querySelectorAll('.ripple');
+            rippleButtons.forEach(button => {
+                button.addEventListener('click', createRipple);
+            });
+
+            // Mobile menu toggle
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            if (mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener('click', function () {
+                    const isExpanded = mobileMenu.classList.contains('max-h-0');
+
+                    if (isExpanded) {
+                        mobileMenu.classList.remove('hidden', 'max-h-0');
+                        mobileMenu.style.maxHeight = mobileMenu.scrollHeight + 'px';
+                    } else {
+                        mobileMenu.style.maxHeight = '0';
+                        setTimeout(() => {
+                            mobileMenu.classList.add('max-h-0');
+                        }, 300);
+                    }
+                });
+            }
+
+            // Enhanced Theme Toggle
+            const themeToggle = document.getElementById('theme-toggle');
+            const themeOrb = document.getElementById('theme-orb');
+            const sunIcon = document.getElementById('sun-icon');
+            const moonIcon = document.getElementById('moon-icon');
+
+            console.log('Theme toggle button found:', !!themeToggle);
+            console.log('Sun icon found:', !!sunIcon);
+            console.log('Moon icon found:', !!moonIcon);
+
+            // Function to toggle dark mode
+            function toggleDarkMode() {
+                const html = document.documentElement;
+                const isDarkMode = html.classList.contains('dark');
+
+                console.log('Current dark mode:', isDarkMode);
+
+                // Animate the orb
+                if (themeOrb) {
+                    themeOrb.classList.remove('opacity-0', 'scale-0');
+                    themeOrb.classList.add('opacity-100', 'scale-100');
+
+                    setTimeout(() => {
+                        themeOrb.classList.remove('opacity-100', 'scale-100');
+                        themeOrb.classList.add('opacity-0', 'scale-0');
+                    }, 300);
+                }
+
+                // Toggle dark mode class
+                if (isDarkMode) {
+                    console.log('Switching to light mode');
+                    html.classList.remove('dark');
+                    localStorage.setItem('theme', 'light');
+                } else {
+                    console.log('Switching to dark mode');
+                    html.classList.add('dark');
+                    localStorage.setItem('theme', 'dark');
+                }
+
+                // Add rotation animation to icons
+                if (sunIcon && moonIcon) {
+                    sunIcon.classList.add('theme-toggle-animate');
+                    moonIcon.classList.add('theme-toggle-animate');
+
+                    setTimeout(() => {
+                        sunIcon.classList.remove('theme-toggle-animate');
+                        moonIcon.classList.remove('theme-toggle-animate');
+                    }, 500);
+                }
+            }
+
+            // Add click event listener to theme toggle button
+            if (themeToggle) {
+                themeToggle.addEventListener('click', toggleDarkMode);
+                console.log('Theme toggle event listener added');
+            }
+
+            // Load saved theme from localStorage
+            function loadTheme() {
+                const savedTheme = localStorage.getItem('theme');
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+                console.log('Saved theme:', savedTheme);
+                console.log('Prefers dark:', prefersDark);
+
+                if (savedTheme === 'dark') {
+                    document.documentElement.classList.add('dark');
+                    console.log('Loaded dark theme from localStorage');
+                } else if (savedTheme === 'light') {
+                    document.documentElement.classList.remove('dark');
+                    console.log('Loaded light theme from localStorage');
+                } else if (prefersDark) {
+                    // If no saved theme, use system preference
+                    document.documentElement.classList.add('dark');
+                    console.log('Loaded dark theme from system preference');
+                }
+            }
+
+            // Load theme on page load
+            loadTheme();
+
+            // Listen for system theme changes
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+                if (!localStorage.getItem('theme')) {
+                    if (e.matches) {
+                        document.documentElement.classList.add('dark');
+                        console.log('System changed to dark mode');
+                    } else {
+                        document.documentElement.classList.remove('dark');
+                        console.log('System changed to light mode');
+                    }
+                }
+            });
+
+            // Add hover effect to dropdowns
+            const dropdowns = document.querySelectorAll('.relative.group');
+            dropdowns.forEach(dropdown => {
+                dropdown.addEventListener('mouseenter', function () {
+                    this.classList.add('z-40');
+                });
+
+                dropdown.addEventListener('mouseleave', function () {
+                    this.classList.remove('z-40');
+                });
+            });
+
+            // Add loading animation to buttons
+            const buttons = document.querySelectorAll('a[href], button');
+            buttons.forEach(button => {
+                if (!button.classList.contains('ripple')) {
+                    button.classList.add('ripple');
+                    button.addEventListener('click', createRipple);
+                }
+            });
+
+            // Animate elements on scroll
+            function animateOnScroll() {
+                const elements = document.querySelectorAll('.animate-on-scroll');
+                const windowHeight = window.innerHeight;
+
+                elements.forEach(element => {
+                    const elementTop = element.getBoundingClientRect().top;
+                    if (elementTop < windowHeight - 100) {
+                        element.classList.add('animated');
+                    }
+                });
+            }
+
+            window.addEventListener('scroll', animateOnScroll);
+            animateOnScroll(); // Initial check
+
+            // Test theme toggle
+            console.log('Theme system initialized successfully');
+            console.log('Current theme:', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+        });
+    </script>
 
 </body>
 

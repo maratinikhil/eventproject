@@ -4,627 +4,998 @@
 
 {% block content %}
 
-<div class="container mx-auto px-4 py-8 space-y-16">
+<style>
+    /* Background Animation Styles */
+    .gif-background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -2;
+        object-fit: cover;
+        opacity: 0.3;
+        filter: blur(0px);
+    }
+
+    .gradient-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(45deg,
+                rgba(59, 130, 246, 0.1) 0%,
+                rgba(168, 85, 247, 0.1) 25%,
+                rgba(236, 72, 153, 0.1) 50%,
+                rgba(239, 68, 68, 0.1) 75%,
+                rgba(245, 158, 11, 0.1) 100%);
+        background-size: 400% 400%;
+        animation: gradient-shift 15s ease infinite;
+        z-index: -1;
+    }
+
+    @keyframes gradient-shift {
+
+        0%,
+        100% {
+            background-position: 0% 50%;
+        }
+
+        50% {
+            background-position: 100% 50%;
+        }
+    }
+
+    /* Floating Elements Animation */
+    @keyframes float {
+
+        0%,
+        100% {
+            transform: translateY(0) rotate(0deg);
+        }
+
+        33% {
+            transform: translateY(-20px) rotate(5deg);
+        }
+
+        66% {
+            transform: translateY(10px) rotate(-5deg);
+        }
+    }
+
+    .floating-element {
+        animation: float 6s ease-in-out infinite;
+    }
+
+    /* Card Hover Animations */
+    @keyframes card-float {
+
+        0%,
+        100% {
+            transform: translateY(0);
+        }
+
+        50% {
+            transform: translateY(-5px);
+        }
+    }
+
+    .card-hover {
+        transition: all 0.3s ease;
+    }
+
+    .card-hover:hover {
+        animation: card-float 2s ease-in-out infinite;
+    }
+
+    /* Glow Animation */
+    @keyframes glow {
+
+        0%,
+        100% {
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+        }
+
+        50% {
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.6);
+        }
+    }
+
+    .glow-animation {
+        animation: glow 3s ease-in-out infinite;
+    }
+
+    /* Section Entrance Animations */
+    @keyframes slide-up {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .slide-up {
+        animation: slide-up 0.6s ease-out forwards;
+    }
+
+    /* Shimmer Effect */
+    @keyframes shimmer {
+        0% {
+            background-position: -1000px 0;
+        }
+
+        100% {
+            background-position: 1000px 0;
+        }
+    }
+
+    .shimmer-effect {
+        background: linear-gradient(90deg,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0.1) 50%,
+                rgba(255, 255, 255, 0) 100%);
+        background-size: 1000px 100%;
+        animation: shimmer 3s infinite;
+    }
+
+    /* Countdown Timer Animation */
+    @keyframes countdown-pulse {
+
+        0%,
+        100% {
+            transform: scale(1);
+        }
+
+        50% {
+            transform: scale(1.05);
+        }
+    }
+
+    .countdown-pulse {
+        animation: countdown-pulse 1s ease-in-out infinite;
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+        .gif-background {
+            opacity: 0.15;
+        }
+
+        .floating-elements {
+            display: none;
+        }
+    }
+</style>
+
+<!-- Background Options -->
+<div class="fixed inset-0 overflow-hidden">
+    <!-- OPTION 1: Animated Gradient Overlay (Recommended) -->
+    <div class="gradient-overlay"></div>
+
+    <!-- OPTION 2: Live Event GIF Background -->
+    <!-- <img src="https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif" alt="Live events background" class="gif-background"> -->
+
+    <!-- OPTION 3: Abstract Particles GIF -->
+    <!-- <img src="https://media.giphy.com/media/3o7abldj0b3rxrZUxW/giphy.gif" alt="Abstract particles" class="gif-background"> -->
+
+    <!-- OPTION 4: Celebration/Confetti GIF -->
+    <!-- <img src="https://media.giphy.com/media/l0HlN3M2j2qRgqj7G/giphy.gif" alt="Celebration" class="gif-background"> -->
+
+    <!-- Floating Animated Elements -->
+    <div class="floating-elements">
+        <div class="absolute top-1/4 left-1/4 w-32 h-32 bg-blue-400/10 rounded-full blur-3xl floating-element"
+            style="animation-delay: 0s;"></div>
+        <div class="absolute top-1/3 right-1/4 w-40 h-40 bg-purple-500/10 rounded-full blur-3xl floating-element"
+            style="animation-delay: 1s;"></div>
+        <div class="absolute bottom-1/4 left-1/3 w-28 h-28 bg-pink-400/10 rounded-full blur-3xl floating-element"
+            style="animation-delay: 2s;"></div>
+        <div class="absolute top-3/4 right-1/3 w-36 h-36 bg-yellow-400/10 rounded-full blur-3xl floating-element"
+            style="animation-delay: 3s;"></div>
+    </div>
+</div>
+
+<div class="container mx-auto px-4 py-8 space-y-16 relative z-10">
+
+    <!-- LIVE COUNTDOWN TIMER -->
+    <div class="fixed top-20 right-4 z-50 hidden md:block">
+        <div class="bg-black/80 backdrop-blur-lg rounded-xl p-3 shadow-xl border border-white/10">
+            <div class="flex items-center space-x-2">
+                <div class="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
+                <span class="text-white text-sm font-semibold">LIVE</span>
+            </div>
+            <div id="live-timer" class="text-white text-xs mt-1">Events updating in <span class="font-bold">30s</span>
+            </div>
+        </div>
+    </div>
 
     <!-- HERO SECTION -->
-    <section class="bg-gradient-to-r from-blue-600 to-purple-700 rounded-2xl p-6 md:p-8 text-white">
-        <div class="max-w-2xl">
-            <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">Discover Amazing Experiences</h1>
-            <p class="text-lg md:text-xl mb-6 md:mb-8">Find the best events, movies, concerts and more in your city</p>
-            <div class="flex flex-col sm:flex-row gap-3 md:gap-4">
-                <input type="text" placeholder="Search for events, movies, concerts..."
-                    class="px-4 py-3 rounded-lg text-gray-800 flex-grow focus:outline-none focus:ring-2 focus:ring-yellow-400">
-                <button
-                    class="bg-yellow-400 text-gray-900 px-6 py-3 rounded-lg font-semibold hover:bg-yellow-300 transition active:scale-95">
-                    Search
-                </button>
+    <section class="slide-up">
+        <div
+            class="bg-gradient-to-r from-blue-600/90 to-purple-700/90 backdrop-blur-lg rounded-2xl p-6 md:p-10 text-white relative overflow-hidden">
+            <!-- Shimmer Overlay -->
+            <div class="absolute inset-0 shimmer-effect"></div>
+
+            <!-- Floating Icons -->
+            <div class="absolute top-4 left-4 text-2xl floating-element">🎭</div>
+            <div class="absolute top-4 right-4 text-2xl floating-element" style="animation-delay: 1s;">🎵</div>
+            <div class="absolute bottom-4 left-4 text-2xl floating-element" style="animation-delay: 2s;">🎬</div>
+            <div class="absolute bottom-4 right-4 text-2xl floating-element" style="animation-delay: 3s;">🎪</div>
+
+            <div class="max-w-3xl relative z-10">
+                <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight" id="hero-title">
+                    Discover <span class="text-yellow-300">Amazing</span> Experiences
+                </h1>
+                <p class="text-lg md:text-xl mb-8 opacity-90" id="hero-subtitle">
+                    Find the best events, movies, concerts and more in your city
+                </p>
+
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <div class="relative flex-grow">
+                        <input type="text" id="search-input" placeholder="Search for events, movies, concerts..."
+                            class="w-full px-6 py-4 rounded-xl text-gray-800 focus:outline-none focus:ring-3 focus:ring-yellow-400/50 shadow-lg transition-all duration-300"
+                            onfocus="this.parentElement.classList.add('glow-animation')"
+                            onblur="this.parentElement.classList.remove('glow-animation')">
+                        <div class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                            🔍
+                        </div>
+                    </div>
+                    <button id="search-btn"
+                        class="bg-yellow-400 hover:bg-yellow-300 text-gray-900 px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl group">
+                        <span class="flex items-center justify-center">
+                            Search
+                            <svg class="w-5 h-5 ml-2 group-hover:rotate-12 transition-transform" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                        </span>
+                    </button>
+                </div>
+
+                <!-- Live Stats -->
+                <div class="mt-8 flex flex-wrap gap-4">
+                    <div class="flex items-center bg-white/20 backdrop-blur-sm rounded-lg px-4 py-2">
+                        <span class="text-yellow-300 mr-2">🎫</span>
+                        <span class="font-semibold" id="event-count">{{ events|length|default:"0" }}</span>
+                        <span class="ml-2 text-sm opacity-90">Live Events</span>
+                    </div>
+                    <div class="flex items-center bg-white/20 backdrop-blur-sm rounded-lg px-4 py-2">
+                        <span class="text-yellow-300 mr-2">🎬</span>
+                        <span class="font-semibold" id="movie-count">{{ movies|length|default:"0" }}</span>
+                        <span class="ml-2 text-sm opacity-90">Movies</span>
+                    </div>
+                    <div class="flex items-center bg-white/20 backdrop-blur-sm rounded-lg px-4 py-2">
+                        <span class="text-yellow-300 mr-2">😂</span>
+                        <span class="font-semibold" id="comedy-count">{{ comedyshows|length|default:"0" }}</span>
+                        <span class="ml-2 text-sm opacity-90">Comedy Shows</span>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- EVENTS SECTION -->
-    <section>
+    <section class="slide-up" style="animation-delay: 0.1s;">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
             <div>
-                <h2 class="text-2xl md:text-3xl font-bold">🎫 Business Events</h2>
+                <h2 class="text-2xl md:text-3xl font-bold flex items-center">
+                    <span class="mr-3 text-blue-500">🎫</span>
+                    Business Events
+                    <span
+                        class="ml-3 text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full animate-pulse">LIVE</span>
+                </h2>
                 <p class="text-gray-600 dark:text-gray-300 mt-2">Don't miss out on these exciting events</p>
             </div>
             <a href="{% url 'events' %}"
-                class="text-blue-600 hover:underline font-medium flex items-center self-end sm:self-auto">
-                View All <span class="ml-1">→</span>
+                class="text-blue-600 hover:text-blue-700 dark:text-blue-400 font-medium flex items-center group transition-all duration-300">
+                View All
+                <svg class="w-5 h-5 ml-2 group-hover:translate-x-2 transition-transform" fill="none"
+                    stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
             </a>
         </div>
-    
-        <div class="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+
+        <div class="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {% for event in events %}
-            <div
-                class="group bg-white dark:bg-gray-800 rounded-xl md:rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 dark:border-gray-700 transform hover:-translate-y-1 active:translate-y-0">
-    
-                <!-- Clickable Image -->
-                <a href="{% url 'event_view' event.id %}">
-                    <div class="h-28 md:h-32 bg-gradient-to-r from-blue-400 to-purple-500 relative overflow-hidden">
-                        {% if event.image %}
-                        <img src="{{ event.image.url }}" alt="{{ event.title }}"
-                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                        {% else %}
-                        <div class="w-full h-full flex items-center justify-center">
-                            <span class="text-white font-bold text-lg">🎭</span>
-                        </div>
-                        {% endif %}
-    
-                        <span class="absolute top-2 left-2 bg-white text-gray-800 text-xs font-bold px-2 py-1 rounded-full">
-                            {{ event.event_type|default:"Event" }}
-                        </span>
-                        <span
-                            class="absolute top-2 right-2 bg-white text-gray-800 text-xs font-bold px-2 py-1 rounded-full">
-                            {{ event.date|date:"M d"|default:"Soon" }}
-                        </span>
-    
-                        <div
-                            class="absolute bottom-2 left-2 bg-black bg-opacity-70 text-white text-xs px-2 py-1 rounded-full flex items-center">
-                            ⭐ {{ event.rating|default:"4.5" }}/5
-                        </div>
-                    </div>
-                </a>
-    
-                <div class="p-3 md:p-4">
-    
-                    <!-- Clickable Title -->
+            <div class="group card-hover relative">
+                <div
+                    class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-200/50 dark:border-gray-700/50 h-full flex flex-col">
+
+                    <!-- Event Image -->
                     <a href="{% url 'event_view' event.id %}">
-                        <h3 class="font-bold text-base md:text-lg mb-2 line-clamp-1">
-                            {{ event.name|default:"Event Name" }}
-                        </h3>
+                        <div class="h-40 bg-gradient-to-r from-blue-400 to-purple-500 relative overflow-hidden">
+                            {% if event.image %}
+                            <img src="{{ event.image.url }}" alt="{{ event.title }}"
+                                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                            {% else %}
+                            <div class="w-full h-full flex items-center justify-center">
+                                <span class="text-white text-4xl">🎭</span>
+                            </div>
+                            {% endif %}
+
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+
+                            <!-- Live Badge -->
+                            <div class="absolute top-3 left-3">
+                                <div
+                                    class="flex items-center bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full">
+                                    <span class="w-2 h-2 bg-white rounded-full mr-2 animate-pulse"></span>
+                                    LIVE
+                                </div>
+                            </div>
+
+                            <!-- Date Badge -->
+                            <div
+                                class="absolute top-3 right-3 bg-white/90 text-gray-800 text-sm font-bold px-3 py-1 rounded-full backdrop-blur-sm">
+                                {{ event.date|date:"M d"|default:"Soon" }}
+                            </div>
+
+                            <!-- Rating -->
+                            <div
+                                class="absolute bottom-3 left-3 bg-black/70 text-white text-sm px-3 py-1 rounded-full backdrop-blur-sm flex items-center">
+                                ⭐ {{ event.rating|default:"4.5" }}
+                            </div>
+                        </div>
                     </a>
-    
-                    <!-- Details -->
-                    <div class="space-y-1 md:space-y-2 mb-2 md:mb-3">
-                        <div class="flex items-center text-xs md:text-sm text-gray-600 dark:text-gray-300">
-                            <svg class="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2 text-blue-500 flex-shrink-0" fill="none"
-                                stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                            </svg>
-                            <span class="truncate">{{ event.location|default:"Venue Location" }}</span>
-                        </div>
-    
-                        <div class="flex items-center text-xs md:text-sm text-gray-600 dark:text-gray-300">
-                            <svg class="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2 text-blue-500 flex-shrink-0" fill="none"
-                                stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                            {{ event.time|default:"7:00 PM" }} • {{ event.duration|default:"3h" }}
-                        </div>
-                    </div>
-    
-                    <!-- Price + Book Button -->
-                    <div
-                        class="flex justify-between items-center pt-2 md:pt-3 border-t border-gray-200 dark:border-gray-600">
-                        <div>
-                            <span class="text-lg md:text-xl font-bold text-green-600 dark:text-green-400">
-                                ₹ {% firstof event.ticket_price event.price "399" %}
-                            </span>
-                            <span class="text-xs text-gray-500 dark:text-gray-400 block">per person</span>
-                        </div>
-    
-                        <a href="{% url 'event_book_tickets' event.id %}"
-                            class="px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
-                            Book Now
+
+                    <!-- Event Details -->
+                    <div class="p-4 flex-1 flex flex-col">
+                        <a href="{% url 'event_view' event.id %}">
+                            <h3
+                                class="font-bold text-lg mb-2 line-clamp-1 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                                {{ event.name|default:"Event Name" }}
+                            </h3>
                         </a>
+
+                        <div class="space-y-2 mb-4 flex-1">
+                            <div class="flex items-center text-gray-600 dark:text-gray-300">
+                                <svg class="w-4 h-4 mr-2 text-blue-500" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                </svg>
+                                <span class="text-sm truncate">{{ event.location|default:"Venue Location" }}</span>
+                            </div>
+
+                            <div class="flex items-center text-gray-600 dark:text-gray-300">
+                                <svg class="w-4 h-4 mr-2 text-blue-500" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <span class="text-sm">{{ event.time|default:"7:00 PM" }} • {{ event.duration|default:"3h" }}</span>
+                            </div>
+                        </div>
+
+                        <!-- Price & Button -->
+                        <div
+                            class="flex justify-between items-center pt-4 border-t border-gray-200 dark:border-gray-600">
+                            <div>
+                                <span class="text-xl font-bold text-green-600 dark:text-green-400">
+                                    {% if event.ticket_price %}
+                                    ₹{{ event.ticket_price }}
+                                    {% elif event.price %}
+                                    ₹{{ event.price }}
+                                    {% else %}
+                                    ₹399
+                                    {% endif %}
+                                </span>
+                                <span class="text-xs text-gray-500 dark:text-gray-400 block">per person</span>
+                            </div>
+
+                            <a href="{% url 'event_book_tickets' event.id %}"
+                                class="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-5 py-2 rounded-lg font-medium transition-all duration-300 transform hover:scale-105 group relative overflow-hidden">
+                                <span class="relative z-10">Book Now</span>
+                                <div
+                                    class="absolute inset-0 bg-gradient-to-r from-blue-700 to-purple-700 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                                </div>
+                            </a>
+                        </div>
                     </div>
-    
+                </div>
+
+                <!-- Hover Effect -->
+                <div
+                    class="absolute inset-0 border-2 border-blue-500/30 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
                 </div>
             </div>
-            {% endfor %}
-    
-            {% if not events %}
+            {% empty %}
             <div class="col-span-full text-center py-8">
                 <p class="text-gray-500 dark:text-gray-400">No events available at the moment.</p>
             </div>
-            {% endif %}
+            {% endfor %}
         </div>
     </section>
-
 
     <!-- MOVIES SECTION -->
-    <section>
+    <section class="slide-up" style="animation-delay: 0.2s;">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
             <div>
-                <h2 class="text-2xl md:text-3xl font-bold">🎬 Now Showing</h2>
+                <h2 class="text-2xl md:text-3xl font-bold flex items-center">
+                    <span class="mr-3 text-red-500">🎬</span>
+                    Now Showing
+                    <span class="ml-3 text-xs bg-red-100 text-red-800 px-2 py-1 rounded-full animate-pulse">NEW</span>
+                </h2>
                 <p class="text-gray-600 dark:text-gray-300 mt-2">Latest blockbusters in theaters near you</p>
             </div>
-    
             <a href="{% url 'movies' %}"
-                class="text-blue-600 hover:underline font-medium flex items-center self-end sm:self-auto">
-                View All <span class="ml-1">→</span>
+                class="text-red-600 hover:text-red-700 dark:text-red-400 font-medium flex items-center group transition-all duration-300">
+                View All
+                <svg class="w-5 h-5 ml-2 group-hover:translate-x-2 transition-transform" fill="none"
+                    stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
             </a>
         </div>
-    
-        <div class="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+
+        <div class="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {% for movie in movies %}
-            <div
-                class="group bg-white dark:bg-gray-800 rounded-xl md:rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 dark:border-gray-700 transform hover:-translate-y-1 active:translate-y-0">
-    
-                <!-- 🔥 Clickable movie header only -->
-                <a href="{% url 'movie_view' movie.id %}">
-                    <div class="h-32 md:h-40 relative overflow-hidden">
-    
-                        {% if movie.image %}
-                        <img src="{{ movie.image.url }}" alt="{{ movie.title }}"
-                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                        {% else %}
-                        <div
-                            class="w-full h-full bg-gradient-to-r from-red-400 to-pink-500 flex items-center justify-center">
-                            <span class="text-white font-bold text-lg">🎬</span>
-                        </div>
-                        {% endif %}
-    
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
-    
-                        <span class="absolute top-2 left-2 bg-white text-gray-800 text-xs font-bold px-2 py-1 rounded-full">
-                            {{ movie.language|default:"ENG" }}
-                        </span>
-    
-                        <span
-                            class="absolute top-2 right-2 bg-yellow-400 text-gray-800 text-xs font-bold px-2 py-1 rounded-full">
-                            {{ movie.genre|default:"Action" }}
-                        </span>
-    
-                        <div
-                            class="absolute bottom-2 left-2 bg-black bg-opacity-70 text-white text-xs px-2 py-1 rounded-full flex items-center">
-                            ⭐ {{ movie.rating|default:"8.2" }}/10
-                        </div>
-    
-                        <div
-                            class="absolute bottom-2 right-2 bg-black bg-opacity-70 text-white text-xs px-2 py-1 rounded-full">
-                            {{ movie.duration|default:"2h 30m" }}
-                        </div>
-                    </div>
-                </a>
-    
-                <!-- Movie Content -->
-                <div class="p-3 md:p-4">
-                    <h3 class="font-bold text-base md:text-lg mb-2 line-clamp-1">{{ movie.title }}</h3>
-    
-                    <div class="space-y-1 md:space-y-2 mb-2 md:mb-3">
-                        <div class="flex items-center text-xs md:text-sm text-gray-600 dark:text-gray-300">
-                            <svg class="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2 text-red-500" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                            </svg>
-                            {{ movie.location }}
-                        </div>
-    
-                        <div class="flex items-center text-xs md:text-sm text-gray-600 dark:text-gray-300">
-                            <svg class="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2 text-red-500" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                            </svg>
-                            {{ movie.date }} • {{ movie.time }}
-                        </div>
-                    </div>
-    
-                    <div class="flex justify-between items-center mb-2 text-xs md:text-sm">
-                        <span class="text-gray-600 dark:text-gray-300">Seats:</span>
-                        <span
-                            class="font-semibold {% if movie.available_seats < 20 %}text-red-600{% else %}text-green-600{% endif %}">
-                            {{ movie.available_seats }} left
-                        </span>
-                    </div>
-    
-                    <div
-                        class="flex justify-between items-center pt-2 md:pt-3 border-t border-gray-200 dark:border-gray-600">
-                        <div>
-                            <span class="text-lg md:text-xl font-bold text-green-600 dark:text-green-400">
-                                ₹ {% firstof movie.ticket_price movie.price "199" %}
-                            </span>
-                            <span class="text-xs text-gray-500 dark:text-gray-400 block">per ticket</span>
-                        </div>
-    
-                        <!-- 🔥 Correct "Book Tickets" button -->
-                        <a href="{% url 'book_movie_tickets' movie.id %}"
-                            class="bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 md:px-4 md:py-2 rounded-lg text-xs md:text-sm font-medium transition transform hover:scale-105 active:scale-95 text-center">
-                            Book Tickets
-                        </a>
-                    </div>
-                </div>
-            </div>
-    
-            {% endfor %}
-    
-            {% if not movies %}
-            <div class="col-span-full text-center py-8">
-                <p class="text-gray-500 dark:text-gray-400">No movies available at the moment.</p>
-            </div>
-            {% endif %}
-        </div>
-    </section>
+            <div class="group card-hover relative">
+                <div
+                    class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-200/50 dark:border-gray-700/50">
 
-
-    <!-- COMEDY SHOWS SECTION -->
-    <section>
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-            <div>
-                <h2 class="text-2xl md:text-3xl font-bold">🎤 Comedy Shows</h2>
-                <p class="text-gray-600 dark:text-gray-300 mt-2">Laugh out loud with top comedians</p>
-            </div>
-            <a href="{% url 'comedyshows' %}"
-                class="text-blue-600 hover:underline font-medium flex items-center self-end sm:self-auto">
-                View All <span class="ml-1">→</span>
-            </a>
-        </div>
-    
-        <div class="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-            {% for comedy in comedyshows %}
-            <div
-                class="group bg-white dark:bg-gray-800 rounded-xl md:rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 dark:border-gray-700 transform hover:-translate-y-1 active:translate-y-0 h-full flex flex-col">
-                <!-- Comedy Show Header - Make this part clickable -->
-                <a href="{% url 'comedyshows_view' comedy.id %}" class="block flex-shrink-0"
-                    title="{{ comedy.title|default:'Comedy Show' }}">
-                    <div class="h-28 md:h-32 bg-gradient-to-r from-yellow-400 to-orange-500 relative overflow-hidden">
-                        {% if comedy.image %}
-                        <img src="{{ comedy.image.url }}" alt="{{ comedy.title }}"
-                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                        {% else %}
-                        <div class="w-full h-full flex items-center justify-center">
-                            <span class="text-white font-bold text-lg">😂</span>
-                        </div>
-                        {% endif %}
-                        <span class="absolute top-2 left-2 bg-white text-gray-800 text-xs font-bold px-2 py-1 rounded-full">
-                            {{ comedy.comedy_type|default:"Stand-up" }}
-                        </span>
-                        <span class="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
-                            {{ comedy.age_limit|default:"18" }}+
-                        </span>
-                        <!-- Comedian -->
-                        <div
-                            class="absolute bottom-2 left-2 bg-black bg-opacity-70 text-white text-xs px-2 py-1 rounded-full">
-                            🎤 {{ comedy.comedian_name|default:"Comedian" }}
-                        </div>
-                        <!-- Duration -->
-                        <div
-                            class="absolute bottom-2 right-2 bg-black bg-opacity-70 text-white text-xs px-2 py-1 rounded-full">
-                            {{ comedy.duration|default:"90min" }}
-                        </div>
-                    </div>
-                </a>
-    
-                <div class="p-3 md:p-4 flex-grow flex flex-col">
-                    <!-- Title - Make this clickable too -->
-                    <a href="{% url 'comedyshows_view' comedy.id %}" class="block mb-2">
-                        <h3
-                            class="font-bold text-base md:text-lg line-clamp-1 hover:text-blue-600 dark:hover:text-blue-400">
-                            {{ comedy.title|default:"Comedy Show" }}</h3>
-                    </a>
-    
-                    <!-- Comedy Details -->
-                    <div class="space-y-1 md:space-y-2 mb-2 md:mb-3">
-                        <div class="flex items-center text-xs md:text-sm text-gray-600 dark:text-gray-300">
-                            <svg class="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2 text-yellow-500 flex-shrink-0" fill="none"
-                                stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                            </svg>
-                            <span class="truncate">{{ comedy.location|default:"Comedy Club" }}</span>
-                        </div>
-                        <div class="flex items-center text-xs md:text-sm text-gray-600 dark:text-gray-300">
-                            <svg class="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2 text-yellow-500 flex-shrink-0" fill="none"
-                                stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                            </svg>
-                            {{ comedy.date|default:"Today" }} • {{ comedy.time|default:"8:00 PM" }}
-                        </div>
-                    </div>
-    
-                    <!-- Rating -->
-                    <div
-                        class="flex items-center justify-between mb-2 md:mb-3 p-2 bg-yellow-50 dark:bg-yellow-900/20 rounded text-xs md:text-sm mt-auto">
-                        <div class="flex items-center">
-                            <div class="flex text-yellow-400" id="rating-stars-{{ forloop.counter }}">
-                                ⭐⭐⭐⭐⭐
-                            </div>
-                            <span class="ml-1 text-gray-600 dark:text-gray-300">
-                                {{ comedy.rating|default:"4.5" }}/5
-                            </span>
-                        </div>
-                        <span class="font-semibold text-yellow-600 dark:text-yellow-400">
-                            {{ comedy.popularity|default:"Popular" }}
-                        </span>
-                    </div>
-    
-                    <div
-                        class="flex justify-between items-center pt-2 md:pt-3 border-t border-gray-200 dark:border-gray-600 mt-auto">
-                        <div>
-                            <span class="text-lg md:text-xl font-bold text-green-600 dark:text-green-400">
-                                ₹ {% firstof comedy.ticket_price comedy.price "499" %}
-                            </span>
-                            <span class="text-xs text-gray-500 dark:text-gray-400 block">per ticket</span>
-                        </div>
-    
-                        <a href="{% url 'book_comedy_tickets' comedy.id %}"
-                            class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1.5 md:px-4 md:py-2 rounded-lg text-xs md:text-sm font-medium transition transform hover:scale-105 active:scale-95">
-                            Get Tickets
-                        </a>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-    
-            {% if not comedyshows %}
-            <div class="col-span-full text-center py-8">
-                <p class="text-gray-500 dark:text-gray-400">No comedy shows available at the moment.</p>
-            </div>
-            {% endif %}
-        </div>
-    </section>
-
-    <!-- LIVE CONCERTS SECTION -->
-    <section>
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-            <div>
-                <h2 class="text-2xl md:text-3xl font-bold">🎸 Live Concerts</h2>
-                <p class="text-gray-600 dark:text-gray-300 mt-2">Experience music like never before</p>
-            </div>
-            <a href="{% url 'liveconcerts' %}"
-                class="text-blue-600 hover:underline font-medium flex items-center self-end sm:self-auto">
-                View All <span class="ml-1">→</span>
-            </a>
-        </div>
-    
-        <div class="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-            {% for concert in liveconcerts %}
-            <div
-                class="group bg-white dark:bg-gray-800 rounded-xl md:rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 dark:border-gray-700 transform hover:-translate-y-1 active:translate-y-0">
-                <a href="{% url 'liveconcerts_view' concert.id %}" class="block">
-                    <!-- Concert Header -->
-                    <div class="h-28 md:h-32 bg-gradient-to-r from-purple-500 to-pink-600 relative overflow-hidden">
-                        {% if concert.image %}
-                        <img src="{{ concert.image.url }}" alt="{{ concert.title }}"
-                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                        {% else %}
-                        <div class="w-full h-full flex items-center justify-center">
-                            <span class="text-white font-bold text-lg">🎵</span>
-                        </div>
-                        {% endif %}
-                        <span class="absolute top-2 left-2 bg-white text-gray-800 text-xs font-bold px-2 py-1 rounded-full">
-                            {{ concert.music_genre|default:"Rock" }}
-                        </span>
-                        <span
-                            class="absolute top-2 right-2 bg-white text-gray-800 text-xs font-bold px-2 py-1 rounded-full">
-                            {{ concert.date|date:"M d"|default:"Soon" }}
-                        </span>
-                        <!-- Artist -->
-                        <div
-                            class="absolute bottom-2 left-2 bg-black bg-opacity-70 text-white text-xs px-2 py-1 rounded-full">
-                            🎤 {{ concert.artist_name|default:"Artist" }}
-                        </div>
-                    </div>
-                </a>
-    
-                <div class="p-3 md:p-4">
-                    <a href="{% url 'liveconcerts_view' concert.id %}" class="block">
-                        <h3
-                            class="font-bold text-base md:text-lg mb-2 line-clamp-1 hover:text-purple-600 transition-colors">
-                            {{ concert.title|default:"Concert" }}
-                        </h3>
-                    </a>
-    
-                    <!-- Concert Details -->
-                    <div class="space-y-1 md:space-y-2 mb-3">
-                        <div class="flex items-center text-xs md:text-sm text-gray-600 dark:text-gray-300">
-                            <svg class="w-3 h-3 md:w-4 md:h-4 mr-2 text-purple-500 flex-shrink-0" fill="none"
-                                stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                            </svg>
-                            <span class="truncate">{{ concert.location|default:"Venue" }}</span>
-                        </div>
-                        <div class="flex items-center text-xs md:text-sm text-gray-600 dark:text-gray-300">
-                            <svg class="w-3 h-3 md:w-4 md:h-4 mr-2 text-purple-500 flex-shrink-0" fill="none"
-                                stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                            {{ concert.time|default:"7:00 PM" }} • 3h
-                        </div>
-                    </div>
-    
-                    <!-- Additional Info -->
-                    <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mb-4">
-                        <div class="text-center flex-1">
-                            <div class="font-semibold text-gray-700 dark:text-gray-300">Age</div>
-                            <div>18+</div>
-                        </div>
-                        <div class="text-center flex-1 border-l border-r border-gray-200 dark:border-gray-600">
-                            <div class="font-semibold text-gray-700 dark:text-gray-300">Type</div>
-                            <div>Live</div>
-                        </div>
-                        <div class="text-center flex-1">
-                            <div class="font-semibold text-gray-700 dark:text-gray-300">Seats</div>
+                    <!-- Movie Image with Overlay -->
+                    <a href="{% url 'movie_view' movie.id %}">
+                        <div class="h-48 relative overflow-hidden">
+                            {% if movie.image %}
+                            <img src="{{ movie.image.url }}" alt="{{ movie.title }}"
+                                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                            {% else %}
                             <div
-                                class="{% if concert.available_seats and concert.available_seats < 50 %}text-red-600{% else %}text-green-600{% endif %}">
-                                {% if concert.available_seats %}{{ concert.available_seats }}{% else %}Many{% endif %}
+                                class="w-full h-full bg-gradient-to-r from-red-400 to-pink-500 flex items-center justify-center">
+                                <span class="text-white text-4xl">🎬</span>
+                            </div>
+                            {% endif %}
+
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent">
+                            </div>
+
+                            <!-- Movie Badges -->
+                            <div class="absolute top-4 left-4 right-4 flex justify-between">
+                                <span
+                                    class="bg-white/90 text-gray-800 text-xs font-bold px-3 py-1 rounded-full backdrop-blur-sm">
+                                    {{ movie.language|default:"ENG" }}
+                                </span>
+                                <span
+                                    class="bg-yellow-400/90 text-gray-800 text-xs font-bold px-3 py-1 rounded-full backdrop-blur-sm">
+                                    {{ movie.genre|default:"Action" }}
+                                </span>
+                            </div>
+
+                            <!-- Rating & Duration -->
+                            <div class="absolute bottom-4 left-4 right-4 flex justify-between">
+                                <span
+                                    class="bg-black/70 text-white text-sm px-3 py-1 rounded-full backdrop-blur-sm flex items-center">
+                                    ⭐ {{ movie.rating|default:"8.2" }}
+                                </span>
+                                <span class="bg-black/70 text-white text-sm px-3 py-1 rounded-full backdrop-blur-sm">
+                                    {{ movie.duration|default:"2h 30m" }}
+                                </span>
                             </div>
                         </div>
-                    </div>
-    
-                    <!-- Price and Book Now Section - FIXED -->
-                    <div class="flex justify-between items-center pt-3 border-t border-gray-200 dark:border-gray-600">
-                        <div class="flex flex-col">
-                            <span class="text-lg md:text-xl font-bold text-green-600 dark:text-green-400">
-                                ₹{{ concert.normal_ticket_price|default:"799" }}
-                            </span>
-                            <span class="text-xs text-gray-500 dark:text-gray-400 mt-[-2px]">starting from</span>
+                    </a>
+
+                    <!-- Movie Details -->
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg mb-3 line-clamp-1">{{ movie.title }}</h3>
+
+                        <div class="space-y-2 mb-4">
+                            <div class="flex items-center text-gray-600 dark:text-gray-300">
+                                <svg class="w-4 h-4 mr-2 text-red-500" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                </svg>
+                                <span class="text-sm">{{ movie.location }}</span>
+                            </div>
+
+                            <div class="flex items-center text-gray-600 dark:text-gray-300">
+                                <svg class="w-4 h-4 mr-2 text-red-500" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                                <span class="text-sm">{{ movie.date }} • {{ movie.time }}</span>
+                            </div>
                         </div>
-                        <a href="{% url 'liveconcerts_book_ticket' concert.id %}"
-                            class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-md hover:shadow-lg">
-                            Book Now
+
+                        <!-- Seats & Price -->
+                        <div class="flex justify-between items-center mb-4">
+                            <div class="flex items-center">
+                                <span class="text-sm text-gray-600 dark:text-gray-300 mr-2">Seats:</span>
+                                <span
+                                    class="font-semibold {% if movie.available_seats < 20 %}text-red-600{% else %}text-green-600{% endif %}">
+                                    {{ movie.available_seats }} left
+                                </span>
+                            </div>
+                            <span class="text-lg font-bold text-green-600 dark:text-green-400">
+                                {% if movie.ticket_price %}
+                                ₹{{ movie.ticket_price }}
+                                {% elif movie.price %}
+                                ₹{{ movie.price }}
+                                {% else %}
+                                ₹199
+                                {% endif %}
+                            </span>
+                        </div>
+
+                        <!-- Book Button -->
+                        <a href="{% url 'book_movie_tickets' movie.id %}"
+                            class="block w-full bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 text-white text-center py-3 rounded-lg font-medium transition-all duration-300 transform hover:scale-[1.02] group relative overflow-hidden">
+                            <span class="relative z-10 flex items-center justify-center">
+                                Book Tickets
+                                <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                </svg>
+                            </span>
+                            <div
+                                class="absolute inset-0 bg-gradient-to-r from-red-700 to-pink-700 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                            </div>
                         </a>
                     </div>
                 </div>
             </div>
             {% empty %}
-            <div class="col-span-full text-center py-12">
-                <div class="text-gray-400 text-6xl mb-4">🎵</div>
-                <p class="text-gray-500 dark:text-gray-400 text-lg">No concerts available at the moment.</p>
-                <p class="text-gray-400 dark:text-gray-500 text-sm mt-2">Check back later for exciting live events!</p>
+            <div class="col-span-full text-center py-8">
+                <p class="text-gray-500 dark:text-gray-400">No movies available at the moment.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- COMEDY SHOWS SECTION -->
+    <section class="slide-up" style="animation-delay: 0.3s;">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+            <div>
+                <h2 class="text-2xl md:text-3xl font-bold flex items-center">
+                    <span class="mr-3 text-yellow-500">😂</span>
+                    Comedy Shows
+                    <span
+                        class="ml-3 text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full animate-pulse">HOT</span>
+                </h2>
+                <p class="text-gray-600 dark:text-gray-300 mt-2">Laugh out loud with top comedians</p>
+            </div>
+            <a href="{% url 'comedyshows' %}"
+                class="text-yellow-600 hover:text-yellow-700 dark:text-yellow-400 font-medium flex items-center group transition-all duration-300">
+                View All
+                <svg class="w-5 h-5 ml-2 group-hover:translate-x-2 transition-transform" fill="none"
+                    stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
+            </a>
+        </div>
+
+        <div class="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {% for comedy in comedyshows %}
+            <div class="group card-hover relative">
+                <div
+                    class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-200/50 dark:border-gray-700/50">
+
+                    <!-- Comedy Show Image -->
+                    <a href="{% url 'comedyshows_view' comedy.id %}">
+                        <div class="h-40 bg-gradient-to-r from-yellow-400 to-orange-500 relative overflow-hidden">
+                            {% if comedy.image %}
+                            <img src="{{ comedy.image.url }}" alt="{{ comedy.title }}"
+                                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                            {% else %}
+                            <div class="w-full h-full flex items-center justify-center">
+                                <span class="text-white text-4xl">😂</span>
+                            </div>
+                            {% endif %}
+
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+
+                            <!-- Badges -->
+                            <div
+                                class="absolute top-3 left-3 bg-white/90 text-gray-800 text-xs font-bold px-3 py-1 rounded-full backdrop-blur-sm">
+                                {{ comedy.comedy_type|default:"Stand-up" }}
+                            </div>
+
+                            <div
+                                class="absolute top-3 right-3 bg-red-500/90 text-white text-xs font-bold px-3 py-1 rounded-full backdrop-blur-sm">
+                                {{ comedy.age_limit|default:"18" }}+
+                            </div>
+
+                            <!-- Comedian Info -->
+                            <div
+                                class="absolute bottom-3 left-3 bg-black/70 text-white text-sm px-3 py-1 rounded-full backdrop-blur-sm">
+                                🎤 {{ comedy.comedian_name|default:"Comedian" }}
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Comedy Details -->
+                    <div class="p-4">
+                        <a href="{% url 'comedyshows_view' comedy.id %}">
+                            <h3
+                                class="font-bold text-lg mb-3 line-clamp-1 hover:text-yellow-600 dark:hover:text-yellow-400 transition-colors">
+                                {{ comedy.title|default:"Comedy Show" }}
+                            </h3>
+                        </a>
+
+                        <div class="space-y-2 mb-4">
+                            <div class="flex items-center text-gray-600 dark:text-gray-300">
+                                <svg class="w-4 h-4 mr-2 text-yellow-500" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                </svg>
+                                <span class="text-sm truncate">{{ comedy.location|default:"Comedy Club" }}</span>
+                            </div>
+
+                            <div class="flex items-center text-gray-600 dark:text-gray-300">
+                                <svg class="w-4 h-4 mr-2 text-yellow-500" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <span class="text-sm">{{ comedy.date|default:"Today" }} • {{ comedy.time|default:"8:00 PM" }}</span>
+                            </div>
+                        </div>
+
+                        <!-- Rating & Price -->
+                        <div class="flex justify-between items-center mb-4">
+                            <div class="flex items-center">
+                                <div class="flex text-yellow-400 mr-2">
+                                    ⭐⭐⭐⭐⭐
+                                </div>
+                                <span class="text-sm font-semibold">{{ comedy.rating|default:"4.5" }}/5</span>
+                            </div>
+                            <span class="text-lg font-bold text-green-600 dark:text-green-400">
+                                {% if comedy.ticket_price %}
+                                ₹{{ comedy.ticket_price }}
+                                {% elif comedy.price %}
+                                ₹{{ comedy.price }}
+                                {% else %}
+                                ₹499
+                                {% endif %}
+                            </span>
+                        </div>
+
+                        <!-- Book Button -->
+                        <a href="{% url 'book_comedy_tickets' comedy.id %}"
+                            class="block w-full bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white text-center py-3 rounded-lg font-medium transition-all duration-300 transform hover:scale-[1.02] group relative overflow-hidden">
+                            <span class="relative z-10 flex items-center justify-center">
+                                Get Tickets
+                                <svg class="w-5 h-5 ml-2 group-hover:rotate-12 transition-transform" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                </svg>
+                            </span>
+                            <div
+                                class="absolute inset-0 bg-gradient-to-r from-yellow-600 to-orange-600 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-span-full text-center py-8">
+                <p class="text-gray-500 dark:text-gray-400">No comedy shows available at the moment.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- LIVE CONCERTS SECTION -->
+    <section class="slide-up" style="animation-delay: 0.4s;">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+            <div>
+                <h2 class="text-2xl md:text-3xl font-bold flex items-center">
+                    <span class="mr-3 text-purple-500">🎸</span>
+                    Live Concerts
+                    <span
+                        class="ml-3 text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded-full animate-pulse">HOT</span>
+                </h2>
+                <p class="text-gray-600 dark:text-gray-300 mt-2">Experience music like never before</p>
+            </div>
+            <a href="{% url 'liveconcerts' %}"
+                class="text-purple-600 hover:text-purple-700 dark:text-purple-400 font-medium flex items-center group transition-all duration-300">
+                View All
+                <svg class="w-5 h-5 ml-2 group-hover:translate-x-2 transition-transform" fill="none"
+                    stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
+            </a>
+        </div>
+
+        <div class="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {% for concert in liveconcerts %}
+            <div class="group card-hover relative">
+                <div
+                    class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-200/50 dark:border-gray-700/50">
+
+                    <!-- Concert Image -->
+                    <a href="{% url 'liveconcerts_view' concert.id %}">
+                        <div class="h-40 bg-gradient-to-r from-purple-500 to-pink-600 relative overflow-hidden">
+                            {% if concert.image %}
+                            <img src="{{ concert.image.url }}" alt="{{ concert.title }}"
+                                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                            {% else %}
+                            <div class="w-full h-full flex items-center justify-center">
+                                <span class="text-white text-4xl">🎵</span>
+                            </div>
+                            {% endif %}
+
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+
+                            <!-- Badges -->
+                            <div
+                                class="absolute top-3 left-3 bg-white/90 text-gray-800 text-xs font-bold px-3 py-1 rounded-full backdrop-blur-sm">
+                                {{ concert.music_genre|default:"Rock" }}
+                            </div>
+
+                            <div
+                                class="absolute top-3 right-3 bg-white/90 text-gray-800 text-xs font-bold px-3 py-1 rounded-full backdrop-blur-sm">
+                                {{ concert.date|date:"M d"|default:"Soon" }}
+                            </div>
+
+                            <!-- Artist Info -->
+                            <div
+                                class="absolute bottom-3 left-3 bg-black/70 text-white text-sm px-3 py-1 rounded-full backdrop-blur-sm">
+                                🎤 {{ concert.artist_name|default:"Artist" }}
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Concert Details -->
+                    <div class="p-4">
+                        <a href="{% url 'liveconcerts_view' concert.id %}">
+                            <h3
+                                class="font-bold text-lg mb-3 line-clamp-1 hover:text-purple-600 dark:hover:text-purple-400 transition-colors">
+                                {{ concert.title|default:"Concert" }}
+                            </h3>
+                        </a>
+
+                        <div class="space-y-2 mb-4">
+                            <div class="flex items-center text-gray-600 dark:text-gray-300">
+                                <svg class="w-4 h-4 mr-2 text-purple-500" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                </svg>
+                                <span class="text-sm truncate">{{ concert.location|default:"Venue" }}</span>
+                            </div>
+
+                            <div class="flex items-center text-gray-600 dark:text-gray-300">
+                                <svg class="w-4 h-4 mr-2 text-purple-500" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <span class="text-sm">{{ concert.time|default:"7:00 PM" }} • 3h</span>
+                            </div>
+                        </div>
+
+                        <!-- Price & Button -->
+                        <div class="flex justify-between items-center mb-4">
+                            <div class="flex items-center">
+                                <span class="text-sm text-gray-600 dark:text-gray-300 mr-2">Seats:</span>
+                                <span
+                                    class="font-semibold {% if concert.available_seats < 20 %}text-red-600{% else %}text-green-600{% endif %}">
+                                    {% if concert.available_seats %}
+                                    {{ concert.available_seats }}
+                                    {% else %}
+                                    Many
+                                    {% endif %} left
+                                </span>
+                            </div>
+                            <span class="text-lg font-bold text-green-600 dark:text-green-400">
+                                {% if concert.normal_ticket_price %}
+                                ₹{{ concert.normal_ticket_price }}
+                                {% else %}
+                                ₹799
+                                {% endif %}
+                            </span>
+                        </div>
+
+                        <!-- Book Button -->
+                        <a href="{% url 'liveconcerts_book_ticket' concert.id %}"
+                            class="block w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white text-center py-3 rounded-lg font-medium transition-all duration-300 transform hover:scale-[1.02] group relative overflow-hidden">
+                            <span class="relative z-10 flex items-center justify-center">
+                                Book Now
+                                <svg class="w-5 h-5 ml-2 group-hover:rotate-12 transition-transform" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                </svg>
+                            </span>
+                            <div
+                                class="absolute inset-0 bg-gradient-to-r from-purple-700 to-pink-700 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-span-full text-center py-8">
+                <p class="text-gray-500 dark:text-gray-400">No concerts available at the moment.</p>
             </div>
             {% endfor %}
         </div>
     </section>
 
     <!-- AMUSEMENT PARKS SECTION -->
-    <section class="py-6">
+    <section class="slide-up" style="animation-delay: 0.5s;">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
             <div>
-                <h2 class="text-2xl md:text-3xl font-bold">🎢 Amusement Parks</h2>
+                <h2 class="text-2xl md:text-3xl font-bold flex items-center">
+                    <span class="mr-3 text-green-500">🎢</span>
+                    Amusement Parks
+                    <span
+                        class="ml-3 text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full animate-pulse">FUN</span>
+                </h2>
                 <p class="text-gray-600 dark:text-gray-300 mt-2">Fun for the whole family</p>
             </div>
             <a href="{% url 'amusements' %}"
-                class="text-blue-600 hover:underline font-medium flex items-center self-end sm:self-auto">
-                View All <span class="ml-1">→</span>
+                class="text-green-600 hover:text-green-700 dark:text-green-400 font-medium flex items-center group transition-all duration-300">
+                View All
+                <svg class="w-5 h-5 ml-2 group-hover:translate-x-2 transition-transform" fill="none"
+                    stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
             </a>
         </div>
-    
-        <div class="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+
+        <div class="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {% for park in amusements %}
-            <div
-                class="group bg-white dark:bg-gray-800 rounded-xl md:rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 dark:border-gray-700 transform hover:-translate-y-1 active:translate-y-0 h-full flex flex-col">
-                <!-- Image Section - Fixed Height -->
-                <a href="{% url 'amusements_view' park.id %}" class="block flex-shrink-0">
-                    <div class="h-32 md:h-36 relative overflow-hidden">
-                        {% if park.image %}
-                        <img src="{{ park.image.url }}" alt="{{ park.park_name }}"
-                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                        {% else %}
-                        <div
-                            class="w-full h-full bg-gradient-to-r from-green-400 to-blue-500 flex items-center justify-center">
-                            <span class="text-white font-bold text-lg">🎡</span>
-                        </div>
-                        {% endif %}
-    
-                        <!-- Dark Overlay -->
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
-    
-                        <!-- Top Badges -->
-                        <div class="absolute top-2 left-2 right-2 flex justify-between">
-                            <span class="bg-white text-gray-800 text-xs font-bold px-2 py-1 rounded-full">
-                                {{ park.rides_available }}+ Rides
-                            </span>
-                            {% if park.family_friendly %}
-                            <span class="bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-full">
-                                Family
-                            </span>
-                            {% endif %}
-                        </div>
-    
-                        <!-- Bottom Badges -->
-                        <div class="absolute bottom-2 left-2 right-2 flex justify-between">
-                            <span class="bg-black/70 text-white text-xs px-2 py-1 rounded-full flex items-center">
-                                ⭐ 4.3/5
-                            </span>
-                            <span class="bg-black/70 text-white text-xs px-2 py-1 rounded-full">
-                                🎢 {{ park.rides_available }}+
-                            </span>
-                        </div>
-                    </div>
-                </a>
-    
-                <!-- Content Section - Flexible -->
-                <div class="p-3 md:p-4 flex flex-col flex-1">
-                    <!-- Park Name -->
-                    <a href="{% url 'amusements_view' park.id %}" class="block mb-2">
-                        <h3 class="font-bold text-base md:text-lg line-clamp-1 hover:text-blue-600 transition-colors">{{ park.park_name }}</h3>
-                    </a>
-    
-                    <!-- Location & Time -->
-                    <div class="space-y-1 md:space-y-2 mb-2 md:mb-3 flex-1">
-                        <div class="flex items-center text-xs md:text-sm text-gray-600 dark:text-gray-300">
-                            <svg class="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2 text-green-500 flex-shrink-0" fill="none"
-                                stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                            </svg>
-                            <span class="truncate">{{ park.location }}</span>
-                        </div>
-                        <div class="flex items-center text-xs md:text-sm text-gray-600 dark:text-gray-300">
-                            <svg class="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2 text-green-500 flex-shrink-0" fill="none"
-                                stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                            {{ park.time|time:"g:i A"|default:"10:00 AM" }} • Full Day
-                        </div>
-                    </div>
-    
-                    <!-- Features Tags -->
-                    <div class="flex flex-wrap gap-1 mb-3 md:mb-4">
-                        <span
-                            class="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs px-2 py-1 rounded">🎢
-                            Rides</span>
-                        <span
-                            class="bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-xs px-2 py-1 rounded">🍔
-                            Food</span>
-                        <span
-                            class="bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 text-xs px-2 py-1 rounded">🎪
-                            Shows</span>
-                        {% if park.family_friendly %}
-                        <span
-                            class="bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 text-xs px-2 py-1 rounded">👨‍👩‍👧‍👦
-                            Family</span>
-                        {% endif %}
-                    </div>
-    
-                    <!-- Price & Button - Fixed at bottom -->
-                    <div
-                        class="flex justify-between items-center pt-3 border-t border-gray-200 dark:border-gray-600 mt-auto">
-                        <div>
-                            <div class="text-lg md:text-xl font-bold text-green-600 dark:text-green-400 leading-tight">
-                                ₹{{ park.ticket_price }}
+            <div class="group card-hover relative">
+                <div
+                    class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-200/50 dark:border-gray-700/50">
+
+                    <!-- Park Image -->
+                    <a href="{% url 'amusements_view' park.id %}">
+                        <div class="h-40 bg-gradient-to-r from-green-400 to-blue-500 relative overflow-hidden">
+                            {% if park.image %}
+                            <img src="{{ park.image.url }}" alt="{{ park.park_name }}"
+                                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                            {% else %}
+                            <div class="w-full h-full flex items-center justify-center">
+                                <span class="text-white text-4xl">🎡</span>
                             </div>
-                            <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">per person</div>
+                            {% endif %}
+
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+
+                            <!-- Badges -->
+                            <div
+                                class="absolute top-3 left-3 bg-white/90 text-gray-800 text-xs font-bold px-3 py-1 rounded-full backdrop-blur-sm">
+                                {{ park.rides_available }}+ Rides
+                            </div>
+
+                            {% if park.family_friendly %}
+                            <div
+                                class="absolute top-3 right-3 bg-green-500/90 text-white text-xs font-bold px-3 py-1 rounded-full backdrop-blur-sm">
+                                Family
+                            </div>
+                            {% endif %}
+
+                            <!-- Rating -->
+                            <div
+                                class="absolute bottom-3 left-3 bg-black/70 text-white text-sm px-3 py-1 rounded-full backdrop-blur-sm flex items-center">
+                                ⭐ 4.3/5
+                            </div>
                         </div>
+                    </a>
+
+                    <!-- Park Details -->
+                    <div class="p-4">
+                        <a href="{% url 'amusements_view' park.id %}">
+                            <h3
+                                class="font-bold text-lg mb-3 line-clamp-1 hover:text-green-600 dark:hover:text-green-400 transition-colors">
+                                {{ park.park_name }}
+                            </h3>
+                        </a>
+
+                        <div class="space-y-2 mb-4">
+                            <div class="flex items-center text-gray-600 dark:text-gray-300">
+                                <svg class="w-4 h-4 mr-2 text-green-500" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                </svg>
+                                <span class="text-sm truncate">{{ park.location }}</span>
+                            </div>
+
+                            <div class="flex items-center text-gray-600 dark:text-gray-300">
+                                <svg class="w-4 h-4 mr-2 text-green-500" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <span class="text-sm">{{ park.time|time:"g:i A"|default:"10:00 AM" }} • Full Day</span>
+                            </div>
+                        </div>
+
+                        <!-- Price & Button -->
+                        <div class="flex justify-between items-center mb-4">
+                            <div>
+                                <span class="text-lg font-bold text-green-600 dark:text-green-400">
+                                    ₹{{ park.ticket_price }}
+                                </span>
+                                <span class="text-xs text-gray-500 dark:text-gray-400 block">per person</span>
+                            </div>
+                        </div>
+
+                        <!-- Book Button -->
                         <a href="{% url 'amusements_book_tickets' park.id %}"
-                            class="bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 md:px-4 md:py-2 rounded-lg text-xs md:text-sm font-medium transition-colors duration-300">
-                            Buy Tickets
+                            class="block w-full bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white text-center py-3 rounded-lg font-medium transition-all duration-300 transform hover:scale-[1.02] group relative overflow-hidden">
+                            <span class="relative z-10 flex items-center justify-center">
+                                Buy Tickets
+                                <svg class="w-5 h-5 ml-2 group-hover:rotate-12 transition-transform" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                </svg>
+                            </span>
+                            <div
+                                class="absolute inset-0 bg-gradient-to-r from-green-700 to-blue-700 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                            </div>
                         </a>
                     </div>
                 </div>
             </div>
-            {% endfor %}
-    
-            {% if not amusements %}
+            {% empty %}
             <div class="col-span-full text-center py-8">
                 <p class="text-gray-500 dark:text-gray-400">No amusement parks available at the moment.</p>
             </div>
-            {% endif %}
+            {% endfor %}
         </div>
     </section>
 
     <!-- NEWSLETTER SECTION -->
-    <section class="bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl md:rounded-2xl p-6 md:p-8 text-white text-center">
-        <h2 class="text-2xl md:text-3xl font-bold mb-4">Stay Updated</h2>
-        <p class="mb-6 max-w-md mx-auto text-sm md:text-base">Get the latest updates on events, concerts, and special offers directly to your
-            inbox</p>
-        <div class="flex flex-col sm:flex-row gap-3 md:gap-4 max-w-md mx-auto">
-            <input type="email" placeholder="Your email address" class="px-4 py-3 rounded-lg text-gray-800 flex-grow focus:outline-none focus:ring-2 focus:ring-yellow-400">
-            <button
-                class="bg-yellow-400 text-gray-900 px-6 py-3 rounded-lg font-semibold hover:bg-yellow-300 transition active:scale-95">
-                Subscribe
-            </button>
+    <section class="slide-up" style="animation-delay: 0.6s;">
+        <div
+            class="bg-gradient-to-r from-blue-500/90 to-purple-600/90 backdrop-blur-lg rounded-2xl p-8 md:p-12 text-white text-center relative overflow-hidden">
+            <!-- Animated Background -->
+            <div class="absolute inset-0 shimmer-effect"></div>
+
+            <!-- Floating Elements -->
+            <div class="absolute -top-10 -left-10 text-6xl opacity-20 floating-element">✉️</div>
+            <div class="absolute -bottom-10 -right-10 text-6xl opacity-20 floating-element"
+                style="animation-delay: 2s;">📧</div>
+
+            <div class="relative z-10">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Stay Updated</h2>
+                <p class="mb-8 max-w-xl mx-auto text-lg opacity-90">
+                    Get the latest updates on events, concerts, and exclusive offers directly to your inbox
+                </p>
+
+                <div class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+                    <input type="email" id="newsletter-email" placeholder="Your email address"
+                        class="px-6 py-4 rounded-xl text-gray-800 flex-grow focus:outline-none focus:ring-3 focus:ring-yellow-400/50 shadow-lg transition-all duration-300"
+                        onfocus="this.classList.add('glow-animation')" onblur="this.classList.remove('glow-animation')">
+                    <button id="subscribe-btn"
+                        class="bg-yellow-400 hover:bg-yellow-300 text-gray-900 px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl group">
+                        <span class="flex items-center justify-center">
+                            Subscribe
+                            <svg class="w-5 h-5 ml-2 group-hover:translate-x-2 transition-transform" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                            </svg>
+                        </span>
+                    </button>
+                </div>
+
+                <p class="text-sm opacity-75 mt-4">
+                    Join 10,000+ subscribers. No spam, unsubscribe anytime.
+                </p>
+            </div>
         </div>
     </section>
 
@@ -632,28 +1003,183 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        // This will run after the page loads
-        const comedyCards = document.querySelectorAll('[id^="rating-stars-"]');
-        
-        comedyCards.forEach((starsContainer, index) => {
-            // For demonstration, using a random rating
-            // In your actual implementation, you'd get this from your data
-            const rating = Math.random() * 5; // Random rating for demo
-            
-            if (rating < 4.5) {
-                if (rating >= 3.5) {
-                    starsContainer.innerHTML = '⭐⭐⭐⭐<span class="text-gray-300">⭐</span>';
-                } else if (rating >= 2.5) {
-                    starsContainer.innerHTML = '⭐⭐⭐<span class="text-gray-300">⭐⭐</span>';
-                } else if (rating >= 1.5) {
-                    starsContainer.innerHTML = '⭐⭐<span class="text-gray-300">⭐⭐⭐</span>';
-                } else if (rating >= 0.5) {
-                    starsContainer.innerHTML = '⭐<span class="text-gray-300">⭐⭐⭐⭐</span>';
-                } else {
-                    starsContainer.innerHTML = '<span class="text-gray-300">⭐⭐⭐⭐⭐</span>';
+        // Live Countdown Timer
+        let countdown = 30;
+        const liveTimer = document.getElementById('live-timer');
+        const timerElement = liveTimer ? liveTimer.querySelector('span') : null;
+
+        if (timerElement) {
+            setInterval(() => {
+                countdown--;
+                if (countdown <= 0) {
+                    countdown = 30;
+                    // Simulate live update
+                    document.querySelectorAll('.countdown-pulse').forEach(el => {
+                        el.classList.add('countdown-pulse');
+                        setTimeout(() => el.classList.remove('countdown-pulse'), 1000);
+                    });
                 }
+                timerElement.textContent = `${countdown}s`;
+            }, 1000);
+        }
+
+        // Search Animation
+        const searchInput = document.getElementById('search-input');
+        const searchBtn = document.getElementById('search-btn');
+
+        if (searchBtn) {
+            searchBtn.addEventListener('click', function () {
+                this.classList.add('animate-pulse');
+                setTimeout(() => {
+                    this.classList.remove('animate-pulse');
+                }, 1000);
+            });
+        }
+
+        // Card Hover Effects
+        const cards = document.querySelectorAll('.card-hover');
+        cards.forEach(card => {
+            card.addEventListener('mouseenter', function () {
+                this.style.transform = 'translateY(-8px)';
+                this.style.boxShadow = '0 25px 50px -12px rgba(0, 0, 0, 0.25)';
+            });
+
+            card.addEventListener('mouseleave', function () {
+                this.style.transform = 'translateY(0)';
+                this.style.boxShadow = '';
+            });
+        });
+
+        // Subscribe Animation
+        const subscribeBtn = document.getElementById('subscribe-btn');
+        const newsletterEmail = document.getElementById('newsletter-email');
+
+        if (subscribeBtn && newsletterEmail) {
+            subscribeBtn.addEventListener('click', function () {
+                if (newsletterEmail.value.trim() === '') {
+                    newsletterEmail.classList.add('animate-shake');
+                    setTimeout(() => {
+                        newsletterEmail.classList.remove('animate-shake');
+                    }, 500);
+                    return;
+                }
+
+                this.classList.add('animate-pulse');
+                this.innerHTML = '<span class="flex items-center justify-center"><svg class="w-5 h-5 mr-2 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg> Subscribing...</span>';
+
+                setTimeout(() => {
+                    this.classList.remove('animate-pulse');
+                    this.innerHTML = '<span class="flex items-center justify-center">✓ Subscribed!</span>';
+                    newsletterEmail.value = '';
+
+                    setTimeout(() => {
+                        this.innerHTML = '<span class="flex items-center justify-center">Subscribe <svg class="w-5 h-5 ml-2 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg></span>';
+                    }, 2000);
+                }, 1500);
+            });
+        }
+
+        // Auto-rotate hero text
+        const heroTitle = document.getElementById('hero-title');
+        const adjectives = ['Amazing', 'Unforgettable', 'Exciting', 'Spectacular', 'Incredible'];
+        let adjIndex = 0;
+
+        if (heroTitle) {
+            setInterval(() => {
+                adjIndex = (adjIndex + 1) % adjectives.length;
+                const span = heroTitle.querySelector('span');
+                span.style.opacity = '0';
+                setTimeout(() => {
+                    span.textContent = adjectives[adjIndex];
+                    span.style.opacity = '1';
+                }, 300);
+            }, 3000);
+        }
+
+        // Live counter animations
+        function animateCounter(elementId, targetValue) {
+            const element = document.getElementById(elementId);
+            if (!element) return;
+
+            let current = 0;
+            const increment = targetValue / 50;
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= targetValue) {
+                    element.textContent = targetValue;
+                    clearInterval(timer);
+                } else {
+                    element.textContent = Math.floor(current);
+                }
+            }, 30);
+        }
+
+        // Animate counters on load
+        setTimeout(() => {
+            const eventCount = parseInt(document.getElementById('event-count')?.textContent || '0');
+            const movieCount = parseInt(document.getElementById('movie-count')?.textContent || '0');
+            const comedyCount = parseInt(document.getElementById('comedy-count')?.textContent || '0');
+
+            animateCounter('event-count', eventCount);
+            animateCounter('movie-count', movieCount);
+            animateCounter('comedy-count', comedyCount);
+        }, 500);
+
+        // Add shake animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                25% { transform: translateX(-5px); }
+                75% { transform: translateX(5px); }
+            }
+            .animate-shake {
+                animation: shake 0.5s ease-in-out;
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Initialize tooltips
+        const tooltips = document.querySelectorAll('[data-tooltip]');
+        tooltips.forEach(tooltip => {
+            tooltip.addEventListener('mouseenter', function () {
+                const tooltipText = this.getAttribute('data-tooltip');
+                const tooltipEl = document.createElement('div');
+                tooltipEl.className = 'fixed bg-gray-800 text-white px-3 py-2 rounded-lg text-sm z-50';
+                tooltipEl.textContent = tooltipText;
+                document.body.appendChild(tooltipEl);
+
+                const rect = this.getBoundingClientRect();
+                tooltipEl.style.left = rect.left + 'px';
+                tooltipEl.style.top = (rect.top - 40) + 'px';
+
+                this._tooltipEl = tooltipEl;
+            });
+
+            tooltip.addEventListener('mouseleave', function () {
+                if (this._tooltipEl) {
+                    this._tooltipEl.remove();
+                }
+            });
+        });
+    });
+
+    // Scroll animations
+    window.addEventListener('scroll', function () {
+        const sections = document.querySelectorAll('.slide-up');
+        const windowHeight = window.innerHeight;
+
+        sections.forEach(section => {
+            const sectionTop = section.getBoundingClientRect().top;
+            if (sectionTop < windowHeight - 100) {
+                section.style.opacity = '1';
+                section.style.transform = 'translateY(0)';
             }
         });
     });
 </script>
+
+<!-- Include Anime.js for advanced animations -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+
 {% endblock %}
