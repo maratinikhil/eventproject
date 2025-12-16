@@ -1,0 +1,874 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Settings - Your App{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 py-8 px-4">
+    <div class="max-w-4xl mx-auto">
+        <!-- Header -->
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-800 dark:text-white">Settings</h1>
+            <p class="text-gray-600 dark:text-gray-400 mt-2">Manage your account preferences and settings</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Left Navigation -->
+            <div class="lg:col-span-1">
+                <div
+                    class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 p-4">
+                    <nav class="space-y-1">
+                        <button onclick="showSection('profile')" id="profile-tab"
+                            class="settings-tab w-full flex items-center px-3 py-3 rounded-lg bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 transition-all duration-200 hover:bg-blue-100 dark:hover:bg-blue-900/30">
+                            <span class="mr-3">👤</span>
+                            <span class="font-medium">Profile</span>
+                        </button>
+
+                        <button onclick="showSection('account')" id="account-tab"
+                            class="settings-tab w-full flex items-center px-3 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700/50 text-gray-700 dark:text-gray-300 transition-all duration-200">
+                            <span class="mr-3">🔐</span>
+                            <span class="font-medium">Account</span>
+                        </button>
+
+                        <button onclick="showSection('appearance')" id="appearance-tab"
+                            class="settings-tab w-full flex items-center px-3 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700/50 text-gray-700 dark:text-gray-300 transition-all duration-200">
+                            <span class="mr-3">🎨</span>
+                            <span class="font-medium">Appearance</span>
+                        </button>
+
+                        <button onclick="showSection('notifications')" id="notifications-tab"
+                            class="settings-tab w-full flex items-center px-3 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700/50 text-gray-700 dark:text-gray-300 transition-all duration-200">
+                            <span class="mr-3">🔔</span>
+                            <span class="font-medium">Notifications</span>
+                        </button>
+
+                        <button onclick="showSection('privacy')" id="privacy-tab"
+                            class="settings-tab w-full flex items-center px-3 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700/50 text-gray-700 dark:text-gray-300 transition-all duration-200">
+                            <span class="mr-3">🛡️</span>
+                            <span class="font-medium">Privacy</span>
+                        </button>
+                    </nav>
+
+                    <div class="mt-6 pt-4 border-t border-gray-200/50 dark:border-gray-700/50">
+                        <a href="{% url 'profile' %}"
+                            class="flex items-center px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700/50 text-gray-700 dark:text-gray-300 transition-all duration-200">
+                            <span class="mr-3">↩️</span>
+                            <span>Back to Profile</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Content -->
+            <div class="lg:col-span-2">
+                <!-- Profile Section -->
+                <div id="profile-section"
+                    class="settings-section bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 p-6">
+                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">Profile Settings</h2>
+
+                    <form id="profileForm" class="space-y-6">
+                        <div class="flex items-center space-x-6">
+                            <div class="relative">
+                                <img id="profileImage" src="{% static 'images/default-avatar.png' %}" alt="Profile"
+                                    class="w-24 h-24 rounded-full object-cover border-4 border-white dark:border-gray-700 shadow-lg">
+                                <input type="file" id="imageUpload" accept="image/*" class="hidden"
+                                    onchange="previewImage(event)">
+                                <button type="button" onclick="document.getElementById('imageUpload').click()"
+                                    class="absolute bottom-0 right-0 bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600 transition-colors">
+                                    <span class="text-xs">📷</span>
+                                </button>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-gray-800 dark:text-white">{{ request.session.user_name }}
+                                </h3>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">Click the camera icon to update your
+                                    photo</p>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">First
+                                    Name</label>
+                                <input type="text" id="firstName" value="{{ user.first_name }}"
+                                    class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Last
+                                    Name</label>
+                                <input type="text" id="lastName" value="{{ user.last_name }}"
+                                    class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email</label>
+                            <input type="email" id="email" value="{{ user.email }}"
+                                class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Bio</label>
+                            <textarea id="bio" rows="4"
+                                class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                                placeholder="Tell us about yourself...">{{ user.profile.bio }}</textarea>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1" id="bioCounter">0/250 characters
+                            </p>
+                        </div>
+
+                        <div class="flex justify-end space-x-4 pt-4">
+                            <button type="button" onclick="resetProfileForm()"
+                                class="px-6 py-3 rounded-xl border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                                Reset
+                            </button>
+                            <button type="submit"
+                                class="px-6 py-3 rounded-xl bg-blue-500 text-white hover:bg-blue-600 transition-colors flex items-center">
+                                <span id="saveProfileText">Save Changes</span>
+                                <span id="profileSpinner" class="ml-2 hidden">🔄</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Account Section -->
+                <div id="account-section"
+                    class="settings-section hidden bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 p-6">
+                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">Account Security</h2>
+
+                    <form id="passwordForm" class="space-y-6">
+                        <div
+                            class="p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-xl">
+                            <div class="flex items-start">
+                                <span class="text-yellow-600 dark:text-yellow-400 mr-3">⚠️</span>
+                                <div>
+                                    <h4 class="font-semibold text-yellow-800 dark:text-yellow-300">Security Notice</h4>
+                                    <p class="text-sm text-yellow-600 dark:text-yellow-400 mt-1">Your password should be
+                                        at least 8 characters long and include a mix of letters, numbers, and symbols.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Current
+                                Password</label>
+                            <div class="relative">
+                                <input type="password" id="currentPassword"
+                                    class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all pr-10">
+                                <button type="button" onclick="togglePassword('currentPassword')"
+                                    class="absolute right-3 top-3 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">
+                                    👁️
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">New
+                                    Password</label>
+                                <div class="relative">
+                                    <input type="password" id="newPassword"
+                                        class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all pr-10">
+                                    <button type="button" onclick="togglePassword('newPassword')"
+                                        class="absolute right-3 top-3 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">
+                                        👁️
+                                    </button>
+                                </div>
+                                <div class="mt-2 space-y-1" id="passwordStrength">
+                                    <div class="flex items-center space-x-2">
+                                        <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                                            <div id="strengthBar" class="bg-red-500 h-2 rounded-full w-0"></div>
+                                        </div>
+                                        <span id="strengthText"
+                                            class="text-xs text-gray-500 dark:text-gray-400">Weak</span>
+                                    </div>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400" id="passwordTips"></p>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Confirm
+                                    Password</label>
+                                <div class="relative">
+                                    <input type="password" id="confirmPassword"
+                                        class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all pr-10">
+                                    <button type="button" onclick="togglePassword('confirmPassword')"
+                                        class="absolute right-3 top-3 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">
+                                        👁️
+                                    </button>
+                                </div>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1" id="passwordMatch"></p>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-end pt-4">
+                            <button type="submit"
+                                class="px-6 py-3 rounded-xl bg-blue-500 text-white hover:bg-blue-600 transition-colors flex items-center">
+                                <span>Update Password</span>
+                                <span id="passwordSpinner" class="ml-2 hidden">🔄</span>
+                            </button>
+                        </div>
+                    </form>
+
+                    <div class="mt-8 pt-6 border-t border-gray-200/50 dark:border-gray-700/50">
+                        <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Two-Factor Authentication
+                        </h3>
+                        <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
+                            <div>
+                                <h4 class="font-medium text-gray-800 dark:text-white">2FA Status</h4>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Add an extra layer of security
+                                    to your account</p>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="2faToggle" class="sr-only peer">
+                                <div
+                                    class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600">
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Appearance Section -->
+                <div id="appearance-section"
+                    class="settings-section hidden bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 p-6">
+                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">Appearance</h2>
+
+                    <div class="space-y-6">
+                        <!-- Theme Selection -->
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Theme</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <label class="theme-option relative">
+                                    <input type="radio" name="theme" value="light" class="sr-only peer" {% if not request.session.dark_mode %}checked{% endif %}>
+                                    <div
+                                        class="p-4 rounded-xl border-2 border-gray-300 dark:border-gray-600 peer-checked:border-blue-500 peer-checked:bg-blue-50 dark:peer-checked:bg-blue-900/20 transition-all cursor-pointer">
+                                        <div class="flex items-center space-x-3">
+                                            <div
+                                                class="w-8 h-8 rounded-full bg-yellow-400 flex items-center justify-center">
+                                                <span class="text-sm">☀️</span>
+                                            </div>
+                                            <div>
+                                                <h4 class="font-medium text-gray-800 dark:text-white">Light</h4>
+                                                <p class="text-sm text-gray-600 dark:text-gray-400">Bright theme</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </label>
+
+                                <label class="theme-option relative">
+                                    <input type="radio" name="theme" value="dark" class="sr-only peer" {% if request.session.dark_mode %}checked{% endif %}>
+                                    <div
+                                        class="p-4 rounded-xl border-2 border-gray-300 dark:border-gray-600 peer-checked:border-blue-500 peer-checked:bg-blue-50 dark:peer-checked:bg-blue-900/20 transition-all cursor-pointer">
+                                        <div class="flex items-center space-x-3">
+                                            <div
+                                                class="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center">
+                                                <span class="text-sm">🌙</span>
+                                            </div>
+                                            <div>
+                                                <h4 class="font-medium text-gray-800 dark:text-white">Dark</h4>
+                                                <p class="text-sm text-gray-600 dark:text-gray-400">Easy on eyes</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </label>
+
+                                <label class="theme-option relative">
+                                    <input type="radio" name="theme" value="auto" class="sr-only peer">
+                                    <div
+                                        class="p-4 rounded-xl border-2 border-gray-300 dark:border-gray-600 peer-checked:border-blue-500 peer-checked:bg-blue-50 dark:peer-checked:bg-blue-900/20 transition-all cursor-pointer">
+                                        <div class="flex items-center space-x-3">
+                                            <div
+                                                class="w-8 h-8 rounded-full bg-gradient-to-r from-yellow-400 to-gray-800 flex items-center justify-center">
+                                                <span class="text-sm">⚙️</span>
+                                            </div>
+                                            <div>
+                                                <h4 class="font-medium text-gray-800 dark:text-white">Auto</h4>
+                                                <p class="text-sm text-gray-600 dark:text-gray-400">System default</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Accent Color -->
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Accent Color</h3>
+                            <div class="grid grid-cols-2 md:grid-cols-6 gap-3">
+                                {% for color in accent_colors %}
+                                <label class="relative">
+                                    <input type="radio" name="accentColor" value="{{ color.value }}"
+                                        class="sr-only peer" {% if forloop.first %}checked{% endif %}>
+                                    <div
+                                        class="w-10 h-10 rounded-full {{ color.bg }} peer-checked:ring-4 peer-checked:ring-offset-2 dark:peer-checked:ring-offset-gray-800 peer-checked:ring-{{ color.ring }}-300 cursor-pointer transition-all hover:scale-110">
+                                    </div>
+                                </label>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <!-- Font Size -->
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Font Size</h3>
+                            <div class="space-y-3">
+                                <input type="range" id="fontSize" min="12" max="20" value="16"
+                                    class="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer">
+                                <div class="flex justify-between text-sm text-gray-600 dark:text-gray-400">
+                                    <span>Small</span>
+                                    <span id="fontSizeValue">Medium</span>
+                                    <span>Large</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Preview -->
+                        <div class="mt-8 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
+                            <h3 class="font-semibold text-gray-800 dark:text-white mb-3">Preview</h3>
+                            <div class="space-y-2">
+                                <p class="text-lg font-bold text-gray-800 dark:text-white">Example Heading</p>
+                                <p class="text-gray-600 dark:text-gray-400">This is how your selected theme will look
+                                    with the current settings.</p>
+                                <button
+                                    class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+                                    Sample Button
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notifications Section -->
+                <div id="notifications-section"
+                    class="settings-section hidden bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 p-6">
+                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">Notification Preferences</h2>
+
+                    <div class="space-y-6">
+                        <!-- Email Notifications -->
+                        <div class="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
+                            <div class="flex items-center justify-between mb-4">
+                                <div>
+                                    <h3 class="font-semibold text-gray-800 dark:text-white">Email Notifications</h3>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">Receive updates via email</p>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" id="emailToggle" class="sr-only peer" checked>
+                                    <div
+                                        class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600">
+                                    </div>
+                                </label>
+                            </div>
+
+                            <div id="emailSubSettings" class="space-y-3 pl-2 border-l-2 border-blue-500 ml-2">
+                                <label class="flex items-center space-x-3 cursor-pointer">
+                                    <input type="checkbox" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
+                                        checked>
+                                    <span class="text-gray-700 dark:text-gray-300">Important updates</span>
+                                </label>
+                                <label class="flex items-center space-x-3 cursor-pointer">
+                                    <input type="checkbox" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
+                                        checked>
+                                    <span class="text-gray-700 dark:text-gray-300">Weekly digest</span>
+                                </label>
+                                <label class="flex items-center space-x-3 cursor-pointer">
+                                    <input type="checkbox" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500">
+                                    <span class="text-gray-700 dark:text-gray-300">Marketing emails</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Push Notifications -->
+                        <div class="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
+                            <div class="flex items-center justify-between mb-4">
+                                <div>
+                                    <h3 class="font-semibold text-gray-800 dark:text-white">Push Notifications</h3>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">Desktop and mobile notifications
+                                    </p>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" id="pushToggle" class="sr-only peer" checked>
+                                    <div
+                                        class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600">
+                                    </div>
+                                </label>
+                            </div>
+
+                            <div id="pushSubSettings" class="space-y-3 pl-2 border-l-2 border-blue-500 ml-2">
+                                <label class="flex items-center space-x-3 cursor-pointer">
+                                    <input type="checkbox" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
+                                        checked>
+                                    <span class="text-gray-700 dark:text-gray-300">New messages</span>
+                                </label>
+                                <label class="flex items-center space-x-3 cursor-pointer">
+                                    <input type="checkbox" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
+                                        checked>
+                                    <span class="text-gray-700 dark:text-gray-300">Reminders</span>
+                                </label>
+                                <label class="flex items-center space-x-3 cursor-pointer">
+                                    <input type="checkbox" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500">
+                                    <span class="text-gray-700 dark:text-gray-300">Announcements</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Sound Settings -->
+                        <div class="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
+                            <h3 class="font-semibold text-gray-800 dark:text-white mb-4">Sound & Alerts</h3>
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-gray-700 dark:text-gray-300">Notification Sound</span>
+                                    <select
+                                        class="px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500">
+                                        <option>Chime</option>
+                                        <option>Bell</option>
+                                        <option>None</option>
+                                    </select>
+                                </div>
+
+                                <div class="flex items-center justify-between">
+                                    <span class="text-gray-700 dark:text-gray-300">Volume</span>
+                                    <input type="range" min="0" max="100" value="50"
+                                        class="w-32 h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Quiet Hours -->
+                        <div class="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
+                            <h3 class="font-semibold text-gray-800 dark:text-white mb-4">Quiet Hours</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Start
+                                        Time</label>
+                                    <input type="time" value="22:00"
+                                        class="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">End
+                                        Time</label>
+                                    <input type="time" value="07:00"
+                                        class="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Privacy Section -->
+                <div id="privacy-section"
+                    class="settings-section hidden bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 p-6">
+                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">Privacy & Data</h2>
+
+                    <div class="space-y-6">
+                        <!-- Data Sharing -->
+                        <div class="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
+                            <h3 class="font-semibold text-gray-800 dark:text-white mb-4">Data Sharing</h3>
+                            <div class="space-y-3">
+                                <label class="flex items-center justify-between cursor-pointer">
+                                    <span class="text-gray-700 dark:text-gray-300">Share usage statistics</span>
+                                    <input type="checkbox" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500">
+                                </label>
+                                <label class="flex items-center justify-between cursor-pointer">
+                                    <span class="text-gray-700 dark:text-gray-300">Share for research</span>
+                                    <input type="checkbox" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500">
+                                </label>
+                                <label class="flex items-center justify-between cursor-pointer">
+                                    <span class="text-gray-700 dark:text-gray-300">Personalized ads</span>
+                                    <input type="checkbox" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500">
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Account Visibility -->
+                        <div class="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
+                            <h3 class="font-semibold text-gray-800 dark:text-white mb-4">Account Visibility</h3>
+                            <div class="space-y-3">
+                                <label class="flex items-center space-x-3 cursor-pointer">
+                                    <input type="radio" name="visibility"
+                                        class="w-4 h-4 text-blue-600 focus:ring-blue-500" checked>
+                                    <span class="text-gray-700 dark:text-gray-300">Public - Anyone can see your
+                                        profile</span>
+                                </label>
+                                <label class="flex items-center space-x-3 cursor-pointer">
+                                    <input type="radio" name="visibility"
+                                        class="w-4 h-4 text-blue-600 focus:ring-blue-500">
+                                    <span class="text-gray-700 dark:text-gray-300">Private - Only followers can
+                                        see</span>
+                                </label>
+                                <label class="flex items-center space-x-3 cursor-pointer">
+                                    <input type="radio" name="visibility"
+                                        class="w-4 h-4 text-blue-600 focus:ring-blue-500">
+                                    <span class="text-gray-700 dark:text-gray-300">Hidden - Only you can see</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Data Management -->
+                        <div class="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
+                            <h3 class="font-semibold text-gray-800 dark:text-white mb-4">Data Management</h3>
+                            <div class="space-y-3">
+                                <button onclick="exportData()"
+                                    class="w-full flex items-center justify-between p-3 rounded-lg border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                                    <div class="flex items-center space-x-3">
+                                        <span>📥</span>
+                                        <div>
+                                            <h4 class="font-medium text-gray-800 dark:text-white">Export Data</h4>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400">Download all your data
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <span>→</span>
+                                </button>
+
+                                <button onclick="clearHistory()"
+                                    class="w-full flex items-center justify-between p-3 rounded-lg border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                                    <div class="flex items-center space-x-3">
+                                        <span>🗑️</span>
+                                        <div>
+                                            <h4 class="font-medium text-gray-800 dark:text-white">Clear History</h4>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400">Remove browsing history
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <span>→</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Delete Account -->
+                        <div
+                            class="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl">
+                            <div class="flex items-start">
+                                <span class="text-red-600 dark:text-red-400 mr-3">⚠️</span>
+                                <div class="flex-1">
+                                    <h4 class="font-semibold text-red-800 dark:text-red-300">Danger Zone</h4>
+                                    <p class="text-sm text-red-600 dark:text-red-400 mt-1">Once you delete your account,
+                                        there is no going back. Please be certain.</p>
+                                    <button onclick="showDeleteModal()"
+                                        class="mt-3 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors">
+                                        Delete Account
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Account Modal -->
+<div id="deleteModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full mx-4 p-6">
+        <div class="text-center">
+            <div
+                class="w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span class="text-2xl">⚠️</span>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Delete Account</h3>
+            <p class="text-gray-600 dark:text-gray-400 mb-6">Are you sure you want to delete your account? This action
+                cannot be undone.</p>
+
+            <div class="space-y-3">
+                <input type="password" id="deletePassword" placeholder="Enter your password to confirm"
+                    class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                <div class="flex space-x-3">
+                    <button onclick="hideDeleteModal()"
+                        class="flex-1 px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                        Cancel
+                    </button>
+                    <button onclick="deleteAccount()"
+                        class="flex-1 px-4 py-3 rounded-xl bg-red-500 text-white hover:bg-red-600 transition-colors">
+                        Delete Account
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Section Management
+    let currentSection = 'profile';
+
+    function showSection(section) {
+        // Hide all sections
+        document.querySelectorAll('.settings-section').forEach(el => {
+            el.classList.add('hidden');
+        });
+
+        // Remove active from all tabs
+        document.querySelectorAll('.settings-tab').forEach(el => {
+            el.classList.remove('bg-blue-50', 'dark:bg-blue-900/20', 'text-blue-600', 'dark:text-blue-400');
+            el.classList.add('hover:bg-gray-100', 'dark:hover:bg-gray-700/50', 'text-gray-700', 'dark:text-gray-300');
+        });
+
+        // Show selected section
+        document.getElementById(`${section}-section`).classList.remove('hidden');
+
+        // Activate selected tab
+        document.getElementById(`${section}-tab`).classList.add('bg-blue-50', 'dark:bg-blue-900/20', 'text-blue-600', 'dark:text-blue-400');
+        document.getElementById(`${section}-tab`).classList.remove('hover:bg-gray-100', 'dark:hover:bg-gray-700/50', 'text-gray-700', 'dark:text-gray-300');
+
+        currentSection = section;
+    }
+
+    // Profile Form
+    document.getElementById('profileForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const saveBtn = e.target.querySelector('button[type="submit"]');
+        const originalText = document.getElementById('saveProfileText').textContent;
+        const spinner = document.getElementById('profileSpinner');
+
+        saveBtn.disabled = true;
+        document.getElementById('saveProfileText').textContent = 'Saving...';
+        spinner.classList.remove('hidden');
+
+        // Simulate API call
+        setTimeout(() => {
+            saveBtn.disabled = false;
+            document.getElementById('saveProfileText').textContent = originalText;
+            spinner.classList.add('hidden');
+
+            // Show success message
+            showToast('Profile updated successfully!', 'success');
+        }, 1500);
+    });
+
+    function resetProfileForm() {
+        document.getElementById('profileForm').reset();
+        document.getElementById('bioCounter').textContent = '0/250 characters';
+    }
+
+    // Image Preview
+    function previewImage(event) {
+        const reader = new FileReader();
+        reader.onload = function () {
+            const output = document.getElementById('profileImage');
+            output.src = reader.result;
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    }
+
+    // Password Strength Checker
+    document.getElementById('newPassword').addEventListener('input', function (e) {
+        const password = e.target.value;
+        const strengthBar = document.getElementById('strengthBar');
+        const strengthText = document.getElementById('strengthText');
+        const tips = document.getElementById('passwordTips');
+
+        let strength = 0;
+        let tipsText = '';
+
+        if (password.length >= 8) strength += 25;
+        if (/[A-Z]/.test(password)) strength += 25;
+        if (/[0-9]/.test(password)) strength += 25;
+        if (/[^A-Za-z0-9]/.test(password)) strength += 25;
+
+        strengthBar.style.width = `${strength}%`;
+
+        if (strength < 50) {
+            strengthBar.style.backgroundColor = '#ef4444';
+            strengthText.textContent = 'Weak';
+            tipsText = 'Add uppercase letters, numbers, and symbols';
+        } else if (strength < 75) {
+            strengthBar.style.backgroundColor = '#f59e0b';
+            strengthText.textContent = 'Fair';
+            tipsText = 'Good, but could be stronger';
+        } else {
+            strengthBar.style.backgroundColor = '#10b981';
+            strengthText.textContent = 'Strong';
+            tipsText = 'Excellent password!';
+        }
+
+        tips.textContent = tipsText;
+    });
+
+    // Password Match Check
+    document.getElementById('confirmPassword').addEventListener('input', function () {
+        const newPass = document.getElementById('newPassword').value;
+        const confirmPass = this.value;
+        const matchText = document.getElementById('passwordMatch');
+
+        if (confirmPass === '') {
+            matchText.textContent = '';
+        } else if (newPass === confirmPass) {
+            matchText.textContent = 'Passwords match ✓';
+            matchText.className = 'text-xs text-green-500 dark:text-green-400 mt-1';
+        } else {
+            matchText.textContent = 'Passwords do not match ✗';
+            matchText.className = 'text-xs text-red-500 dark:text-red-400 mt-1';
+        }
+    });
+
+    function togglePassword(inputId) {
+        const input = document.getElementById(inputId);
+        input.type = input.type === 'password' ? 'text' : 'password';
+    }
+
+    // Appearance Settings
+    document.querySelectorAll('input[name="theme"]').forEach(radio => {
+        radio.addEventListener('change', function () {
+            if (this.value === 'dark') {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            } else if (this.value === 'light') {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            } else {
+                // Auto theme
+                localStorage.removeItem('theme');
+                if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+            }
+        });
+    });
+
+    // Font Size
+    document.getElementById('fontSize').addEventListener('input', function (e) {
+        const size = e.target.value;
+        const sizeValue = document.getElementById('fontSizeValue');
+
+        if (size < 14) sizeValue.textContent = 'Small';
+        else if (size < 18) sizeValue.textContent = 'Medium';
+        else sizeValue.textContent = 'Large';
+
+        document.documentElement.style.fontSize = `${size}px`;
+    });
+
+    // Notification Toggles
+    document.getElementById('emailToggle').addEventListener('change', function () {
+        document.getElementById('emailSubSettings').style.display =
+            this.checked ? 'block' : 'none';
+    });
+
+    document.getElementById('pushToggle').addEventListener('change', function () {
+        document.getElementById('pushSubSettings').style.display =
+            this.checked ? 'block' : 'none';
+    });
+
+    // Privacy Functions
+    function exportData() {
+        showToast('Preparing your data export...', 'info');
+        // In a real app, this would trigger a server-side data export
+    }
+
+    function clearHistory() {
+        if (confirm('Are you sure you want to clear your history?')) {
+            showToast('History cleared successfully', 'success');
+        }
+    }
+
+    // Delete Account Modal
+    function showDeleteModal() {
+        document.getElementById('deleteModal').classList.remove('hidden');
+    }
+
+    function hideDeleteModal() {
+        document.getElementById('deleteModal').classList.add('hidden');
+    }
+
+    async function deleteAccount() {
+        const password = document.getElementById('deletePassword').value;
+
+        if (!password) {
+            showToast('Please enter your password', 'error');
+            return;
+        }
+
+        // In a real app, send request to server
+        // const response = await fetch('/api/delete-account/', {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //         'X-CSRFToken': getCookie('csrftoken')
+        //     },
+        //     body: JSON.stringify({ password: password })
+        // });
+
+        hideDeleteModal();
+        showToast('Account deletion request submitted', 'info');
+    }
+
+    // Toast Notification
+    function showToast(message, type = 'info') {
+        const toast = document.createElement('div');
+        toast.className = `fixed top-4 right-4 px-6 py-3 rounded-xl shadow-lg z-50 transform transition-all duration-300 ${type === 'success' ? 'bg-green-500 text-white' :
+                type === 'error' ? 'bg-red-500 text-white' :
+                    'bg-blue-500 text-white'
+            }`;
+        toast.textContent = message;
+
+        document.body.appendChild(toast);
+
+        setTimeout(() => {
+            toast.classList.add('opacity-0', 'translate-x-full');
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    }
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', function () {
+        // Set active tab
+        document.getElementById('profile-tab').click();
+
+        // Bio character counter
+        const bio = document.getElementById('bio');
+        const counter = document.getElementById('bioCounter');
+        if (bio && counter) {
+            bio.addEventListener('input', function () {
+                counter.textContent = `${this.value.length}/250 characters`;
+            });
+        }
+
+        // Theme initialization
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            const radio = document.querySelector(`input[name="theme"][value="${savedTheme}"]`);
+            if (radio) radio.checked = true;
+        }
+    });
+</script>
+
+<style>
+    .settings-section {
+        animation: fadeIn 0.3s ease-out;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+        appearance: none;
+        height: 20px;
+        width: 20px;
+        border-radius: 50%;
+        background: #3b82f6;
+        cursor: pointer;
+    }
+
+    input[type="range"]::-moz-range-thumb {
+        height: 20px;
+        width: 20px;
+        border-radius: 50%;
+        background: #3b82f6;
+        cursor: pointer;
+        border: none;
+    }
+</style>
+{% endblock %}

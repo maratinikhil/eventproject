@@ -71,6 +71,18 @@ urlpatterns = [
     path('admin/get-ticket-details/<int:ticket_id>/', views.get_ticket_details, name='get_ticket_details'),
     path('admin/get-park-price/<int:park_id>/', views.get_park_price, name='get_park_price'),
 
+
+    # Profile URl's 
+    path('profile/', views.profile, name='profile'),
+    path('profile/update/', views.update_profile, name='update_profile'),
+    path('profile/change-password/', views.change_password, name='change_password'),
+
+
+    # Forgot-password
+    path('forgot-password/', views.forgot_password, name='forgot_password'),
+    path('reset-password/<str:token>/', views.reset_password, name='reset_password'),
+
+    path('settings/', views.settings_view, name='settings_view'),
 ]
 
 if settings.DEBUG:

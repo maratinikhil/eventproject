@@ -7,7 +7,11 @@ from .forms import BookingComedyShowForm
 import json
 from django.core.mail import send_mail
 from django.contrib.auth import login as auth_login, logout as auth_logout
-import random
+import random,datetime
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+from django.utils import timezone
+from django.conf import settings
 from django.urls import reverse
 from django. db import transaction
 from .models import Event,Movie,ComedyShow,AmusementPark,LiveConcert,MovieScreen,TheaterSeat,TicketBooking,LiveConcertTicketBooking,AmusementTicket,BookingsEvent
@@ -42,6 +46,7 @@ def home(request):
         'liveconcerts':liveconcerts,
     })
 
+
 def signup(request):
     if request.method == "POST":
         firstname = request.POST.get('firstname')
@@ -75,18 +80,19 @@ def signup(request):
         return redirect('login')
     return render(request,'signup.html')
 
+
 def login(request):
     if request.method == "POST":
         user_input = request.POST.get('user_input')
-        user=None
-        email_to_send=None
+        user = None
+        email_to_send = None
 
         if '@' in user_input:
             try:
                 user = User.objects.get(email=user_input)
-                email_to_send=user.email
+                email_to_send = user.email
             except User.DoesNotExist:
-                messages.error(request,'Email not registered')
+                messages.error(request, 'Email not registered')
                 return redirect('login')
         
         else:
@@ -94,62 +100,252 @@ def login(request):
                 user = User.objects.get(mobile=user_input)
                 email_to_send = user.email
             except User.DoesNotExist:
-                messages.error(request,"Mobile not registered")
+                messages.error(request, "Mobile not registered")
                 return redirect("login")
             
-        otp = random.randint(100000,999999)
+        otp = random.randint(100000, 999999)
         request.session["otp"] = otp
         request.session["user_id"] = user.id
 
-         # Professional email format
-        email_subject = "Your EventHub Login OTP"
-        email_message = f"""
+        # Professional email format
+        email_subject = "🔐 Your EventHub Login Verification Code"
         
-Dear {user.firstname},
+        # HTML Email Template with styling
+        email_html_message = f"""
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EventHub Security Verification</title>
+    <style>
+        body {{
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }}
+        .email-container {{
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e0e0e0;
+        }}
+        .header {{
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+            margin-bottom: 30px;
+        }}
+        .logo {{
+            font-size: 28px;
+            font-weight: bold;
+            color: #2563eb;
+            margin-bottom: 10px;
+        }}
+        .tagline {{
+            color: #64748b;
+            font-size: 14px;
+        }}
+        .otp-container {{
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            color: white;
+            padding: 25px;
+            border-radius: 8px;
+            text-align: center;
+            margin: 30px 0;
+            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2);
+        }}
+        .otp-code {{
+            font-size: 36px;
+            font-weight: bold;
+            letter-spacing: 8px;
+            margin: 15px 0;
+            font-family: monospace;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 5px;
+            display: inline-block;
+        }}
+        .otp-expiry {{
+            font-size: 14px;
+            opacity: 0.9;
+            margin-top: 10px;
+        }}
+        .security-section {{
+            background-color: #f8fafc;
+            border-left: 4px solid #ef4444;
+            padding: 15px;
+            margin: 25px 0;
+            border-radius: 4px;
+        }}
+        .security-title {{
+            color: #ef4444;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }}
+        .info-box {{
+            background-color: #e8f4fd;
+            border-left: 4px solid #2563eb;
+            padding: 15px;
+            margin: 25px 0;
+            border-radius: 4px;
+        }}
+        .footer {{
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            color: #64748b;
+            font-size: 12px;
+        }}
+        .footer-links {{
+            margin: 15px 0;
+        }}
+        .footer-links a {{
+            color: #2563eb;
+            text-decoration: none;
+            margin: 0 10px;
+        }}
+        .highlight {{
+            color: #2563eb;
+            font-weight: bold;
+        }}
+        .step {{
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }}
+        .step-number {{
+            background-color: #2563eb;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            font-size: 14px;
+            flex-shrink: 0;
+        }}
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="header">
+            <div class="logo">🎭 EventHub</div>
+            <div class="tagline">Your Gateway to Unforgettable Experiences</div>
+        </div>
 
-You have initiated a login request for your EventHub account. To ensure the security of your account, we require verification using the One-Time Password provided below.
+        <p>Dear <span class="highlight">{user.firstname if user.firstname else user.email.split('@')[0]}</span>,</p>
+        
+        <p>You have initiated a login request for your EventHub account. To ensure the security of your account, we require verification using the One-Time Password provided below.</p>
+        
+        <div class="otp-container">
+            <h3 style="margin: 0 0 15px 0; font-size: 18px;">🔒 SECURITY VERIFICATION CODE</h3>
+            <div class="otp-code">{otp}</div>
+            <div class="otp-expiry">⏰ Valid for 10 minutes | One-time use only</div>
+        </div>
 
-SECURITY VERIFICATION CODE: {otp}
+        <div class="security-section">
+            <div class="security-title">⚠️ SECURITY ADVISORY</div>
+            <p>For your protection:</p>
+            <div class="step">
+                <div class="step-number">1</div>
+                <span><strong>Do not share</strong> this code with anyone</span>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <span>EventHub representatives will <strong>never ask</strong> for this code</span>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <span>This code is required <strong>only for login authentication</strong></span>
+            </div>
+        </div>
 
-This verification code is valid for 10 minutes from the time of this request and may be used only once.
+        <div class="info-box">
+            <p><strong>If you did NOT initiate this login attempt:</strong></p>
+            <div class="step">
+                <div class="step-number">1</div>
+                <span>Change your account password immediately</span>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <span>Contact our Security Team at <span class="highlight">security@eventhub.com</span></span>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <span>Review recent account activity from your dashboard</span>
+            </div>
+        </div>
 
-For your security:
-• Do not share this code with anyone
-• EventHub representatives will never ask for this code
-• This code is required only for login authentication
+        <p>Thank you for choosing EventHub as your entertainment partner.</p>
+        <p style="margin-bottom: 30px;">
+            Sincerely,<br>
+            <strong>EventHub Security Team</strong>
+        </p>
 
-If you did not initiate this login attempt, please secure your account immediately by:
-1. Changing your account password
-2. Contacting our Security Team at security@eventhub.com
-3. Reviewing recent account activity
+        <div class="footer">
+            <div class="footer-links">
+                <a href="https://www.eventhub.com/help">Help Center</a> | 
+                <a href="https://www.eventhub.com/privacy">Privacy Policy</a> | 
+                <a href="https://www.eventhub.com/terms">Terms of Service</a>
+            </div>
+            <div>
+                <strong>Customer Support:</strong> +91-98765-43210<br>
+                <strong>Website:</strong> <a href="https://www.eventhub.com">www.eventhub.com</a><br>
+                <strong>Email:</strong> support@eventhub.com
+            </div>
+            <div style="margin-top: 20px; color: #94a3b8;">
+                <em>This is an automated security message. Please do not reply to this email.<br>
+                For security reasons, we recommend deleting this email after successful login.</em>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+"""
 
-Thank you for choosing EventHub as your entertainment partner.
+        # Plain text version as fallback
+      
 
-Sincerely,
-EventHub Security Team
-
-Customer Support: +91-XXXXX-XXXXX
-Website: www.eventhub.com
-Email: support@eventhub.com
-
----
-This is an automated security message. Please do not reply to this email.
-For security reasons, we recommend deleting this email after use."""
-
-        send_mail(
-            subject=email_subject,
-            message=email_message,
-            from_email="EventHub <marati.nikhil9@gmail.com>",
-            recipient_list=[email_to_send],
-            fail_silently=False
-        )
-
-        messages.success(request,"OTP sent to your email")
+        # Send email with HTML content
+        try:
+            # First, send the HTML email
+            from django.core.mail import EmailMultiAlternatives
+            
+            email = EmailMultiAlternatives(
+                subject=email_subject,
+                from_email="EventHub Security <security@eventhub.com>",
+                to=[email_to_send],
+                reply_to=["no-reply@eventhub.com"]
+            )
+            
+            # Attach HTML version
+            email.attach_alternative(email_html_message, "text/html")
+            
+            # Send email
+            email.send(fail_silently=False)
+            
+            messages.success(request, "✅ OTP has been sent to your registered email address")
+            
+            # Log the OTP sending activity (optional)
+            print(f"OTP {otp} sent to {email_to_send} for user {user.id}")
+            
+        except Exception as e:
+            messages.error(request, "Failed to send OTP. Please try again.")
+            print(f"Email sending error: {e}")
+            return redirect("login")
 
         return redirect("login_otp_verify")
     
-    return render(request,"login.html")
-
+    return render(request, "login.html")
 
 def login_otp_verify(request):
     if request.method == "POST":
@@ -166,6 +362,10 @@ def login_otp_verify(request):
 
 def login_password(request):
     if request.method == "POST":
+        if 'forgot_password' in request.POST:
+            email = request.POST.get('email')
+            return redirect('forgot_password')
+        
         password = request.POST.get("password")
         user = User.objects.get(id=request.session["user_id"])
 
@@ -184,9 +384,269 @@ def login_password(request):
     return render(request,"login_password.html")
 
 
+def forgot_password(request):
+    """Step 1: User enters email, we send reset link"""
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        
+        try:
+            user = User.objects.get(email=email)
+            
+            # Generate reset token
+            reset_token = user.generate_reset_token()
+            
+            # Build reset URL
+            reset_url = f"{request.scheme}://{request.get_host()}/reset-password/{reset_token}/"
+            
+            # Prepare email content
+            subject = 'Password Reset Request'
+            html_message = render_to_string('email/password_reset_email.html', {
+                'user': user,
+                'reset_url': reset_url,
+                'expiry_hours': 24,
+            })
+            plain_message = strip_tags(html_message)
+            
+            # Send email
+            try:
+                send_mail(
+                    subject=subject,
+                    message=plain_message,
+                    html_message=html_message,
+                    from_email=settings.DEFAULT_FROM_EMAIL,
+                    recipient_list=[user.email],
+                    fail_silently=False,
+                )
+                
+                messages.success(request, f'Password reset link has been sent to {email}. Please check your inbox.')
+                return render(request, 'forgot_password.html')
+                
+            except Exception as e:
+                # If email fails, show the link for testing
+                messages.warning(request, f'Email sending failed. Here is your reset link: {reset_url}')
+                messages.info(request, 'For testing, you can use this link directly.')
+                return render(request, 'forgot_password.html')
+            
+        except User.DoesNotExist:
+            # Don't reveal if email exists or not for security
+            messages.success(request, 'If your email exists in our system, you will receive a reset link shortly.')
+            return render(request, 'forgot_password.html')
+    
+    return render(request, 'forgot_password.html')
+
+
+def reset_password(request, token):
+    """Step 2: User clicks reset link and sets new password"""
+    try:
+        # Find user with valid reset token
+        user = User.objects.get(reset_token=token)
+        
+        # Check if token is valid
+        if not user.is_reset_token_valid():
+            messages.error(request, 'Reset link has expired. Please request a new one.')
+            user.clear_reset_token()  # Clear expired token
+            return redirect('forgot_password')
+        
+        if request.method == 'POST':
+            new_password = request.POST.get('new_password')
+            confirm_password = request.POST.get('confirm_password')
+            
+            # Validate passwords
+            if new_password != confirm_password:
+                messages.error(request, 'Passwords do not match.')
+                return render(request, 'reset_password.html')
+            
+            # Check password strength
+            if len(new_password) < 8:
+                messages.error(request, 'Password must be at least 8 characters long.')
+                return render(request, 'reset_password.html')
+            
+            # Update user password
+            user.password = new_password
+            user.clear_reset_token()  # Clear token after successful reset
+            
+            # Send confirmation email
+            try:
+                send_mail(
+                    subject='Password Reset Successful',
+                    message=f'Your password has been successfully reset. If you did not make this change, please contact support immediately.',
+                    from_email=settings.DEFAULT_FROM_EMAIL,
+                    recipient_list=[user.email],
+                    fail_silently=True,
+                )
+            except:
+                pass  # Ignore email errors for confirmation
+            
+            messages.success(request, 'Password reset successful! You can now login with your new password.')
+            return redirect('login')
+        
+        # GET request - show reset form
+        return render(request, 'reset_password.html', {'token': token})
+        
+    except User.DoesNotExist:
+        messages.error(request, 'Invalid or expired reset link.')
+        return redirect('forgot_password')
+
+
 def logout(request):
     request.session.flush()
     return redirect('login')
+
+def profile(request):
+    """
+    Display and update user profile information
+    """
+    if not request.session.get('user_authenticated'):
+        messages.error(request, 'Please login to access your profile')
+        return redirect('login')
+    
+    # Get user from database using session email
+    user_email = request.session.get('user_email')
+    try:
+        user = User.objects.get(email=user_email)
+        
+        # Prepare user data for template
+        user_data = {
+            'id': user.id,
+            'firstname': user.firstname,
+            'lastname': user.lastname,
+            'fullname': f"{user.firstname} {user.lastname}",
+            'email': user.email,
+            'mobile': user.mobile,
+            # Add any additional fields you might have
+            'joined_date': user.created_at.strftime('%Y-%m-%d') if hasattr(user, 'created_at') else '2024-01-01',
+        }
+        
+    except User.DoesNotExist:
+        # Fallback to session data if user not found
+        user_data = {
+            'firstname': request.session.get('user_name', 'User').split()[0] if ' ' in request.session.get('user_name', 'User') else request.session.get('user_name', 'User'),
+            'lastname': request.session.get('user_name', 'User').split()[1] if ' ' in request.session.get('user_name', 'User') and len(request.session.get('user_name', 'User').split()) > 1 else '',
+            'fullname': request.session.get('user_name', 'User'),
+            'email': request.session.get('user_email', 'user@example.com'),
+            'mobile': request.session.get('user_phone', 'Not provided'),
+            'joined_date': request.session.get('joined_date', '2024-01-01'),
+        }
+    
+    context = {
+        'user': user_data,
+    }
+    
+    return render(request, 'profile.html', context)
+
+def update_profile(request):
+    """
+    Handle profile update via AJAX
+    """
+    if not request.session.get('user_authenticated'):
+        return JsonResponse({'success': False, 'message': 'Authentication required'})
+    
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            user_email = request.session.get('user_email')
+            
+            try:
+                user = User.objects.get(email=user_email)
+                
+                # Update user fields
+                user.firstname = data.get('firstname', user.firstname)
+                user.lastname = data.get('lastname', user.lastname)
+                user.email = data.get('email', user.email)
+                user.mobile = data.get('mobile', user.mobile)
+                user.save()
+                
+                # Update session data
+                request.session['user_name'] = f"{user.firstname} {user.lastname}"
+                request.session['user_email'] = user.email
+                request.session['user_phone'] = user.mobile
+                request.session.save()
+                
+                return JsonResponse({
+                    'success': True,
+                    'message': 'Profile updated successfully',
+                    'user': {
+                        'fullname': f"{user.firstname} {user.lastname}",
+                        'firstname': user.firstname,
+                        'lastname': user.lastname,
+                        'email': user.email,
+                        'mobile': user.mobile,
+                    }
+                })
+                
+            except User.DoesNotExist:
+                return JsonResponse({'success': False, 'message': 'User not found'})
+            
+        except json.JSONDecodeError:
+            return JsonResponse({'success': False, 'message': 'Invalid data format'})
+    
+    return JsonResponse({'success': False, 'message': 'Invalid request method'})
+
+def change_password(request):
+    """
+    Handle password change
+    """
+    if not request.session.get('user_authenticated'):
+        return JsonResponse({'success': False, 'message': 'Authentication required'})
+    
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            current_password = data.get('current_password')
+            new_password = data.get('new_password')
+            confirm_password = data.get('confirm_password')
+            user_email = request.session.get('user_email')
+            
+            # Validate passwords
+            if not current_password or not new_password or not confirm_password:
+                return JsonResponse({'success': False, 'message': 'All fields are required'})
+            
+            if new_password != confirm_password:
+                return JsonResponse({'success': False, 'message': 'New passwords do not match'})
+            
+            if len(new_password) < 6:
+                return JsonResponse({'success': False, 'message': 'Password must be at least 6 characters'})
+            
+            try:
+                user = User.objects.get(email=user_email)
+                
+                # Verify current password (plain text comparison since you're storing plain text)
+                if user.password != current_password:
+                    return JsonResponse({'success': False, 'message': 'Current password is incorrect'})
+                
+                # Update password
+                user.password = new_password
+                user.save()
+                
+                return JsonResponse({
+                    'success': True,
+                    'message': 'Password changed successfully'
+                })
+                
+            except User.DoesNotExist:
+                return JsonResponse({'success': False, 'message': 'User not found'})
+            
+        except json.JSONDecodeError:
+            return JsonResponse({'success': False, 'message': 'Invalid data format'})
+    
+    return JsonResponse({'success': False, 'message': 'Invalid request method'})
+
+
+# views.py
+def settings_view(request):
+    accent_colors = [
+        {'value': 'blue', 'bg': 'bg-blue-500', 'ring': 'blue'},
+        {'value': 'green', 'bg': 'bg-green-500', 'ring': 'green'},
+        {'value': 'purple', 'bg': 'bg-purple-500', 'ring': 'purple'},
+        {'value': 'pink', 'bg': 'bg-pink-500', 'ring': 'pink'},
+        {'value': 'orange', 'bg': 'bg-orange-500', 'ring': 'orange'},
+        {'value': 'teal', 'bg': 'bg-teal-500', 'ring': 'teal'},
+    ]
+    
+    return render(request, 'settings.html', {
+        'accent_colors': accent_colors,
+        'user': request.user,
+    })
 
 
 @login_required_session

@@ -4,6 +4,7 @@ from django.db.models import Sum
 from django.contrib.auth.models import User
 from django.db.models.signals import m2m_changed,post_save,post_delete
 from django.dispatch import receiver
+from django.utils import timezone
 import math
 import uuid
 
@@ -15,6 +16,31 @@ class User(models.Model):
     email = models.EmailField(unique=True)
     mobile = models.CharField(max_length=10,unique=True)
     password = models.CharField(max_length=255)
+
+    reset_token = models.CharField(max_length=100, blank=True, null=True)
+    reset_token_created_at = models.DateTimeField(blank=True, null=True)
+
+    def generate_reset_token(self):
+        self.reset_token = str(uuid.uuid4())
+        self.reset_token_created_at = timezone.now()
+        self.save()
+        return self.reset_token
+    
+    def is_reset_token_valid(self):
+        if not self.reset_token or not self.reset_token_created_at:
+            return False
+        
+        token_age = timezone.now() - self.reset_token_created_at
+        return token_age.total_seconds() < 86400 
+    
+    
+    def clear_reset_token(self):
+        """Clear the reset token after use"""
+        self.reset_token = None
+        self.reset_token_created_at = None
+        self.save()
+    
+
 
     def __str__(self):
         return self.email

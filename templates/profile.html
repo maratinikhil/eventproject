@@ -1,0 +1,421 @@
+<!-- profile.html -->
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}My Profile - EventHub{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto">
+    <!-- Header -->
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">My Profile</h1>
+        <p class="text-gray-600 dark:text-gray-400">Manage your account information and settings</p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Left Column - Profile Info -->
+        <div class="lg:col-span-2 space-y-8">
+            <!-- Profile Card -->
+            <div
+                class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+                <div class="relative">
+                    <!-- Profile Cover -->
+                    <div class="h-32 bg-gradient-to-r from-blue-500 to-purple-600"></div>
+
+                    <!-- Profile Picture -->
+                    <div class="absolute -bottom-12 left-8">
+                        <div class="relative group">
+                            <div
+                                class="w-24 h-24 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full border-4 border-white dark:border-gray-800 shadow-lg flex items-center justify-center text-white text-3xl font-bold">
+                                {{ user.fullname|first|upper }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Edit Button -->
+                    <div class="absolute top-4 right-4">
+                        <button id="edit-profile-btn"
+                            class="px-4 py-2 bg-white/20 backdrop-blur-sm text-white rounded-xl hover:bg-white/30 transition-all duration-200 ripple">
+                            Edit Profile
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Profile Info -->
+                <div class="pt-16 px-8 pb-8">
+                    <div class="flex items-center justify-between mb-6">
+                        <div>
+                            <h2 class="text-2xl font-bold text-gray-900 dark:text-white">{{ user.fullname }}</h2>
+                            <p class="text-gray-600 dark:text-gray-400">{{ user.email }}</p>
+                        </div>
+                        <span
+                            class="px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 rounded-full text-sm font-medium">
+                            Active Member
+                        </span>
+                    </div>
+
+                    <!-- User Details -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                        <div class="bg-gray-50 dark:bg-gray-900/50 rounded-xl p-4">
+                            <label class="text-sm text-gray-500 dark:text-gray-400">Full Name</label>
+                            <p class="text-gray-900 dark:text-white font-medium">{{ user.fullname }}</p>
+                        </div>
+                        <div class="bg-gray-50 dark:bg-gray-900/50 rounded-xl p-4">
+                            <label class="text-sm text-gray-500 dark:text-gray-400">Email Address</label>
+                            <p class="text-gray-900 dark:text-white font-medium">{{ user.email }}</p>
+                        </div>
+                        <div class="bg-gray-50 dark:bg-gray-900/50 rounded-xl p-4">
+                            <label class="text-sm text-gray-500 dark:text-gray-400">Mobile Number</label>
+                            <p class="text-gray-900 dark:text-white font-medium">{{ user.mobile }}</p>
+                        </div>
+                        <div class="bg-gray-50 dark:bg-gray-900/50 rounded-xl p-4">
+                            <label class="text-sm text-gray-500 dark:text-gray-400">Account ID</label>
+                            <p class="text-gray-900 dark:text-white font-medium">#{{ user.id }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Edit Profile Form (Hidden by default) -->
+            <div id="edit-profile-form"
+                class="hidden bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-8">
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-6">Edit Profile Information</h3>
+                <form id="profile-form">
+                    {% csrf_token %}
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                First Name
+                            </label>
+                            <input type="text" name="firstname" value="{{ user.firstname }}"
+                                class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                                required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Last Name
+                            </label>
+                            <input type="text" name="lastname" value="{{ user.lastname }}"
+                                class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                                required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Email Address *
+                            </label>
+                            <input type="email" name="email" value="{{ user.email }}"
+                                class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                                required>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">* Changing email may require
+                                re-verification</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Mobile Number *
+                            </label>
+                            <input type="tel" name="mobile" value="{{ user.mobile }}"
+                                class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                                required>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">* 10 digit mobile number</p>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end space-x-4">
+                        <button type="button" id="cancel-edit-btn"
+                            class="px-6 py-3 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-all duration-200 ripple">
+                            Cancel
+                        </button>
+                        <button type="submit"
+                            class="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl hover:from-blue-600 hover:to-purple-700 transition-all duration-200 ripple relative overflow-hidden group">
+                            <span class="relative z-10">Save Changes</span>
+                            <div
+                                class="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-700 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                            </div>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Change Password Section -->
+            <div
+                class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-8">
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-6">Change Password</h3>
+                <form id="password-form">
+                    {% csrf_token %}
+                    <div class="space-y-4 mb-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Current Password
+                            </label>
+                            <input type="password" name="current_password" required
+                                class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                                placeholder="Enter your current password">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                New Password
+                            </label>
+                            <input type="password" name="new_password" required
+                                class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                                placeholder="Enter new password (min. 6 characters)">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Confirm New Password
+                            </label>
+                            <input type="password" name="confirm_password" required
+                                class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                                placeholder="Confirm new password">
+                        </div>
+                    </div>
+                    <div class="flex justify-end">
+                        <button type="submit"
+                            class="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl hover:from-blue-600 hover:to-purple-700 transition-all duration-200 ripple relative overflow-hidden group">
+                            <span class="relative z-10">Update Password</span>
+                            <div
+                                class="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-700 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                            </div>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Right Column - Sidebar -->
+        <div class="space-y-8">
+            <!-- Account Details -->
+            <div
+                class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-6">
+                <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">Account Details</h3>
+                <div class="space-y-4">
+                    <div>
+                        <label class="text-sm text-gray-500 dark:text-gray-400">Account ID</label>
+                        <p class="text-gray-900 dark:text-white font-mono">#{{ user.id }}</p>
+                    </div>
+                    <div>
+                        <label class="text-sm text-gray-500 dark:text-gray-400">Account Status</label>
+                        <p class="text-green-600 dark:text-green-400 font-medium">Active</p>
+                    </div>
+                    <div>
+                        <label class="text-sm text-gray-500 dark:text-gray-400">Email Verified</label>
+                        <p class="text-green-600 dark:text-green-400 font-medium">Verified ✓</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div
+                class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-6">
+                <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">Quick Actions</h3>
+                <div class="space-y-3">
+                    <a href="#"
+                        class="flex items-center space-x-3 p-3 rounded-xl hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-200 ripple">
+                        <span class="text-blue-600 dark:text-blue-400">📱</span>
+                        <span class="text-gray-700 dark:text-gray-300">Download Tickets</span>
+                    </a>
+                    <a href="#"
+                        class="flex items-center space-x-3 p-3 rounded-xl hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-200 ripple">
+                        <span class="text-green-600 dark:text-green-400">❤️</span>
+                        <span class="text-gray-700 dark:text-gray-300">Favorites</span>
+                    </a>
+                    <a href="{% url 'profile' %}"
+                        class="flex items-center space-x-3 p-3 rounded-xl hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-200 ripple">
+                        <span class="text-yellow-600 dark:text-yellow-400">👤</span>
+                        <span class="text-gray-700 dark:text-gray-300">My Profile</span>
+                    </a>
+                    <a href="{% url 'logout' %}"
+                        class="flex items-center space-x-3 p-3 rounded-xl hover:bg-red-50 dark:hover:bg-red-900/20 transition-all duration-200 ripple">
+                        <span class="text-red-600 dark:text-red-400">🚪</span>
+                        <span class="text-gray-700 dark:text-gray-300">Logout</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Account Security -->
+            <div
+                class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-6">
+                <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">Account Security</h3>
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-700 dark:text-gray-300">Password</span>
+                        <span
+                            class="px-2 py-1 bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 rounded-full text-xs">
+                            Last changed: Recently
+                        </span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-700 dark:text-gray-300">Two-factor Auth</span>
+                        <span class="text-gray-500 dark:text-gray-400 text-sm">Not enabled</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-700 dark:text-gray-300">Login Sessions</span>
+                        <span class="text-blue-600 dark:text-blue-400 text-sm cursor-pointer hover:underline">View
+                            all</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Edit Profile Toggle
+        const editProfileBtn = document.getElementById('edit-profile-btn');
+        const editProfileForm = document.getElementById('edit-profile-form');
+        const cancelEditBtn = document.getElementById('cancel-edit-btn');
+        const profileForm = document.getElementById('profile-form');
+
+        if (editProfileBtn && editProfileForm) {
+            editProfileBtn.addEventListener('click', function () {
+                editProfileForm.classList.remove('hidden');
+                editProfileForm.scrollIntoView({ behavior: 'smooth' });
+            });
+
+            cancelEditBtn.addEventListener('click', function () {
+                editProfileForm.classList.add('hidden');
+            });
+
+            // Profile Form Submission
+            profileForm.addEventListener('submit', async function (e) {
+                e.preventDefault();
+
+                // Show loading state
+                const submitBtn = profileForm.querySelector('button[type="submit"]');
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = 'Saving...';
+                submitBtn.disabled = true;
+
+                const formData = new FormData(this);
+                const data = Object.fromEntries(formData.entries());
+
+                try {
+                    const response = await fetch('{% url "update_profile" %}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': getCookie('csrftoken'),
+                        },
+                        body: JSON.stringify(data)
+                    });
+
+                    const result = await response.json();
+
+                    if (result.success) {
+                        showToast('Profile updated successfully!', 'success');
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1500);
+                    } else {
+                        showToast(result.message, 'error');
+                        submitBtn.innerHTML = originalText;
+                        submitBtn.disabled = false;
+                    }
+                } catch (error) {
+                    showToast('An error occurred. Please try again.', 'error');
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                }
+            });
+        }
+
+        // Password Form Submission
+        const passwordForm = document.getElementById('password-form');
+        if (passwordForm) {
+            passwordForm.addEventListener('submit', async function (e) {
+                e.preventDefault();
+
+                // Show loading state
+                const submitBtn = passwordForm.querySelector('button[type="submit"]');
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = 'Updating...';
+                submitBtn.disabled = true;
+
+                const formData = new FormData(this);
+                const data = Object.fromEntries(formData.entries());
+
+                try {
+                    const response = await fetch('{% url "change_password" %}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': getCookie('csrftoken'),
+                        },
+                        body: JSON.stringify(data)
+                    });
+
+                    const result = await response.json();
+
+                    if (result.success) {
+                        showToast('Password changed successfully!', 'success');
+                        passwordForm.reset();
+                    } else {
+                        showToast(result.message, 'error');
+                    }
+                } catch (error) {
+                    showToast('An error occurred. Please try again.', 'error');
+                } finally {
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                }
+            });
+        }
+
+        // Helper function to get CSRF token
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        // Toast notification function
+        function showToast(message, type = 'info') {
+            const toastContainer = document.getElementById('toast-container');
+            if (!toastContainer) return;
+
+            const toast = document.createElement('div');
+            toast.className = `p-4 rounded-xl shadow-lg transform transition-all duration-300 translate-x-full opacity-0`;
+
+            const bgColor = type === 'success' ? 'bg-green-500' :
+                type === 'error' ? 'bg-red-500' :
+                    'bg-blue-500';
+
+            toast.innerHTML = `
+            <div class="flex items-center space-x-3">
+                <span class="text-white text-lg">
+                    ${type === 'success' ? '✓' : type === 'error' ? '✕' : 'ℹ'}
+                </span>
+                <span class="text-white font-medium">${message}</span>
+            </div>
+        `;
+
+            toast.classList.add(bgColor);
+            toastContainer.appendChild(toast);
+
+            // Animate in
+            setTimeout(() => {
+                toast.classList.remove('translate-x-full', 'opacity-0');
+            }, 10);
+
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                toast.classList.add('translate-x-full', 'opacity-0');
+                setTimeout(() => {
+                    if (toast.parentNode) {
+                        toast.parentNode.removeChild(toast);
+                    }
+                }, 300);
+            }, 5000);
+        }
+    });
+</script>
+{% endblock %}
